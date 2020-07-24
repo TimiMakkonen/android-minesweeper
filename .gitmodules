@@ -1,0 +1,3 @@
+[submodule "app/src/main/cpp/extern/minesweeper"]
+	path = app/src/main/cpp/extern/minesweeper
+	url = https://github.com/TimiMakkonen/minesweeper.git

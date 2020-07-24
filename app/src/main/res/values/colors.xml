@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--  Minesweeper grid colors:  -->
+    <color name="minesweeperViewCellBgColor">#91A9A5</color>
+    <color name="minesweeperViewCheckedCellBgColor">#DDE6CC</color>
+    <color name="minesweeperViewGridLinesColor">#384E4A</color>
+
+    <!--  Minesweeper symbol colors:  -->
+    <color name="one_symbol">#0000ff</color>
+    <color name="two_symbol">#00a000</color>
+    <color name="three_symbol">#ff0000</color>
+    <color name="four_symbol">#00006d</color>
+    <color name="five_symbol">#005a00</color>
+    <color name="six_symbol">#800000</color>
+    <color name="seven_symbol">#b100e5</color>
+    <color name="eight_symbol">#4f0066</color>
+    <color name="marked_symbol_flag">#ff0000</color>
+    <color name="marked_symbol_pole">#000000</color>
+</resources>

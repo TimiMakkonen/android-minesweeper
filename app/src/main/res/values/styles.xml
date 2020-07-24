@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+
+        <!-- MinesweeperGridView -->
+        <item name="cellBgColor">@color/minesweeperViewCellBgColor</item>
+        <item name="checkedCellBgColor">@color/minesweeperViewCheckedCellBgColor</item>
+        <item name="gridLinesColor">@color/minesweeperViewGridLinesColor</item>
+    </style>
+    
+</resources>

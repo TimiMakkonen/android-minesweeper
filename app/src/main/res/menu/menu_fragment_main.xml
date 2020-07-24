@@ -1,0 +1,57 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.timimakkonen.minesweeper.MainActivity">
+
+    <item
+        android:id="@+id/action_game_menu"
+        android:orderInCategory="100"
+        android:title="@string/action_game_menu"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_restart_without_mines"
+                android:orderInCategory="101"
+                android:title="@string/action_restart_without_mines"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_restart_with_mines"
+                android:orderInCategory="102"
+                android:title="@string/action_restart_with_mines"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_change_size"
+        android:orderInCategory="200"
+        android:title="@string/action_change_size"
+        app:showAsAction="ifRoom" >
+        <menu>
+            <item
+                android:id="@+id/action_new_game_easy"
+                android:orderInCategory="201"
+                android:title="@string/action_new_game_easy"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_new_game_medium"
+                android:orderInCategory="202"
+                android:title="@string/action_new_game_medium"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_new_game_hard"
+                android:orderInCategory="203"
+                android:title="@string/action_new_game_hard"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_new_game_custom"
+                android:orderInCategory="204"
+                android:title="@string/action_new_game_custom"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="900"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>

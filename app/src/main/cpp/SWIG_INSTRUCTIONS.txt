@@ -1,0 +1,8 @@
+
+To update swig, run in this folder:
+
+swig -c++ -java -package com.timimakkonen.minesweeper.jni -outdir ../java/com/timimakkonen/minesweeper/jni -o src/android-minesweeper/game_wrapper.cpp swig/game.swig
+
+Do this after each time you change:
+  * 'game.h' or
+  * 'game.cpp' in 'src/android-minesweeper'.

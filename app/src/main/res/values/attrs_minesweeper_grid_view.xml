@@ -1,0 +1,31 @@
+<resources>
+    <declare-styleable name="MinesweeperGridView">
+
+        <!-- Grid size -->
+        <attr name="numberOfColumns" format="integer" />
+        <attr name="numberOfRows" format="integer" />
+
+        <!-- Colors -->
+        <attr name="gridLinesColor" format="color" />
+        <attr name="cellBgColor" format="color" />
+        <attr name="checkedCellBgColor" format="color" />
+
+        <!-- Grid line width -->
+        <attr name="gridLineStrokeWidth" format="dimension" />
+
+        <!-- Drawables -->
+        <attr name="uncheckedCellDrawable" format="color|reference" />
+        <attr name="emptyCellDrawable" format="color|reference" />
+        <attr name="oneCellDrawable" format="color|reference" />
+        <attr name="twoCellDrawable" format="color|reference" />
+        <attr name="threeCellDrawable" format="color|reference" />
+        <attr name="fourCellDrawable" format="color|reference" />
+        <attr name="fiveCellDrawable" format="color|reference" />
+        <attr name="sixCellDrawable" format="color|reference" />
+        <attr name="sevenCellDrawable" format="color|reference" />
+        <attr name="eightCellDrawable" format="color|reference" />
+        <attr name="mineCellDrawable" format="color|reference" />
+        <attr name="markedCellDrawable" format="color|reference" />
+
+    </declare-styleable>
+</resources>

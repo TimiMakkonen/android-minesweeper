@@ -1,0 +1,15 @@
+<vector
+    android:height="100dp" android:viewportHeight="1000"
+    android:viewportWidth="1000"
+    android:width="100dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <path
+        android:fillAlpha="1"
+        android:fillColor="@color/one_symbol"
+        android:pathData="M500,100 L250,350v50H450V850H250V950H750V850H550V100Z"
+        android:strokeAlpha="1"
+        android:strokeColor="#00000000"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter"
+        android:strokeWidth="1"/>
+</vector>
