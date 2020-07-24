@@ -12,6 +12,7 @@ Android minesweeper game utilising [Minesweeper game library](https://github.com
 * [External libraries](#external-libraries)
 * [Tools used](#tools-used)
 * [Version history](#version-history)
+* [Screenshots](#screenshots)
 * [Fixes and features left to consider/implement](#fixes-and-features-left-to-considerimplement)
 
 ## How to clone
@@ -48,6 +49,12 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 * Currently you can play: Easy, Medium, Hard or Custom (up to 30x20) games.
 * Preliminary dark theme (night mode) support.
 * Progress is currently not saved on exit.
+
+## Screenshots
+
+Gameplay example | Gameplay example (larger grid) | Gameplay example (dark theme) | Custom game selection dialog
+-----------------|--------------------------------|-------------------------------|-----------------------------
+[![Gameplay example](/screenshots/GamePlay1.png "Gameplay example")](/screenshots/GamePlay1.png) | [![Gameplay example (larger grid)](/screenshots/GamePlay2.png "Gameplay example (larger grid)")](/screenshots/GamePlay2.png) | [![Gameplay example (dark theme)](/screenshots/DarkTheme_GamePlay.png "Gameplay example (dark theme)")](/screenshots/DarkTheme_GamePlay.png) | [![Custom game selection dialog](/screenshots/CustomGameSelection.png "Custom game selection dialog")](/screenshots/CustomGameSelection.png)
 
 ## Fixes and features left to consider/implement
 

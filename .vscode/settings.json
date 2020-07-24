@@ -66,8 +66,11 @@
     "README.md": ["## Table of contents"]
     },
     "cSpell.words": [
+        "Gameplay",
+        "Makkonen",
+        "Screenshots",
         "Timi",
-        "Makkonen"
+        "considerimplement"
     ],
     "markdown.extension.toc.unorderedList.marker": "*"
 }
