@@ -1,6 +1,6 @@
 # Minesweeper game on Android
 
-[![GitHub License](https://img.shields.io/github/license/TimiMakkonen/android-minesweeper)](https://github.com/TimiMakkonen/android-minesweeper/LICENSE.MIT)
+[![GitHub License](https://img.shields.io/github/license/TimiMakkonen/android-minesweeper)](/LICENSE)
 ![GitHub Latest Release Tag](https://img.shields.io/github/v/tag/TimiMakkonen/android-minesweeper)
 
 Android minesweeper game utilising [Minesweeper game library](https://github.com/TimiMakkonen/minesweeper) version 8.4.3.
