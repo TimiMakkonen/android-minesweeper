@@ -46,8 +46,8 @@ public class GameViewModel extends ViewModel {
 
         this.disposables = new CompositeDisposable();
         visualMinesweeperCells = new MutableLiveData<>();
-        playerHasWon = new MutableLiveData<>(false);
-        playerHasLost = new MutableLiveData<>(false);
+        playerHasWon = new MutableLiveData<>();
+        playerHasLost = new MutableLiveData<>();
 
         init();
     }

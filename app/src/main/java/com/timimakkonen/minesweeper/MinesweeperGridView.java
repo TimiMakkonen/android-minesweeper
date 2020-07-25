@@ -13,6 +13,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
+
 
 public class MinesweeperGridView extends View {
 
@@ -28,9 +30,9 @@ public class MinesweeperGridView extends View {
     private int mNumOfRows = DEFAULT_NUM_OF_ROWS; // TODO: use a default from R.dimen...
 
     // color fields:
-    private int mCellBgColor = Color.LTGRAY; // TODO: use a default from R.color...
-    private int mCheckedCellBgColor = Color.GRAY; // TODO: use a default from R.color...
-    private int mGridLinesColor = Color.BLACK; // TODO: use a default from R.color...
+    @ColorInt private int mCellBgColor = Color.LTGRAY; // TODO: use a default from R.color...
+    @ColorInt private int mCheckedCellBgColor = Color.GRAY; // TODO: use a default from R.color...
+    @ColorInt private int mGridLinesColor = Color.BLACK; // TODO: use a default from R.color...
 
     // drawable symbols:
     private Drawable mUncheckedDrawable;
@@ -493,7 +495,7 @@ public class MinesweeperGridView extends View {
         return mCellBgColor;
     }
 
-    public void setCellBgColor(int mCellBgColor) {
+    public void setCellBgColor(@ColorInt int mCellBgColor) {
         this.mCellBgColor = mCellBgColor;
         invalidatePaintColors();
     }
@@ -502,7 +504,7 @@ public class MinesweeperGridView extends View {
         return mGridLinesColor;
     }
 
-    public void setGridLinesColor(int mGridLinesColor) {
+    public void setGridLinesColor(@ColorInt int mGridLinesColor) {
         this.mGridLinesColor = mGridLinesColor;
         invalidatePaintColors();
     }

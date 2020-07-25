@@ -43,6 +43,11 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ## Version history
 
+### Version DEVELOP
+
+* Added win/loss background color changes/tints.
+* Annotated various ints with '@ColorInt', as appropriate.
+
 ### Version 0.1.0
 
 * Basic working minesweeper game in mostly playable form.
