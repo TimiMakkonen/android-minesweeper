@@ -1,5 +1,6 @@
 package com.timimakkonen.minesweeper;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -16,6 +17,7 @@ import android.view.View;
 import androidx.annotation.ColorInt;
 
 
+@SuppressWarnings("FieldCanBeLocal")
 public class MinesweeperGridView extends View {
 
     private static final String TAG = "MinesweeperGridView";
@@ -210,84 +212,108 @@ public class MinesweeperGridView extends View {
         if (a.hasValue(R.styleable.MinesweeperGridView_uncheckedCellDrawable)) {
             mUncheckedDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_uncheckedCellDrawable);
-            mUncheckedDrawable.setCallback(this);
+            if (mUncheckedDrawable != null) {
+                mUncheckedDrawable.setCallback(this);
+            }
         }
 
         // empty cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_emptyCellDrawable)) {
             mEmptyDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_emptyCellDrawable);
-            mEmptyDrawable.setCallback(this);
+            if (mEmptyDrawable != null) {
+                mEmptyDrawable.setCallback(this);
+            }
         }
 
         // one cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_oneCellDrawable)) {
             mOneDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_oneCellDrawable);
-            mOneDrawable.setCallback(this);
+            if (mOneDrawable != null) {
+                mOneDrawable.setCallback(this);
+            }
         }
 
         // two cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_twoCellDrawable)) {
             mTwoDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_twoCellDrawable);
-            mTwoDrawable.setCallback(this);
+            if (mTwoDrawable != null) {
+                mTwoDrawable.setCallback(this);
+            }
         }
 
         // three cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_threeCellDrawable)) {
             mThreeDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_threeCellDrawable);
-            mThreeDrawable.setCallback(this);
+            if (mThreeDrawable != null) {
+                mThreeDrawable.setCallback(this);
+            }
         }
 
         // four cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_fourCellDrawable)) {
             mFourDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_fourCellDrawable);
-            mFourDrawable.setCallback(this);
+            if (mFourDrawable != null) {
+                mFourDrawable.setCallback(this);
+            }
         }
 
         // five cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_fiveCellDrawable)) {
             mFiveDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_fiveCellDrawable);
-            mFiveDrawable.setCallback(this);
+            if (mFiveDrawable != null) {
+                mFiveDrawable.setCallback(this);
+            }
         }
 
         // six cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_sixCellDrawable)) {
             mSixDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_sixCellDrawable);
-            mSixDrawable.setCallback(this);
+            if (mSixDrawable != null) {
+                mSixDrawable.setCallback(this);
+            }
         }
 
         // seven cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_sevenCellDrawable)) {
             mSevenDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_sevenCellDrawable);
-            mSevenDrawable.setCallback(this);
+            if (mSevenDrawable != null) {
+                mSevenDrawable.setCallback(this);
+            }
         }
 
         // eight cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_eightCellDrawable)) {
             mEightDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_eightCellDrawable);
-            mEightDrawable.setCallback(this);
+            if (mEightDrawable != null) {
+                mEightDrawable.setCallback(this);
+            }
         }
 
         // mine cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_mineCellDrawable)) {
             mMineDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_mineCellDrawable);
-            mMineDrawable.setCallback(this);
+            if (mMineDrawable != null) {
+                mMineDrawable.setCallback(this);
+            }
         }
 
         // marked cell drawable:
         if (a.hasValue(R.styleable.MinesweeperGridView_markedCellDrawable)) {
             mMarkedDrawable = a.getDrawable(
                     R.styleable.MinesweeperGridView_markedCellDrawable);
-            mMarkedDrawable.setCallback(this);
+            if (mMarkedDrawable != null) {
+                mMarkedDrawable.setCallback(this);
+            }
         }
     }
 
@@ -298,13 +324,13 @@ public class MinesweeperGridView extends View {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+        super.onSizeChanged(w, h, oldW, oldH);
         invalidateDimensions();
     }
 
     private void invalidateDimensions() {
-        // TODO
+
         mViewWidth = getWidth();
         mViewHeight = getHeight();
         mPaddingLeft = getPaddingLeft();
@@ -434,17 +460,19 @@ public class MinesweeperGridView extends View {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        boolean result = mGestureDetector.onTouchEvent(event);
-        return result;
+        return mGestureDetector.onTouchEvent(event);
     }
 
+    @SuppressWarnings("SameReturnValue")
     public int maxGridHeight() {
         return 30;
     }
 
+    @SuppressWarnings("SameReturnValue")
     public int maxGridWidth() {
         return 20;
     }

@@ -47,6 +47,8 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 * Added win/loss background color changes/tints.
 * Annotated various ints with '@ColorInt', as appropriate.
+* Made dark theme selection and setting to work properly.
+* Fixed various warnings.
 
 ### Version 0.1.0
 

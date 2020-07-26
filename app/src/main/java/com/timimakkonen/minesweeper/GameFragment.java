@@ -1,7 +1,6 @@
 package com.timimakkonen.minesweeper;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -20,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.appcompat.app.AlertDialog;
 
@@ -52,9 +50,7 @@ public class GameFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_game, container, false);
-
-        return view;
+        return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -65,36 +61,24 @@ public class GameFragment extends Fragment {
         gameFragmentView = view.findViewById(R.id.game_fragment_view);
         hasOriginalColorDrawableBackground = initBackgroundColorField();
 
-        viewModel.getVisualMinesweeperCells().observe(getViewLifecycleOwner(),
-                                                      new Observer<VisualMinesweeperCell[][]>() {
-                                                          @Override
-                                                          public void onChanged(
-                                                                  VisualMinesweeperCell[][] visualMinesweeperCells) {
-                                                              mineSweeperView
-                                                                      .setVisualMinesweeperCellsAndResize(
-                                                                              visualMinesweeperCells);
-                                                          }
-                                                      });
+        viewModel.getVisualMinesweeperCells()
+                 .observe(getViewLifecycleOwner(), visualMinesweeperCells -> mineSweeperView
+                         .setVisualMinesweeperCellsAndResize(visualMinesweeperCells)
+                 );
 
-        viewModel.hasPlayerWon().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean playerHasWon) {
-                if (playerHasWon) {
-                    onGameWin();
-                } else {
-                    onGameNotWin();
-                }
+        viewModel.hasPlayerWon().observe(getViewLifecycleOwner(), playerHasWon -> {
+            if (playerHasWon) {
+                onGameWin();
+            } else {
+                onGameNotWin();
             }
         });
 
-        viewModel.hasPlayerLost().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean playerHasLost) {
-                if (playerHasLost) {
-                    onGameLoss();
-                } else {
-                    onGameNotLoss();
-                }
+        viewModel.hasPlayerLost().observe(getViewLifecycleOwner(), playerHasLost -> {
+            if (playerHasLost) {
+                onGameLoss();
+            } else {
+                onGameNotLoss();
             }
         });
 
@@ -128,7 +112,7 @@ public class GameFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
 
-        ((MinesweeperApplication) getActivity().getApplicationContext())
+        ((MinesweeperApplication) requireActivity().getApplicationContext())
                 .appComponent
                 .inject(this);
 
@@ -177,7 +161,7 @@ public class GameFragment extends Fragment {
     private void customNewGameDialog() { // TODO
 
         final MaterialAlertDialogBuilder newGameAlert = new MaterialAlertDialogBuilder(
-                getActivity());
+                requireActivity());
 
         newGameAlert.setTitle(R.string.new_game_dialog_title);
 
@@ -202,43 +186,24 @@ public class GameFragment extends Fragment {
         numOfMinesSliderWithEditText.setMaxValue(0);
 
         gridHeightSliderWithEditText.addOnChangeListener(
-                new MaterialIntSliderAndEditText.OnChangeListener() {
-                    @Override
-                    public void onValueChange(
-                            @NonNull MaterialIntSliderAndEditText intSliderAndEditText, int value) {
-                        numOfMinesSliderWithEditText.setMaxValue(
-                                viewModel.maxNumOfMines(gridHeightSliderWithEditText.getValue(),
-                                                        gridWidthSliderWithEditText.getValue()));
-                    }
-                });
+                (intSliderAndEditText, value) -> numOfMinesSliderWithEditText.setMaxValue(
+                        viewModel.maxNumOfMines(gridHeightSliderWithEditText.getValue(),
+                                                gridWidthSliderWithEditText.getValue())));
 
         gridWidthSliderWithEditText.addOnChangeListener(
-                new MaterialIntSliderAndEditText.OnChangeListener() {
-                    @Override
-                    public void onValueChange(
-                            @NonNull MaterialIntSliderAndEditText intSliderAndEditText, int value) {
-                        numOfMinesSliderWithEditText.setMaxValue(
-                                viewModel.maxNumOfMines(gridHeightSliderWithEditText.getValue(),
-                                                        gridWidthSliderWithEditText.getValue()));
-                    }
-                });
+                (intSliderAndEditText, value) -> numOfMinesSliderWithEditText.setMaxValue(
+                        viewModel.maxNumOfMines(gridHeightSliderWithEditText.getValue(),
+                                                gridWidthSliderWithEditText.getValue())));
 
 
-        newGameAlert.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
+        newGameAlert.setNeutralButton(R.string.cancel, (dialog, which) -> {
         });
 
-        newGameAlert.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                viewModel.startNewGame(gridHeightSliderWithEditText.getValue(),
-                                       gridWidthSliderWithEditText.getValue(),
-                                       numOfMinesSliderWithEditText.getValue());
-            }
-        });
+        newGameAlert.setPositiveButton(
+                R.string.accept,
+                (dialog, which) -> viewModel.startNewGame(gridHeightSliderWithEditText.getValue(),
+                                                          gridWidthSliderWithEditText.getValue(),
+                                                          numOfMinesSliderWithEditText.getValue()));
 
         newGameAlert.show();
     }
@@ -246,7 +211,7 @@ public class GameFragment extends Fragment {
 
     private void showSettings() {
         //Todo
-        Context context = getActivity().getApplicationContext();
+        Context context = requireActivity().getApplicationContext();
         CharSequence text = getString(R.string.not_implemented_message);
         int duration = Toast.LENGTH_LONG;
 
@@ -295,64 +260,56 @@ public class GameFragment extends Fragment {
     }
 
     private void showWinAlert() {
-        new MaterialAlertDialogBuilder(getActivity())
+        new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.win_alert_title)
                 .setSingleChoiceItems(R.array.won_game_dialog_options, 0, null)
                 .setNeutralButton(R.string.cancel, null)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        int selectedItem =
-                                ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                        Log.d(TAG,
-                              String.format("showWinAlert: onClick: Confirmed option number: %d",
-                                            selectedItem));
-                        String choice = getResources().getStringArray(
-                                R.array.won_game_dialog_options)[selectedItem];
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    int selectedItem =
+                            ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                    Log.d(TAG, String.format("showWinAlert: onClick: Confirmed option number: %d",
+                                             selectedItem));
+                    String choice = getResources().getStringArray(
+                            R.array.won_game_dialog_options)[selectedItem];
 
-                        if (choice.equals(getString(R.string.play_again))) {
-                            viewModel.restartWithoutMines();
-                        } else if (choice.equals(getString(R.string.play_easy_game))) {
-                            viewModel.startNewEasyGame();
-                        } else if (choice.equals(getString(R.string.play_medium_game))) {
-                            viewModel.startNewMediumGame();
-                        } else if (choice.equals(getString(R.string.play_hard_game))) {
-                            viewModel.startNewHardGame();
-                        } else if (choice.equals(getString(R.string.play_custom_game))) {
-                            customNewGameDialog();
-                        }
+                    if (choice.equals(getString(R.string.play_again))) {
+                        viewModel.restartWithoutMines();
+                    } else if (choice.equals(getString(R.string.play_easy_game))) {
+                        viewModel.startNewEasyGame();
+                    } else if (choice.equals(getString(R.string.play_medium_game))) {
+                        viewModel.startNewMediumGame();
+                    } else if (choice.equals(getString(R.string.play_hard_game))) {
+                        viewModel.startNewHardGame();
+                    } else if (choice.equals(getString(R.string.play_custom_game))) {
+                        customNewGameDialog();
                     }
                 })
                 .show();
     }
 
     private void showLossAlert() {
-        new MaterialAlertDialogBuilder(getActivity())
+        new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.lost_alert_title)
                 .setSingleChoiceItems(R.array.lost_game_dialog_options, 0, null)
                 .setNeutralButton(R.string.cancel, null)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        int selectedItem =
-                                ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                        Log.d(TAG,
-                              String.format("showLostAlert: onClick: Confirmed option number: %d",
-                                            selectedItem));
-                        String choice = getResources().getStringArray(
-                                R.array.lost_game_dialog_options)[selectedItem];
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    int selectedItem =
+                            ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                    Log.d(TAG, String.format("showLostAlert: onClick: Confirmed option number: %d",
+                                             selectedItem));
+                    String choice = getResources().getStringArray(
+                            R.array.lost_game_dialog_options)[selectedItem];
 
-                        if (choice.equals(getString(R.string.play_again))) {
-                            viewModel.restartWithoutMines();
-                        } else if (choice.equals(getString(R.string.play_easy_game))) {
-                            viewModel.startNewEasyGame();
-                        } else if (choice.equals(getString(R.string.play_medium_game))) {
-                            viewModel.startNewMediumGame();
-                        } else if (choice.equals(getString(R.string.play_hard_game))) {
-                            viewModel.startNewHardGame();
-                        } else if (choice.equals(getString(R.string.play_custom_game))) {
-                            customNewGameDialog();
-                        }
+                    if (choice.equals(getString(R.string.play_again))) {
+                        viewModel.restartWithoutMines();
+                    } else if (choice.equals(getString(R.string.play_easy_game))) {
+                        viewModel.startNewEasyGame();
+                    } else if (choice.equals(getString(R.string.play_medium_game))) {
+                        viewModel.startNewMediumGame();
+                    } else if (choice.equals(getString(R.string.play_hard_game))) {
+                        viewModel.startNewHardGame();
+                    } else if (choice.equals(getString(R.string.play_custom_game))) {
+                        customNewGameDialog();
                     }
                 })
                 .show();

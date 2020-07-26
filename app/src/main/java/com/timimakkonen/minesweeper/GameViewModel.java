@@ -35,7 +35,7 @@ public class GameViewModel extends ViewModel {
     private final MutableLiveData<VisualMinesweeperCell[][]> visualMinesweeperCells;
     private final MutableLiveData<Boolean> playerHasWon;
     private final MutableLiveData<Boolean> playerHasLost;
-    private CompositeDisposable disposables;
+    private final CompositeDisposable disposables;
 
 
     @Inject

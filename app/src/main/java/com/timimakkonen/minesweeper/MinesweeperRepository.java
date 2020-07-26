@@ -18,8 +18,8 @@ class MinesweeperRepository {
 
     private static final String TAG = "MinesweeperRepository";
 
-    private BehaviorSubject<MinesweeperDataForView> minesweeperDataForViewObservable;
-    private AndroidMinesweeperGame currentMinesweeperGame;
+    private final BehaviorSubject<MinesweeperDataForView> minesweeperDataForViewObservable;
+    private final AndroidMinesweeperGame currentMinesweeperGame;
 
     @Inject
     public MinesweeperRepository(AndroidMinesweeperGame androidMinesweeperGame) {

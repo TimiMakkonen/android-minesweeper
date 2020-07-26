@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -25,7 +26,13 @@ public class MainActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        // Odd workaround to allow using 'androidx.fragment.app.FragmentContainerView' instead of 'fragment' as navigation host.
+        // https://issuetracker.google.com/issues/142847973
+        final NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        final NavController navController = navHostFragment.getNavController();
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
@@ -35,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+               || super.onSupportNavigateUp();
     }
 
     @Override
@@ -51,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_about) {
             showAbout();
             return true;

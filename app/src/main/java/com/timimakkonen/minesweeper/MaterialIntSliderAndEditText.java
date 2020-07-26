@@ -5,11 +5,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -92,33 +89,27 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
             public void afterTextChanged(Editable s) {
             }
         });
-        editText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    try {
-                        int textValue = Integer.parseInt(String.valueOf(editText.getText()));
-                        setCurrentValue(textValue);
-                    } catch (NumberFormatException ex) {
-                        Log.d(TAG, "setUpListeners: editTextListener: Invalid integer");
-                    }
+        editText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                try {
+                    int textValue = Integer.parseInt(String.valueOf(editText.getText()));
+                    setCurrentValue(textValue);
+                } catch (NumberFormatException ex) {
+                    Log.d(TAG, "setUpListeners: editTextListener: Invalid integer");
                 }
             }
         });
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE ||
-                    actionId == EditorInfo.IME_ACTION_NEXT) {
-                    try {
-                        int textValue = Integer.parseInt(String.valueOf(editText.getText()));
-                        setCurrentValue(textValue);
-                    } catch (NumberFormatException ex) {
-                        Log.d(TAG, "setUpListeners: editTextListener: Invalid integer");
-                    }
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                actionId == EditorInfo.IME_ACTION_NEXT) {
+                try {
+                    int textValue = Integer.parseInt(String.valueOf(editText.getText()));
+                    setCurrentValue(textValue);
+                } catch (NumberFormatException ex) {
+                    Log.d(TAG, "setUpListeners: editTextListener: Invalid integer");
                 }
-                return false;
             }
+            return false;
         });
     }
 
