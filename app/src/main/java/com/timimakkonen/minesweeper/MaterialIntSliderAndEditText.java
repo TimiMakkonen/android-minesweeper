@@ -22,6 +22,7 @@ import java.util.List;
 public class MaterialIntSliderAndEditText extends LinearLayout {
 
     private static final String TAG = "MatIntSliderAndEditT";
+
     private final List<OnChangeListener> changeListeners = new ArrayList<>();
     private Slider slider;
     private TextInputEditText editText;

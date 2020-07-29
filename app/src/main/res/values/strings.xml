@@ -1,27 +1,20 @@
 <resources>
     <string name="app_name">Minesweeper</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="main_fragment_label">@string/app_name</string>
     <string name="settings_label">Settings</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-
     <!-- Win/Lost Alerts -->
     <string name="win_alert_title">Congratulations! You have won!</string>
     <string name="lost_alert_title">You have lost!</string>
+
+    <!-- Win/Lost Screen options -->
+    <string name="play_again">Play Again</string>
+    <string name="play_easy_game">Play Easy Game</string>
+    <string name="play_medium_game">Play Medium Game</string>
+    <string name="play_hard_game">Play Hard Game</string>
+    <string name="play_custom_game">Play Custom Game</string>
 
     <!-- Menu buttons -->
     <string name="action_about">About</string>
@@ -46,13 +39,16 @@
     <string name="grid_width_selection_title">Grid width:</string>
     <string name="number_of_mines_selection_title">Number of mines:</string>
 
+    <!-- Delete saved game dialog -->
+    <string name="delete_saved_game_dialog_title">Delete saved game data?</string>
+    <string name="delete_saved_game_dialog_message">This will delete the previously saved game.</string>
 
-    <!-- Various strings: -->
+    <!-- Corrupted game save dialog -->
+    <string name="corrupted_game_save_dialog_title">Save file was corrupted</string>
+    <string name="corrupted_game_save_dialog_message">Deleted the save file and started a new game.</string>
+
+    <!-- Various strings -->
     <string name="not_implemented_message">Not implemented yet. Come back later!</string>
-    <string name="play_again">Play Again</string>
-    <string name="play_easy_game">Play Easy Game</string>
-    <string name="play_medium_game">Play Medium Game</string>
-    <string name="play_hard_game">Play Hard Game</string>
-    <string name="play_custom_game">Play Custom Game</string>
+
 
 </resources>

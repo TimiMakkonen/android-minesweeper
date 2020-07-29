@@ -2,11 +2,9 @@ package com.timimakkonen.minesweeper;
 
 import android.util.Log;
 
-
 import com.timimakkonen.minesweeper.jni.AndroidMinesweeperGame;
 import com.timimakkonen.minesweeper.di.ApplicationScope;
 import com.timimakkonen.minesweeper.jni.vector_int;
-
 
 import javax.inject.Inject;
 
@@ -18,12 +16,17 @@ class MinesweeperRepository {
 
     private static final String TAG = "MinesweeperRepository";
 
+    private static final String HAS_SAVED_GAME_KEY = "has_saved_game";
+
+    private final LocalStorage localStorage;
     private final BehaviorSubject<MinesweeperDataForView> minesweeperDataForViewObservable;
     private final AndroidMinesweeperGame currentMinesweeperGame;
 
     @Inject
-    public MinesweeperRepository(AndroidMinesweeperGame androidMinesweeperGame) {
+    public MinesweeperRepository(LocalStorage localStorage,
+                                 AndroidMinesweeperGame androidMinesweeperGame) {
 
+        this.localStorage = localStorage;
         this.currentMinesweeperGame = androidMinesweeperGame;
         this.minesweeperDataForViewObservable = BehaviorSubject.create();
         updateCurrentGridInformation();
@@ -113,10 +116,20 @@ class MinesweeperRepository {
     }
 
     public int maxNumOfMines(int gridHeight, int gridWidth) throws IllegalArgumentException {
-        if (gridHeight < 0 || gridWidth < 0 ) {
-            throw new IllegalArgumentException("Trying to check the maximum number of mines for a negative grid.");
+        if (gridHeight < 0 || gridWidth < 0) {
+            throw new IllegalArgumentException(
+                    "Trying to check the maximum number of mines for a negative grid.");
         }
         return AndroidMinesweeperGame.maxNumOfMines(gridHeight, gridWidth);
+    }
+
+    public void save() {
+        saveCurrentMinesweeperGame();
+    }
+
+    private void saveCurrentMinesweeperGame() {
+        localStorage.saveCurrentMinesweeperGame(this.currentMinesweeperGame.serialise());
+        localStorage.setBoolean(HAS_SAVED_GAME_KEY, true);
     }
 
     private void updateCurrentGridInformation() {

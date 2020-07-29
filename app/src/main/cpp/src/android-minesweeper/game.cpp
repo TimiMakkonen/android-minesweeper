@@ -1,10 +1,14 @@
 
-#include <vector> // std::vector
+#include <sstream>   // std::ostringstream
+#include <stdexcept> // std::invalid_argument
+#include <string>    // std::string
+#include <vector>    // std::vector
+
 
 #include <android-minesweeper/game.h>
 #include <minesweeper/game.h>
 
-// TODO(Timi): Handle throws!
+// TODO(Timi): Handle throws?
 namespace android_minesweeper {
 
 AndroidMinesweeperGame::AndroidMinesweeperGame()
@@ -39,6 +43,25 @@ int AndroidMinesweeperGame::getNumOfMines() const { return this->_minesweeperGam
 
 std::vector<int> AndroidMinesweeperGame::visualise() const {
     return this->_minesweeperGame.visualise<std::vector<int>>();
+}
+
+std::string AndroidMinesweeperGame::serialise() const {
+    std::ostringstream oss;
+    this->_minesweeperGame.serialise(oss);
+    return oss.str();
+}
+
+bool AndroidMinesweeperGame::deserialise(std::string inStr) {
+
+    std::istringstream iss(inStr);
+    try {
+        this->_minesweeperGame.deserialise(iss);
+    } catch (std::invalid_argument& ex) {
+        // return false if unsuccessful
+        return false;
+    }
+    // return true if successful
+    return true;
 }
 
 // static

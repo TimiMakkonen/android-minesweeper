@@ -1,7 +1,9 @@
 #ifndef ANDROID_MINESWEEPER_GAME_H
 #define ANDROID_MINESWEEPER_GAME_H
 
+#include <string> // std::string
 #include <vector> // std::vector
+
 
 #include <minesweeper/game.h>
 #include <minesweeper/random.h>
@@ -48,6 +50,13 @@ class AndroidMinesweeperGame {
 
     // get visual information of each cell:
     std::vector<int> visualise() const;
+
+    // save game:
+    std::string serialise() const;
+
+    // load game:
+    // returns true if successful, false if unsuccessful/throw
+    bool deserialise(std::string inStr);
 
     // +------------------------+
     // | public static methods: |

@@ -196,4 +196,8 @@ public class GameViewModel extends ViewModel {
             return visualMinesweeperCells.getValue()[0].length;
         }
     }
+
+    public void save() {
+        minesweeperRepository.save();
+    }
 }

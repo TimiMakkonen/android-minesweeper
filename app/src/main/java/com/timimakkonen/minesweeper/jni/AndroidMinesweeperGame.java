@@ -88,6 +88,14 @@ public class AndroidMinesweeperGame {
     return new vector_int(minesweeper_gameJNI.AndroidMinesweeperGame_visualise(swigCPtr, this), true);
   }
 
+  public String serialise() {
+    return minesweeper_gameJNI.AndroidMinesweeperGame_serialise(swigCPtr, this);
+  }
+
+  public boolean deserialise(String inStr) {
+    return minesweeper_gameJNI.AndroidMinesweeperGame_deserialise(swigCPtr, this, inStr);
+  }
+
   public static int maxNumOfMines(int gridHeight, int gridWidth) {
     return minesweeper_gameJNI.AndroidMinesweeperGame_maxNumOfMines(gridHeight, gridWidth);
   }

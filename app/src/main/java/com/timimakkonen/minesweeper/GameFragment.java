@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -30,8 +29,13 @@ public class GameFragment extends Fragment {
 
     private static final String TAG = "GameFragment";
 
+    private static final String SAVE_AND_RESUME_KEY = "save_and_resume";
+
     @Inject
     GameViewModel viewModel;
+
+    @Inject
+    LocalStorage localStorage;
 
 
     private MinesweeperGridView mineSweeperView;
@@ -43,12 +47,10 @@ public class GameFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        setHasOptionsMenu(true);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_game, container, false);
     }
@@ -111,18 +113,25 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
 
         ((MinesweeperApplication) requireActivity().getApplicationContext())
                 .appComponent
                 .inject(this);
-
-        super.onAttach(context);
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPause() {
+        if (localStorage.getBoolean(SAVE_AND_RESUME_KEY, true)) {
+            viewModel.save();
+        }
+        super.onPause();
     }
 
     @Override
@@ -158,7 +167,7 @@ public class GameFragment extends Fragment {
         }
     }
 
-    private void customNewGameDialog() { // TODO
+    private void customNewGameDialog() {
 
         final MaterialAlertDialogBuilder newGameAlert = new MaterialAlertDialogBuilder(
                 requireActivity());
@@ -210,13 +219,6 @@ public class GameFragment extends Fragment {
 
 
     private void showSettings() {
-        //Todo
-        Context context = requireActivity().getApplicationContext();
-        CharSequence text = getString(R.string.not_implemented_message);
-        int duration = Toast.LENGTH_LONG;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
 
         NavHostFragment.findNavController(GameFragment.this)
                        .navigate(R.id.action_FirstFragment_to_settingsFragment);

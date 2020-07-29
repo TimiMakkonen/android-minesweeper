@@ -243,6 +243,9 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 #include <stdexcept>
 
 
+#include <string>
+
+
 /* Check for overflow converting to Java int (always signed 32-bit) from (unsigned variable-bit) size_t */
 SWIGINTERN jint SWIG_JavaIntFromSize_t(size_t size) {
   static const jint JINT_MAX = 0x7FFFFFFF;
@@ -779,6 +782,45 @@ SWIGEXPORT jlong JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1game
   arg1 = *(android_minesweeper::AndroidMinesweeperGame **)&jarg1; 
   result = ((android_minesweeper::AndroidMinesweeperGame const *)arg1)->visualise();
   *(std::vector< int > **)&jresult = new std::vector< int >((const std::vector< int > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1gameJNI_AndroidMinesweeperGame_1serialise(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  android_minesweeper::AndroidMinesweeperGame *arg1 = (android_minesweeper::AndroidMinesweeperGame *) 0 ;
+  std::string result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(android_minesweeper::AndroidMinesweeperGame **)&jarg1; 
+  result = ((android_minesweeper::AndroidMinesweeperGame const *)arg1)->serialise();
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1gameJNI_AndroidMinesweeperGame_1deserialise(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  jboolean jresult = 0 ;
+  android_minesweeper::AndroidMinesweeperGame *arg1 = (android_minesweeper::AndroidMinesweeperGame *) 0 ;
+  std::string arg2 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(android_minesweeper::AndroidMinesweeperGame **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+    return 0;
+  } 
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return 0;
+  (&arg2)->assign(arg2_pstr);
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  result = (bool)(arg1)->deserialise(arg2);
+  jresult = (jboolean)result; 
   return jresult;
 }
 

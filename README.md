@@ -49,6 +49,12 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 * Annotated various ints with '@ColorInt', as appropriate.
 * Made dark theme selection and setting to work properly.
 * Fixed various warnings.
+* Added saving functionality and made the game save on exit.
+  * Also added an option to switch off this functionality in settings.
+  * Potential save corruptions have also been handled properly.
+* Added LocalStorage class to handle all local storage related tasks.
+  * SettingsFragment is the only exception to this. (It handles this automatically by itself.)
+* Deleted unnecessary relic pieces of code.
 
 ### Version 0.1.0
 
@@ -65,12 +71,11 @@ Gameplay example | Gameplay example (larger grid) | Gameplay example (dark theme
 
 ## Fixes and features left to consider/implement
 
-* Support dark theme (night mode) properly.
-* Make app to save the game on exit, and load the game back when returning.
 * Add tests.
 * Handle edge cases and invalid arguments of various method parameters.
-* Automatise ['SWIG'](http://www.swig.org).
-* Handle exceptions in C++ code.
+* Consider automatising ['SWIG'](http://www.swig.org).
+  * Would be nice, but would require anyone who builds this app to have ['SWIG'](http://www.swig.org) installed.
+* Consider handling exceptions in C++ code.
 * Add more customisation options (more colors, minesweeper symbols, etc.).
 * Clean up and comment code.
 * Add help and about pages.

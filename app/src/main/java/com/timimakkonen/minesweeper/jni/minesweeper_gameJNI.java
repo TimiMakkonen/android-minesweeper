@@ -37,6 +37,8 @@ public class minesweeper_gameJNI {
   public final static native int AndroidMinesweeperGame_getGridWidth(long jarg1, AndroidMinesweeperGame jarg1_);
   public final static native int AndroidMinesweeperGame_getNumOfMines(long jarg1, AndroidMinesweeperGame jarg1_);
   public final static native long AndroidMinesweeperGame_visualise(long jarg1, AndroidMinesweeperGame jarg1_);
+  public final static native String AndroidMinesweeperGame_serialise(long jarg1, AndroidMinesweeperGame jarg1_);
+  public final static native boolean AndroidMinesweeperGame_deserialise(long jarg1, AndroidMinesweeperGame jarg1_, String jarg2);
   public final static native int AndroidMinesweeperGame_maxNumOfMines(int jarg1, int jarg2);
   public final static native double AndroidMinesweeperGame_maxProportionOfMines(int jarg1, int jarg2);
   public final static native int AndroidMinesweeperGame_minNumOfMines();

@@ -13,19 +13,31 @@ import androidx.navigation.ui.NavigationUI;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final String SAVE_WAS_CORRUPTED_KEY = "save_was_corrupted";
+
     AppBarConfiguration appBarConfiguration;
+
+    @Inject
+    LocalStorage localStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // setting up content view
         setContentView(R.layout.activity_main);
 
+        // setting up application toolbar
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // setting up action bar with navigation controller
         // Odd workaround to allow using 'androidx.fragment.app.FragmentContainerView' instead of 'fragment' as navigation host.
         // https://issuetracker.google.com/issues/142847973
         final NavHostFragment navHostFragment =
@@ -35,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
         final NavController navController = navHostFragment.getNavController();
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        // injecting dependencies
+        ((MinesweeperApplication) getApplicationContext()).appComponent.inject(this);
+
+        // displaying alert dialog if save file was corrupted
+        if (localStorage.getBoolean(SAVE_WAS_CORRUPTED_KEY, false)) {
+            showCorruptedGameSaveDialog();
+            localStorage.setBoolean(SAVE_WAS_CORRUPTED_KEY, false);
+        }
 
     }
 
@@ -68,5 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void showAbout() {
         //Todo
+    }
+
+    private void showCorruptedGameSaveDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.corrupted_game_save_dialog_title)
+                .setMessage(R.string.corrupted_game_save_dialog_message)
+                .setPositiveButton(R.string.ok, null)
+                .show();
     }
 }
