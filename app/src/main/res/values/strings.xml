@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Minesweeper</string>
+    <string name="source_code_webpage">https://github.com/TimiMakkonen/android-minesweeper</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="main_fragment_label">@string/app_name</string>
@@ -55,11 +56,10 @@
     <string name="source_code_button">Source code</string>
     <string name="send_feedback_button">Send feedback</string>
 
-    <!-- Various strings -->
-    <string name="not_implemented_message">Not implemented yet. Come back later!</string>
-    <string name="source_code_webpage">https://github.com/TimiMakkonen/android-minesweeper</string>
-    <string name="feedback_email_subject">Android Minesweeper - V:%s OS:%s SDK:%d D:%s M:%s P:%s</string>
+    <!-- Feedback -->
     <string name="email">timi.makkonen@gmail.com</string>
+    <string name="feedback_email_subject">Android Minesweeper - V:%s OS:%s SDK:%d D:%s M:%s P:%s</string>
 
+    <!-- Various strings -->
 
 </resources>

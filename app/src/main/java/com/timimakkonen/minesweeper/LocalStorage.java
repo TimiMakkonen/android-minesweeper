@@ -93,7 +93,7 @@ public class LocalStorage {
         return output;
     }
 
-    private void deleteSaveFile(String saveFileName) {
+    private void deleteSaveFile(@SuppressWarnings("SameParameterValue") String saveFileName) {
         File file = new File(savePath, saveFileName);
         //noinspection ResultOfMethodCallIgnored
         file.delete();
