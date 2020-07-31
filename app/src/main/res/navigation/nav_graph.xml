@@ -18,4 +18,12 @@
         android:id="@+id/settingsFragment"
         android:name="com.timimakkonen.minesweeper.SettingsFragment"
         android:label="@string/settings_label" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.timimakkonen.minesweeper.AboutFragment"
+        android:label="@string/about_label"
+        tools:layout="@layout/fragment_about" />
+    <action
+        android:id="@+id/action_global_aboutFragment"
+        app:destination="@id/aboutFragment" />
 </navigation>

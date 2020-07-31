@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showAbout() {
-        //Todo
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_aboutFragment);
     }
 
     private void showCorruptedGameSaveDialog() {

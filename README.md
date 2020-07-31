@@ -55,6 +55,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 * Added LocalStorage class to handle all local storage related tasks.
   * SettingsFragment is the only exception to this. (It handles this automatically by itself.)
 * Deleted unnecessary relic pieces of code.
+* Added about page.
 
 ### Version 0.1.0
 

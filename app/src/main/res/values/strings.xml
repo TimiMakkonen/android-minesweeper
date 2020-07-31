@@ -47,8 +47,19 @@
     <string name="corrupted_game_save_dialog_title">Save file was corrupted</string>
     <string name="corrupted_game_save_dialog_message">Deleted the save file and started a new game.</string>
 
+    <!-- About page -->
+    <string name="about_label">About</string>
+    <string name="version_name">v%s</string>
+    <string name="app_logo_description">Application logo</string>
+    <string name="copyright_text">Copyright © 2020 Timi Makkonen</string>
+    <string name="source_code_button">Source code</string>
+    <string name="send_feedback_button">Send feedback</string>
+
     <!-- Various strings -->
     <string name="not_implemented_message">Not implemented yet. Come back later!</string>
+    <string name="source_code_webpage">https://github.com/TimiMakkonen/android-minesweeper</string>
+    <string name="feedback_email_subject">Android Minesweeper - V:%s OS:%s SDK:%d D:%s M:%s P:%s</string>
+    <string name="email">timi.makkonen@gmail.com</string>
 
 
 </resources>
