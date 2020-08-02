@@ -35,7 +35,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ## External libraries
 
-* [TimiMakkonen/minesweeper](https://github.com/astoeckel/json) (v8.4.3) for minesweeper game logic in C++
+* [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) (v8.4.3) for minesweeper game logic in C++
 
 ## Tools used
 
