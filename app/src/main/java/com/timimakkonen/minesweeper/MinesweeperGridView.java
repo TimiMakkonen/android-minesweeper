@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -32,9 +33,12 @@ public class MinesweeperGridView extends View {
     private int mNumOfRows = DEFAULT_NUM_OF_ROWS; // TODO: use a default from R.dimen...
 
     // color fields:
-    @ColorInt private int mCellBgColor = Color.LTGRAY; // TODO: use a default from R.color...
-    @ColorInt private int mCheckedCellBgColor = Color.GRAY; // TODO: use a default from R.color...
-    @ColorInt private int mGridLinesColor = Color.BLACK; // TODO: use a default from R.color...
+    @ColorInt
+    private int mCellBgColor = Color.LTGRAY; // TODO: use a default from R.color...
+    @ColorInt
+    private int mCheckedCellBgColor = Color.GRAY; // TODO: use a default from R.color...
+    @ColorInt
+    private int mGridLinesColor = Color.BLACK; // TODO: use a default from R.color...
 
     // drawable symbols:
     private Drawable mUncheckedDrawable;
@@ -384,7 +388,7 @@ public class MinesweeperGridView extends View {
                                    mOriginX + ((x + 1) * mCellSize),
                                    mOriginY + ((y + 1) * mCellSize));
         if (mVisualMinesweeperCells != null) {
-            switch (mVisualMinesweeperCells[y][x]) { // TODO:
+            switch (mVisualMinesweeperCells[y][x]) {
                 case UNCHECKED:
                     canvas.drawRect(cellBounds, mCellBgPaint);
                     drawDrawableToCell(canvas, mUncheckedDrawable, cellBounds);
@@ -469,12 +473,16 @@ public class MinesweeperGridView extends View {
 
     @SuppressWarnings("SameReturnValue")
     public int maxGridHeight() {
-        return 30;
+        return (int) (mContentHeight /
+                      ((float) (24 * getContext().getResources().getDisplayMetrics().densityDpi) /
+                       DisplayMetrics.DENSITY_DEFAULT));
     }
 
     @SuppressWarnings("SameReturnValue")
     public int maxGridWidth() {
-        return 20;
+        return (int) (mContentWidth /
+                      ((float) (24 * getContext().getResources().getDisplayMetrics().densityDpi) /
+                       DisplayMetrics.DENSITY_DEFAULT));
     }
 
     /**
