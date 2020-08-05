@@ -113,23 +113,51 @@ public class GameViewModel extends ViewModel {
         return playerHasLost;
     }
 
-    public void checkMinesweeperInputCoordinates(int x, int y) throws IllegalArgumentException {
+    public void primaryMinesweeperCoordinatesAction(int x, int y) throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= getCurrentGridWidth() ||
             y >= getCurrentGridHeight()) {
-            throw new IllegalArgumentException("Trying to check cell outside the grid.");
+            throw new IllegalArgumentException(
+                    "Trying perform primary action on a cell outside the grid.");
         }
-        Log.d(TAG, "checkMinesweeperInputCoordinates: "
-                   + String.format("Checking cell (%d, %d)", x, y));
-        minesweeperRepository.checkInputCoordinates(x, y);
+
+        if (isCellVisible(x, y)) {
+            completeAroundMinesweeperCoordinates(x, y);
+        } else {
+            checkMinesweeperCoordinates(x, y);
+        }
     }
 
-    public void markMinesweeperInputCoordinates(int x, int y) throws IllegalArgumentException {
+    public void secondaryMinesweeperCoordinatesAction(int x, int y)
+            throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= getCurrentGridWidth() ||
             y >= getCurrentGridHeight()) {
-            throw new IllegalArgumentException("Trying to mark cell outside the grid.");
+            throw new IllegalArgumentException(
+                    "Trying perform secondary action on a cell outside the grid.");
         }
+        markMinesweeperCoordinates(x, y);
+    }
 
-        minesweeperRepository.markInputCoordinates(x, y);
+    private void checkMinesweeperCoordinates(int x, int y) {
+        Log.d(TAG, "checkMinesweeperCoordinates: "
+                   + String.format("Checking cell (%d, %d)", x, y));
+        minesweeperRepository.checkCoordinates(x, y);
+    }
+
+    private void markMinesweeperCoordinates(int x, int y) {
+        Log.d(TAG, "markMinesweeperCoordinates: "
+                   + String.format("Marking cell (%d, %d)", x, y));
+        minesweeperRepository.markCoordinates(x, y);
+    }
+
+    private void completeAroundMinesweeperCoordinates(int x, int y)
+            throws IllegalArgumentException {
+        if (!isCellVisible(x, y)) {
+            throw new IllegalArgumentException(
+                    "Trying to complete around a cell that is not visible.");
+        }
+        Log.d(TAG, "completeAroundMinesweeperCoordinates: "
+                   + String.format("Completing around cell (%d, %d)", x, y));
+        minesweeperRepository.completeAroundCoordinates(x, y);
     }
 
     public void restartWithMines() {
@@ -195,6 +223,14 @@ public class GameViewModel extends ViewModel {
         } else {
             return visualMinesweeperCells.getValue()[0].length;
         }
+    }
+
+    private boolean isCellVisible(int x, int y) {
+        if (BuildConfig.DEBUG && (x < 0 || y < 0 || x >= getCurrentGridWidth() ||
+                                   y >= getCurrentGridHeight())) {
+            throw new AssertionError("Trying to check visibility of a cell outside the grid.");
+        }
+        return minesweeperRepository.isCellVisible(x, y);
     }
 
     public void save() {

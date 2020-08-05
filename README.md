@@ -46,6 +46,13 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 ### Version DEVELOP
 
 * Added 'SolutionFragment' to show the solution of the current grid.
+* Added 'complete-around'-feature.
+  * If you perform a primary click action on a visible cell that has:
+    'number of marked neighbouring cells' == 'number of mines around',
+    then all unchecked/invisible cells around this cell get
+    automatically checked, since they trivially should not have a mine.
+  * This action can result in a loss if a cell that does not have a mine
+    has been erroneously marked.
 * Modified 'maxGridHeight' and 'maxGridWidth' methods in
   'MinesweeperGridView' to make sure that cells are at least 24dp.
 * Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to v8.5.1

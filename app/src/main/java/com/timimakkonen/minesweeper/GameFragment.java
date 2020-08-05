@@ -87,14 +87,15 @@ public class GameFragment extends Fragment {
         mineSweeperView.setMinesweeperGridViewEventListener(
                 new MinesweeperGridView.OnMinesweeperGridViewEventListener() {
                     @Override
-                    public void onCellCheck(int x, int y) {
-                        Log.d(TAG, String.format("Checking cell (%d, %d)", x, y));
-                        viewModel.checkMinesweeperInputCoordinates(x, y);
+                    public void onCellPrimaryAction(int x, int y) {
+                        Log.d(TAG, String.format("Primary cell action on (%d, %d)", x, y));
+                        viewModel.primaryMinesweeperCoordinatesAction(x, y);
                     }
 
                     @Override
-                    public void onCellMark(int x, int y) {
-                        viewModel.markMinesweeperInputCoordinates(x, y);
+                    public void onCellSecondaryAction(int x, int y) {
+                        Log.d(TAG, String.format("Secondary cell action on (%d, %d)", x, y));
+                        viewModel.secondaryMinesweeperCoordinatesAction(x, y);
                     }
                 });
 

@@ -64,12 +64,20 @@ public class AndroidMinesweeperGame {
     minesweeper_gameJNI.AndroidMinesweeperGame_markInputCoordinates(swigCPtr, this, x, y);
   }
 
+  public void completeAroundInputCoordinates(int x, int y) {
+    minesweeper_gameJNI.AndroidMinesweeperGame_completeAroundInputCoordinates(swigCPtr, this, x, y);
+  }
+
   public boolean playerHasWon() {
     return minesweeper_gameJNI.AndroidMinesweeperGame_playerHasWon(swigCPtr, this);
   }
 
   public boolean playerHasLost() {
     return minesweeper_gameJNI.AndroidMinesweeperGame_playerHasLost(swigCPtr, this);
+  }
+
+  public boolean isCellVisible(int x, int y) {
+    return minesweeper_gameJNI.AndroidMinesweeperGame_isCellVisible(swigCPtr, this, x, y);
   }
 
   public int getGridHeight() {

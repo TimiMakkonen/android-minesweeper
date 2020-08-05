@@ -139,8 +139,8 @@ public class MinesweeperGridView extends View {
                     int clickedColumn = (eventX - mOriginX) / mCellSize;
                     int clickedRow = (eventY - mOriginY) / mCellSize;
 
-                    Log.d(TAG, String.format("Checking cell (%d, %d)", clickedColumn, clickedRow));
-                    mMinesweeperGridViewEventListener.onCellCheck(clickedColumn, clickedRow);
+                    Log.d(TAG, String.format("Primary cell action on (%d, %d)", clickedColumn, clickedRow));
+                    mMinesweeperGridViewEventListener.onCellPrimaryAction(clickedColumn, clickedRow);
                 }
 
                 return true;
@@ -164,8 +164,8 @@ public class MinesweeperGridView extends View {
                     int clickedColumn = (eventX - mOriginX) / mCellSize;
                     int clickedRow = (eventY - mOriginY) / mCellSize;
 
-                    Log.d(TAG, String.format("Marking cell (%d, %d)", clickedColumn, clickedRow));
-                    mMinesweeperGridViewEventListener.onCellMark(clickedColumn, clickedRow);
+                    Log.d(TAG, String.format("Secondary cell action on (%d, %d)", clickedColumn, clickedRow));
+                    mMinesweeperGridViewEventListener.onCellSecondaryAction(clickedColumn, clickedRow);
                 }
             }
 
@@ -697,8 +697,8 @@ public class MinesweeperGridView extends View {
     }
 
     public interface OnMinesweeperGridViewEventListener {
-        void onCellCheck(int x, int y);
+        void onCellPrimaryAction(int x, int y);
 
-        void onCellMark(int x, int y);
+        void onCellSecondaryAction(int x, int y);
     }
 }

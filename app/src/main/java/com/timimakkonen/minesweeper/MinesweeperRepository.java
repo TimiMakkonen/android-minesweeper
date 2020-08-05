@@ -20,7 +20,8 @@ class MinesweeperRepository {
 
     private final LocalStorage localStorage;
     private final BehaviorSubject<MinesweeperDataForView> minesweeperDataForViewObservable;
-    private final BehaviorSubject<VisualMinesweeperCell[][]> minesweeperSolutionVisualisationObservable;
+    private final BehaviorSubject<VisualMinesweeperCell[][]>
+            minesweeperSolutionVisualisationObservable;
     private final AndroidMinesweeperGame currentMinesweeperGame;
 
     private boolean solutionVisualisationIsOutdated;
@@ -79,23 +80,46 @@ class MinesweeperRepository {
         return this.minesweeperSolutionVisualisationObservable;
     }
 
-    public void checkInputCoordinates(int x, int y) throws IllegalArgumentException {
+    public void checkCoordinates(int x, int y) throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException("Trying to check cell outside the grid.");
         }
-        Log.d(TAG, "checkInputCoordinates: " + String.format("Checking cell (%d, %d)", x, y));
+        Log.d(TAG, "checkCoordinates: " + String.format("Checking cell (%d, %d)", x, y));
         this.currentMinesweeperGame.checkInputCoordinates(x, y);
         updateCurrentGridInformation();
     }
 
-    public void markInputCoordinates(int x, int y) throws IllegalArgumentException {
+    public void markCoordinates(int x, int y) throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException("Trying to mark cell outside the grid.");
         }
         this.currentMinesweeperGame.markInputCoordinates(x, y);
         updateCurrentGridInformation();
+    }
+
+    public void completeAroundCoordinates(int x, int y) throws IllegalArgumentException {
+        if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
+            y >= currentMinesweeperGame.getGridHeight()) {
+            throw new IllegalArgumentException(
+                    "Trying to complete around a cell outside the grid.");
+        }
+        if (!currentMinesweeperGame.isCellVisible(x, y)) {
+            throw new IllegalArgumentException(
+                    "Trying to complete around a cell that is not visible.");
+        }
+        this.currentMinesweeperGame.completeAroundInputCoordinates(x, y);
+        updateCurrentGridInformation();
+    }
+
+    public boolean isCellVisible(int x, int y) {
+        if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
+            y >= currentMinesweeperGame.getGridHeight()) {
+            throw new IllegalArgumentException(
+                    "Trying to check visibility of a cell outside the grid.");
+        }
+        return this.currentMinesweeperGame.isCellVisible(x, y);
     }
 
     public void resetCurrentGame(boolean keepCreatedMines) {
@@ -196,7 +220,8 @@ class MinesweeperRepository {
 
     private VisualMinesweeperCell[][] getCurrentSolutionVisualisation() {
 
-        Log.d(TAG, "getCurrentSolutionVisualisation: Updating minesweeper solution visualisation cells");
+        Log.d(TAG,
+              "getCurrentSolutionVisualisation: Updating minesweeper solution visualisation cells");
         final int gridHeight = currentMinesweeperGame.getGridHeight();
         final int gridWidth = currentMinesweeperGame.getGridWidth();
 

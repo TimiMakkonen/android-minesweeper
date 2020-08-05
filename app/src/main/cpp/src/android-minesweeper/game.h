@@ -38,9 +38,15 @@ class AndroidMinesweeperGame {
     // to mark (or unmark) given coordinates
     void markInputCoordinates(int x, int y);
 
+    // checks trivial cells around already visible cell coordinates
+    void completeAroundInputCoordinates(int x, int y);
+
     // game progress information:
     bool playerHasWon() const;
     bool playerHasLost() const;
+
+    // cell information:
+    bool isCellVisible(int x, int y) const;
 
     // getters:
     int getGridHeight() const;

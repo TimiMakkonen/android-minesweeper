@@ -30,9 +30,15 @@ void AndroidMinesweeperGame::checkInputCoordinates(int x, int y) { this->_minesw
 
 void AndroidMinesweeperGame::markInputCoordinates(int x, int y) { this->_minesweeperGame.markInputCoordinates(x, y); }
 
+void AndroidMinesweeperGame::completeAroundInputCoordinates(int x, int y) {
+    this->_minesweeperGame.completeAroundInputCoordinates(x, y);
+}
+
 bool AndroidMinesweeperGame::playerHasWon() const { return this->_minesweeperGame.playerHasWon(); }
 
 bool AndroidMinesweeperGame::playerHasLost() const { return this->_minesweeperGame.playerHasLost(); }
+
+bool AndroidMinesweeperGame::isCellVisible(int x, int y) const { return this->_minesweeperGame.isCellVisible(x, y); }
 
 int AndroidMinesweeperGame::getGridHeight() const { return this->_minesweeperGame.getGridHeight(); }
 

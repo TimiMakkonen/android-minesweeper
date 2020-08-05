@@ -696,6 +696,21 @@ SWIGEXPORT void JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1gameJ
 }
 
 
+SWIGEXPORT void JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1gameJNI_AndroidMinesweeperGame_1completeAroundInputCoordinates(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3) {
+  android_minesweeper::AndroidMinesweeperGame *arg1 = (android_minesweeper::AndroidMinesweeperGame *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(android_minesweeper::AndroidMinesweeperGame **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  (arg1)->completeAroundInputCoordinates(arg2,arg3);
+}
+
+
 SWIGEXPORT jboolean JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1gameJNI_AndroidMinesweeperGame_1playerHasWon(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
   android_minesweeper::AndroidMinesweeperGame *arg1 = (android_minesweeper::AndroidMinesweeperGame *) 0 ;
@@ -721,6 +736,25 @@ SWIGEXPORT jboolean JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1g
   (void)jarg1_;
   arg1 = *(android_minesweeper::AndroidMinesweeperGame **)&jarg1; 
   result = (bool)((android_minesweeper::AndroidMinesweeperGame const *)arg1)->playerHasLost();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1gameJNI_AndroidMinesweeperGame_1isCellVisible(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3) {
+  jboolean jresult = 0 ;
+  android_minesweeper::AndroidMinesweeperGame *arg1 = (android_minesweeper::AndroidMinesweeperGame *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(android_minesweeper::AndroidMinesweeperGame **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  result = (bool)((android_minesweeper::AndroidMinesweeperGame const *)arg1)->isCellVisible(arg2,arg3);
   jresult = (jboolean)result; 
   return jresult;
 }

@@ -31,8 +31,10 @@ public class minesweeper_gameJNI {
   public final static native void AndroidMinesweeperGame_newGame__SWIG_1(long jarg1, AndroidMinesweeperGame jarg1_, int jarg2, int jarg3, double jarg4);
   public final static native void AndroidMinesweeperGame_checkInputCoordinates(long jarg1, AndroidMinesweeperGame jarg1_, int jarg2, int jarg3);
   public final static native void AndroidMinesweeperGame_markInputCoordinates(long jarg1, AndroidMinesweeperGame jarg1_, int jarg2, int jarg3);
+  public final static native void AndroidMinesweeperGame_completeAroundInputCoordinates(long jarg1, AndroidMinesweeperGame jarg1_, int jarg2, int jarg3);
   public final static native boolean AndroidMinesweeperGame_playerHasWon(long jarg1, AndroidMinesweeperGame jarg1_);
   public final static native boolean AndroidMinesweeperGame_playerHasLost(long jarg1, AndroidMinesweeperGame jarg1_);
+  public final static native boolean AndroidMinesweeperGame_isCellVisible(long jarg1, AndroidMinesweeperGame jarg1_, int jarg2, int jarg3);
   public final static native int AndroidMinesweeperGame_getGridHeight(long jarg1, AndroidMinesweeperGame jarg1_);
   public final static native int AndroidMinesweeperGame_getGridWidth(long jarg1, AndroidMinesweeperGame jarg1_);
   public final static native int AndroidMinesweeperGame_getNumOfMines(long jarg1, AndroidMinesweeperGame jarg1_);
