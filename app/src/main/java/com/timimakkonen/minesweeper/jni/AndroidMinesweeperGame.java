@@ -88,6 +88,10 @@ public class AndroidMinesweeperGame {
     return new vector_int(minesweeper_gameJNI.AndroidMinesweeperGame_visualise(swigCPtr, this), true);
   }
 
+  public vector_int visualiseSolution() {
+    return new vector_int(minesweeper_gameJNI.AndroidMinesweeperGame_visualiseSolution(swigCPtr, this), true);
+  }
+
   public String serialise() {
     return minesweeper_gameJNI.AndroidMinesweeperGame_serialise(swigCPtr, this);
   }

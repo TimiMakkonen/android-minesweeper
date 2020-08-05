@@ -20,7 +20,10 @@ class MinesweeperRepository {
 
     private final LocalStorage localStorage;
     private final BehaviorSubject<MinesweeperDataForView> minesweeperDataForViewObservable;
+    private final BehaviorSubject<VisualMinesweeperCell[][]> minesweeperSolutionVisualisationObservable;
     private final AndroidMinesweeperGame currentMinesweeperGame;
+
+    private boolean solutionVisualisationIsOutdated;
 
     @Inject
     public MinesweeperRepository(LocalStorage localStorage,
@@ -29,7 +32,10 @@ class MinesweeperRepository {
         this.localStorage = localStorage;
         this.currentMinesweeperGame = androidMinesweeperGame;
         this.minesweeperDataForViewObservable = BehaviorSubject.create();
+        this.minesweeperSolutionVisualisationObservable = BehaviorSubject.create();
         updateCurrentGridInformation();
+
+        solutionVisualisationIsOutdated = true;
     }
 
     private static void verifyGridDimension(int gridDimension) throws IllegalArgumentException {
@@ -68,6 +74,10 @@ class MinesweeperRepository {
         return this.minesweeperDataForViewObservable;
     }
 
+    public Observable<VisualMinesweeperCell[][]> getCurrentVisualMinesweeperSolutionInformation() {
+
+        return this.minesweeperSolutionVisualisationObservable;
+    }
 
     public void checkInputCoordinates(int x, int y) throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
@@ -134,18 +144,20 @@ class MinesweeperRepository {
 
     private void updateCurrentGridInformation() {
         final VisualMinesweeperCell[][] currentVisualMinesweeperCells =
-                updateCurrentVisualMinesweeperCells();
+                getCurrentVisualMinesweeperCells();
         final boolean playerHasWon = updatePlayerHasWonInformation();
         final boolean playerHasLost = updatePlayerHasLostInformation();
 
         this.minesweeperDataForViewObservable.onNext(
                 new MinesweeperDataForView(currentVisualMinesweeperCells, playerHasWon,
                                            playerHasLost));
+
+        solutionVisualisationIsOutdated = true;
     }
 
-    private VisualMinesweeperCell[][] updateCurrentVisualMinesweeperCells() {
+    private VisualMinesweeperCell[][] getCurrentVisualMinesweeperCells() {
 
-        Log.d(TAG, "updateCurrentVisualMinesweeperCells: Updating visual minesweeper cells");
+        Log.d(TAG, "getCurrentVisualMinesweeperCells: Updating visual minesweeper cells");
         final int gridHeight = currentMinesweeperGame.getGridHeight();
         final int gridWidth = currentMinesweeperGame.getGridWidth();
 
@@ -173,4 +185,34 @@ class MinesweeperRepository {
         return this.currentMinesweeperGame.playerHasLost();
     }
 
+    public void updateCurrentGridSolutionVisualisation() {
+        if (solutionVisualisationIsOutdated) {
+            this.minesweeperSolutionVisualisationObservable.onNext(
+                    getCurrentSolutionVisualisation());
+            solutionVisualisationIsOutdated = false;
+        }
+    }
+
+
+    private VisualMinesweeperCell[][] getCurrentSolutionVisualisation() {
+
+        Log.d(TAG, "getCurrentSolutionVisualisation: Updating minesweeper solution visualisation cells");
+        final int gridHeight = currentMinesweeperGame.getGridHeight();
+        final int gridWidth = currentMinesweeperGame.getGridWidth();
+
+        VisualMinesweeperCell[][] newVisualSolutionMinesweeperCells =
+                new VisualMinesweeperCell[gridHeight][gridWidth];
+        vector_int currentGameJniSolutionVisualisation = currentMinesweeperGame.visualiseSolution();
+
+        int i = 0;
+        for (int y = 0; y < gridHeight; y++) {
+            for (int x = 0; x < gridWidth; i++, x++) {
+                newVisualSolutionMinesweeperCells[y][x] =
+                        VisualMinesweeperCell.newVisualMinesweeperCell(
+                                currentGameJniSolutionVisualisation.get(i));
+            }
+        }
+
+        return newVisualSolutionMinesweeperCells;
+    }
 }

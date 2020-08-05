@@ -150,6 +150,9 @@ public class GameFragment extends Fragment {
             case R.id.action_restart_with_mines:
                 viewModel.restartWithMines();
                 return true;
+            case R.id.action_show_solution:
+                showSolution();
+                return true;
             case R.id.action_new_game_easy:
                 viewModel.startNewEasyGame();
                 return true;
@@ -221,7 +224,13 @@ public class GameFragment extends Fragment {
     private void showSettings() {
 
         NavHostFragment.findNavController(GameFragment.this)
-                       .navigate(R.id.action_FirstFragment_to_settingsFragment);
+                       .navigate(R.id.action_gameFragment_to_settingsFragment);
+    }
+
+    private void showSolution() {
+
+        NavHostFragment.findNavController(GameFragment.this)
+                       .navigate(R.id.action_gameFragment_to_solutionFragment);
     }
 
     private void onGameWin() {

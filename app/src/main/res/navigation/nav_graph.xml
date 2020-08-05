@@ -3,16 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/gameFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/gameFragment"
         android:name="com.timimakkonen.minesweeper.GameFragment"
         android:label="@string/main_fragment_label"
         tools:layout="@layout/fragment_game">
         <action
-            android:id="@+id/action_FirstFragment_to_settingsFragment"
+            android:id="@+id/action_gameFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_solutionFragment"
+            app:destination="@id/solutionFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -26,4 +29,9 @@
     <action
         android:id="@+id/action_global_aboutFragment"
         app:destination="@id/aboutFragment" />
+    <fragment
+        android:id="@+id/solutionFragment"
+        android:name="com.timimakkonen.minesweeper.SolutionFragment"
+        android:label="@string/solution_label"
+        tools:layout="@layout/solution_fragment" />
 </navigation>

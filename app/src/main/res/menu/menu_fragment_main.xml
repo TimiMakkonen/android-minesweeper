@@ -19,6 +19,12 @@
                 android:orderInCategory="102"
                 android:title="@string/action_restart_with_mines"
                 app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_show_solution"
+                android:orderInCategory="103"
+                android:title="@string/action_show_solution"
+                app:showAsAction="ifRoom"
+                />
         </menu>
     </item>
     <item

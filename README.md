@@ -3,7 +3,7 @@
 [![GitHub License](https://img.shields.io/github/license/TimiMakkonen/android-minesweeper)](/LICENSE)
 ![GitHub Latest Release Tag](https://img.shields.io/github/v/tag/TimiMakkonen/android-minesweeper)
 
-Android minesweeper game utilising [Minesweeper game library](https://github.com/TimiMakkonen/minesweeper) version 8.4.3.
+Android minesweeper game utilising [Minesweeper game library](https://github.com/TimiMakkonen/minesweeper) version 8.5.1.
 
 ## Table of contents
 
@@ -35,13 +35,20 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ## External libraries
 
-* [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) (v8.4.3) for minesweeper game logic in C++
+* [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) (v8.5.1) for minesweeper game logic in C++
 
 ## Tools used
 
 * [SWIG](http://www.swig.org) to create JNI wrapper around C++ interface code
 
 ## Version history
+
+### Version DEVELOP
+
+* Added 'SolutionFragment' to show the solution of the current grid.
+* Modified 'maxGridHeight' and 'maxGridWidth' methods in
+  'MinesweeperGridView' to make sure that cells are at least 24dp.
+* Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to v8.5.1
 
 ### Version 0.2.0
 
@@ -82,4 +89,5 @@ Gameplay example | Gameplay example (larger grid) | Gameplay example (dark theme
 * Clean up and comment code.
 * Add help page.
 * Add zooming option to grid.
-* Add solution option/screen.
+* Add 'peek solution' option which instead of showing solution in
+  another fragment, shows the solution in place of the current game.

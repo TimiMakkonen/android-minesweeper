@@ -4,7 +4,6 @@
 #include <string>    // std::string
 #include <vector>    // std::vector
 
-
 #include <android-minesweeper/game.h>
 #include <minesweeper/game.h>
 
@@ -45,13 +44,17 @@ std::vector<int> AndroidMinesweeperGame::visualise() const {
     return this->_minesweeperGame.visualise<std::vector<int>>();
 }
 
+std::vector<int> AndroidMinesweeperGame::visualiseSolution() const {
+    return this->_minesweeperGame.visualiseSolution<std::vector<int>>();
+}
+
 std::string AndroidMinesweeperGame::serialise() const {
     std::ostringstream oss;
     this->_minesweeperGame.serialise(oss);
     return oss.str();
 }
 
-bool AndroidMinesweeperGame::deserialise(std::string inStr) {
+bool AndroidMinesweeperGame::deserialise(const std::string& inStr) {
 
     std::istringstream iss(inStr);
     try {

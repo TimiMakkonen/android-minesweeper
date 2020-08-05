@@ -59,6 +59,8 @@
     <!-- Feedback -->
     <string name="email">timi.makkonen@gmail.com</string>
     <string name="feedback_email_subject">Android Minesweeper - V:%s OS:%s SDK:%d D:%s M:%s P:%s</string>
+    <string name="action_show_solution">Show solution</string>
+    <string name="solution_label">Solution</string>
 
     <!-- Various strings -->
 

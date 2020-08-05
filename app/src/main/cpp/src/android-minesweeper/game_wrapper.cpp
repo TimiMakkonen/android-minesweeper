@@ -786,6 +786,21 @@ SWIGEXPORT jlong JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1game
 }
 
 
+SWIGEXPORT jlong JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1gameJNI_AndroidMinesweeperGame_1visualiseSolution(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  android_minesweeper::AndroidMinesweeperGame *arg1 = (android_minesweeper::AndroidMinesweeperGame *) 0 ;
+  std::vector< int > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(android_minesweeper::AndroidMinesweeperGame **)&jarg1; 
+  result = ((android_minesweeper::AndroidMinesweeperGame const *)arg1)->visualiseSolution();
+  *(std::vector< int > **)&jresult = new std::vector< int >((const std::vector< int > &)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT jstring JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1gameJNI_AndroidMinesweeperGame_1serialise(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jstring jresult = 0 ;
   android_minesweeper::AndroidMinesweeperGame *arg1 = (android_minesweeper::AndroidMinesweeperGame *) 0 ;
@@ -804,7 +819,7 @@ SWIGEXPORT jstring JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1ga
 SWIGEXPORT jboolean JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1gameJNI_AndroidMinesweeperGame_1deserialise(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   jboolean jresult = 0 ;
   android_minesweeper::AndroidMinesweeperGame *arg1 = (android_minesweeper::AndroidMinesweeperGame *) 0 ;
-  std::string arg2 ;
+  std::string *arg2 = 0 ;
   bool result;
   
   (void)jenv;
@@ -814,12 +829,13 @@ SWIGEXPORT jboolean JNICALL Java_com_timimakkonen_minesweeper_jni_minesweeper_1g
   if(!jarg2) {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
     return 0;
-  } 
+  }
   const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
   if (!arg2_pstr) return 0;
-  (&arg2)->assign(arg2_pstr);
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
   jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-  result = (bool)(arg1)->deserialise(arg2);
+  result = (bool)(arg1)->deserialise((std::string const &)*arg2);
   jresult = (jboolean)result; 
   return jresult;
 }

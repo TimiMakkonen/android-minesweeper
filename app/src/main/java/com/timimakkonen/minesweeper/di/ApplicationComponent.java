@@ -4,6 +4,7 @@ import com.timimakkonen.minesweeper.GameFragment;
 import com.timimakkonen.minesweeper.MainActivity;
 import com.timimakkonen.minesweeper.MinesweeperApplication;
 import com.timimakkonen.minesweeper.SettingsFragment;
+import com.timimakkonen.minesweeper.SolutionFragment;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -12,13 +13,15 @@ import dagger.Component;
 @Component(modules = {MinesweeperModelModule.class, ApplicationModule.class})
 public interface ApplicationComponent {
 
-    void inject(GameFragment gameFragment);
-
     void inject(MinesweeperApplication minesweeperApplication);
 
-    void inject(SettingsFragment settingsFragment);
-
     void inject(MainActivity mainActivity);
+
+    void inject(GameFragment gameFragment);
+
+    void inject(SolutionFragment solutionFragment);
+
+    void inject(SettingsFragment settingsFragment);
 
     @Component.Factory
     interface Factory {
