@@ -13,6 +13,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+/**
+ * <p>
+ * This fragment is responsible for displaying solution visualisation of minesweeper grid and
+ * handling the android lifecycle, and other android specific details related to this.
+ * </p>
+ */
 public class SolutionFragment extends Fragment {
 
     @Inject
@@ -33,7 +39,8 @@ public class SolutionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final MinesweeperGridView minesweeperSolutionView = view.findViewById(R.id.solutionMinesweeperGridView);
+        final MinesweeperGridView minesweeperSolutionView = view.findViewById(
+                R.id.solutionMinesweeperGridView);
 
         viewModel.getVisualMinesweeperCells()
                  .observe(getViewLifecycleOwner(),

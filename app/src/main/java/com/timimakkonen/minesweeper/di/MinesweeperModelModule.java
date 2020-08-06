@@ -6,6 +6,15 @@ import com.timimakkonen.minesweeper.jni.AndroidMinesweeperGame;
 import dagger.Module;
 import dagger.Provides;
 
+/**
+ * <p>
+ * Dagger module responsible for providing an instance of 'AndroidMinesweeperGame'.
+ * </p>
+ * <p>
+ * If saved game can be found from 'LocalStorage', and the user has chosen to resume it, this saved
+ * game is returned. Else, a new instance of 'AndroidMinesweeperGame' is returned.
+ * </p>
+ */
 @Module
 public class MinesweeperModelModule {
 

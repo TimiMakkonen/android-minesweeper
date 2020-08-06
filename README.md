@@ -55,6 +55,12 @@ Modifying the Java/Android portion of the code should work as expected, but if y
     has been erroneously marked.
 * Modified 'maxGridHeight' and 'maxGridWidth' methods in
   'MinesweeperGridView' to make sure that cells are at least 24dp.
+* Added preliminary Javadoc comments to classes.
+* In 'MaterialIntSliderAndEditText':
+  * Added attributes.
+  * Added 'setValue', 'removeOnChangeListener' and
+    'clearOnChangeListeners' methods.
+  * Fixed typos in 'setMinValue' and 'setMaxValue' methods.
 * Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to v8.5.1
 
 ### Version 0.2.0

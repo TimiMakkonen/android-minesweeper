@@ -15,6 +15,21 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 
+/**
+ * <p>
+ * This 'ViewModel' class is responsible for holding the data needed to display a minesweeper grid
+ * and interacting with 'MinesweeperRepository' to forward all the update requests made to it from
+ * the android/ui/view level.
+ * </p>
+ * <p>
+ * This class has 'visualMinesweeperCells' (VisualMinesweeperCell[][]), 'playerHasWon' (Boolean) and
+ * 'playerHasLost' (Boolean) 'LiveData's which can be observed.
+ * </p>
+ * <p>
+ * This class itself observes 'RxJava MinesweeperDataForView Observable' and reacts to its changes
+ * by updating corresponding 'LiveData's.
+ * </p>
+ */
 public class GameViewModel extends ViewModel {
 
     private static final String TAG = "GameViewModel";
@@ -227,7 +242,7 @@ public class GameViewModel extends ViewModel {
 
     private boolean isCellVisible(int x, int y) {
         if (BuildConfig.DEBUG && (x < 0 || y < 0 || x >= getCurrentGridWidth() ||
-                                   y >= getCurrentGridHeight())) {
+                                  y >= getCurrentGridHeight())) {
             throw new AssertionError("Trying to check visibility of a cell outside the grid.");
         }
         return minesweeperRepository.isCellVisible(x, y);

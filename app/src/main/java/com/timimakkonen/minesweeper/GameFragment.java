@@ -25,6 +25,23 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import javax.inject.Inject;
 
+/**
+ * <p>
+ * This fragment class is the fragment that is responsible for displaying the current minesweeper
+ * game and handling the android lifecycle, and other android specific details.
+ * </p>
+ * <p>
+ * This fragment:
+ *  <ul>
+ *      <li>forwards needed data to 'MinesweeperGridView' and passes its touch events to
+ *          'GameViewModel'</li>
+ *      <li>starts 'save-game'-feature when paused</li>
+ *      <li>deals with minesweeper game related menu items, such as 'New Game' and 'Show solution'
+ *      </li>
+ *      <li>starts dialogs when game has been won, lost, or when a new custom game is requested</li>
+ *  </ul>
+ * </p>
+ */
 public class GameFragment extends Fragment {
 
     private static final String TAG = "GameFragment";
@@ -38,7 +55,7 @@ public class GameFragment extends Fragment {
     LocalStorage localStorage;
 
 
-    private MinesweeperGridView mineSweeperView;
+    private MinesweeperGridView minesweeperView;
     private ConstraintLayout gameFragmentView;
 
     private boolean hasOriginalColorDrawableBackground = false;
@@ -58,13 +75,13 @@ public class GameFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mineSweeperView = view.findViewById(R.id.minesweeperGridView);
+        minesweeperView = view.findViewById(R.id.minesweeperGridView);
 
         gameFragmentView = view.findViewById(R.id.game_fragment_view);
         hasOriginalColorDrawableBackground = initBackgroundColorField();
 
         viewModel.getVisualMinesweeperCells()
-                 .observe(getViewLifecycleOwner(), visualMinesweeperCells -> mineSweeperView
+                 .observe(getViewLifecycleOwner(), visualMinesweeperCells -> minesweeperView
                          .setVisualMinesweeperCellsAndResize(visualMinesweeperCells)
                  );
 
@@ -84,7 +101,7 @@ public class GameFragment extends Fragment {
             }
         });
 
-        mineSweeperView.setMinesweeperGridViewEventListener(
+        minesweeperView.setMinesweeperGridViewEventListener(
                 new MinesweeperGridView.OnMinesweeperGridViewEventListener() {
                     @Override
                     public void onCellPrimaryAction(int x, int y) {
@@ -186,12 +203,12 @@ public class GameFragment extends Fragment {
         final MaterialIntSliderAndEditText gridHeightSliderWithEditText = dialogView.findViewById(
                 R.id.sliderandedittext_grid_height);
         gridHeightSliderWithEditText.setMinValue(0);
-        gridHeightSliderWithEditText.setMaxValue(mineSweeperView.maxGridHeight());
+        gridHeightSliderWithEditText.setMaxValue(minesweeperView.maxGridHeight());
 
         final MaterialIntSliderAndEditText gridWidthSliderWithEditText = dialogView.findViewById(
                 R.id.sliderandedittext_grid_width);
         gridWidthSliderWithEditText.setMinValue(0);
-        gridWidthSliderWithEditText.setMaxValue(mineSweeperView.maxGridWidth());
+        gridWidthSliderWithEditText.setMaxValue(minesweeperView.maxGridWidth());
 
         final MaterialIntSliderAndEditText numOfMinesSliderWithEditText = dialogView.findViewById(
                 R.id.sliderandedittext_grid_num_of_mines);

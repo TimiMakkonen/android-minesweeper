@@ -11,6 +11,20 @@ import javax.inject.Inject;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
+/**
+ * <p>
+ * This class is the main holder of the 'AndroidMinesweeperGame'.
+ * </p>
+ * <p>
+ * This class holds an instance of 'AndroidMinesweeperGame' and handles calling its methods, updates
+ * visual information when needed (into its observables) and saves the game progress on request.
+ * </p>
+ * <p>
+ * This class has 'minesweeperDataForViewObservable' (MinesweeperDataForView) and
+ * 'minesweeperSolutionVisualisationObservable' (VisualMinesweeperCell[][]) 'BehaviorSubject's,
+ * which can be observed.
+ * </p>
+ */
 @ApplicationScope
 class MinesweeperRepository {
 

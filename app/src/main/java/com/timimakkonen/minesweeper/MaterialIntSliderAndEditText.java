@@ -1,6 +1,7 @@
 package com.timimakkonen.minesweeper;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -17,11 +18,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: document your custom view class.
+ * <p>
+ * This class is a composite view consisting of synchronised 'Material Slider' with discrete integer
+ * values, and 'Material TextEdit' with number values. When either one has been edited, the other
+ * one should update so that they represent the same value.
+ * </p>
+ * <p>
+ * 'maxValue', 'minValue' and 'value/currentValue' can be set as expected via setters and
+ * attributes.
+ * </p>
+ * <p>
+ * Changes in the 'value/currentValue' can be listened with an implementation of
+ * 'MaterialIntSliderAndEditText.OnChangeListener', which can be set using 'addOnChangeListener'
+ * method.
+ * </p>
  */
 public class MaterialIntSliderAndEditText extends LinearLayout {
 
     private static final String TAG = "MatIntSliderAndEditT";
+
+    private final static int DEFAULT_MIN_VALUE = 0;
+    private final static int DEFAULT_MAX_VALUE = 0;
+    private final static int DEFAULT_CURRENT_VALUE = 0;
 
     private final List<OnChangeListener> changeListeners = new ArrayList<>();
     private Slider slider;
@@ -33,20 +51,22 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
 
     public MaterialIntSliderAndEditText(Context context) {
         super(context);
-        init();
+        init(null, 0);
     }
 
     public MaterialIntSliderAndEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs, 0);
     }
 
     public MaterialIntSliderAndEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(attrs, defStyle);
     }
 
-    private void init() {
+    private void init(AttributeSet attrs, int defStyle) {
+
+        loadAttributes(attrs, defStyle);
 
         inflate(getContext(), R.layout.material_int_slider_and_edittext, this);
 
@@ -54,6 +74,24 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
         editText = findViewById(R.id.edittext_materialintsliderandedittext);
 
         setUpListeners();
+    }
+
+    private void loadAttributes(AttributeSet attrs, int defStyle) {
+
+        // Load attributes
+        final TypedArray a = getContext().obtainStyledAttributes(
+                attrs, R.styleable.MaterialIntSliderAndEditText, defStyle, 0);
+
+        minValue = a.getInteger(R.styleable.MaterialIntSliderAndEditText_minValue,
+                                DEFAULT_MIN_VALUE);
+
+        maxValue = a.getInteger(R.styleable.MaterialIntSliderAndEditText_maxValue,
+                                DEFAULT_MAX_VALUE);
+
+        currentValue = a.getInteger(R.styleable.MaterialIntSliderAndEditText_value,
+                                    DEFAULT_CURRENT_VALUE);
+
+        a.recycle();
     }
 
     private void setUpListeners() {
@@ -66,7 +104,7 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
                 } else if (value > this.maxValue) {
                     valueToSet = this.maxValue;
                 }
-                setCurrentValue(valueToSet);
+                updateCurrentValue(valueToSet);
             }
         });
         editText.addTextChangedListener(new TextWatcher() {
@@ -79,7 +117,7 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
                 try {
                     int textValue = Integer.parseInt(s.toString());
                     if (textValue >= minValue && textValue <= maxValue) {
-                        setCurrentValue(textValue);
+                        updateCurrentValue(textValue);
                     }
                 } catch (NumberFormatException ex) {
                     Log.d(TAG, "setUpListeners: editTextListener: Invalid integer");
@@ -94,7 +132,7 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
             if (!hasFocus) {
                 try {
                     int textValue = Integer.parseInt(String.valueOf(editText.getText()));
-                    setCurrentValue(textValue);
+                    updateCurrentValue(textValue);
                 } catch (NumberFormatException ex) {
                     Log.d(TAG, "setUpListeners: editTextListener: Invalid integer");
                 }
@@ -105,7 +143,7 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
                 actionId == EditorInfo.IME_ACTION_NEXT) {
                 try {
                     int textValue = Integer.parseInt(String.valueOf(editText.getText()));
-                    setCurrentValue(textValue);
+                    updateCurrentValue(textValue);
                 } catch (NumberFormatException ex) {
                     Log.d(TAG, "setUpListeners: editTextListener: Invalid integer");
                 }
@@ -114,7 +152,7 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
         });
     }
 
-    private void setCurrentValue(int value) {
+    private void updateCurrentValue(int value) {
         if (value < minValue) {
             currentValue = minValue;
         } else {
@@ -149,13 +187,13 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
             throw new IllegalArgumentException(
                     String.format(
                             "maxvalue (%d) should not be smaller than minValue (%d)",
-                            this.maxValue,
+                            maxValue,
                             this.minValue));
         }
 
         this.maxValue = maxValue;
         if (currentValue > maxValue) {
-            setCurrentValue(maxValue);
+            updateCurrentValue(maxValue);
         }
 
         setSliderRange();
@@ -181,13 +219,13 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
             throw new IllegalArgumentException(
                     String.format(
                             "minvalue (%d) should not be bigger than maxValue (%d)",
-                            this.minValue,
+                            minValue,
                             this.maxValue));
         }
 
         this.minValue = minValue;
         if (currentValue < minValue) {
-            setCurrentValue(minValue);
+            updateCurrentValue(minValue);
         }
 
         setSliderRange();
@@ -197,8 +235,34 @@ public class MaterialIntSliderAndEditText extends LinearLayout {
         return this.currentValue;
     }
 
+    public void setValue(int value) {
+        if (value < this.minValue) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "value (%d) should not be smaller than minValue (%d)",
+                            value,
+                            this.minValue));
+        }
+        if (value > this.maxValue) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "value (%d) should not be bigger than maxValue (%d)",
+                            value,
+                            this.maxValue));
+        }
+        updateCurrentValue(value);
+    }
+
     public void addOnChangeListener(MaterialIntSliderAndEditText.OnChangeListener listener) {
         this.changeListeners.add(listener);
+    }
+
+    public void removeOnChangeListener(MaterialIntSliderAndEditText.OnChangeListener listener) {
+        this.changeListeners.remove(listener);
+    }
+
+    public void clearOnChangeListeners() {
+        this.changeListeners.clear();
     }
 
     public interface OnChangeListener {

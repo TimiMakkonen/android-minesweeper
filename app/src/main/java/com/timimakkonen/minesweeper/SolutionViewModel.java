@@ -10,6 +10,21 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 
+/**
+ * <p>
+ * This 'ViewModel' class is responsible for holding the data needed to display a solution
+ * visualisation of a minesweeper grid and interacting with 'MinesweeperRepository' to forward all
+ * the update requests made to it from the android/ui/view level.
+ * </p>
+ * <p>
+ * This class has 'visualMinesweeperCells' (VisualMinesweeperCell[][]) 'LiveData' which can be
+ * observed.
+ * </p>
+ * <p>
+ * This class itself observes 'RxJava MinesweeperDataForView Observable' and reacts to its changes
+ * by updating its corresponding 'LiveData'.
+ * </p>
+ */
 public class SolutionViewModel extends ViewModel {
 
     private final MinesweeperRepository minesweeperRepository;

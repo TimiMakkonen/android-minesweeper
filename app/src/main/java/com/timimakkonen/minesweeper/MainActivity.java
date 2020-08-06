@@ -17,6 +17,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import javax.inject.Inject;
 
+/**
+ * <p>
+ * This 'MainActivity' class is the first visual/ui point of contact for this app. It is responsible
+ * for hosting the content fragments in the 'content_main.xml' layout and initialising the toolbar
+ * and the navigation controller.
+ * </p>
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final String SAVE_WAS_CORRUPTED_KEY = "save_was_corrupted";
@@ -88,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showAbout() {
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_aboutFragment);
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(
+                R.id.action_global_aboutFragment);
     }
 
     private void showCorruptedGameSaveDialog() {

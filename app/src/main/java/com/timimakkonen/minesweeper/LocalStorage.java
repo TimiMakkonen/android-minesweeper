@@ -19,6 +19,18 @@ import java.nio.charset.StandardCharsets;
 
 import javax.inject.Inject;
 
+/**
+ * <p>
+ * This class is responsible for the local storage. The idea is to separate the concept of storage
+ * from the android specific details, such as 'SharedPreferences' and android file save path.
+ * </p>
+ * <p>
+ * This class stores 'currentMinesweeperGame' as a file , and any other given keys as a
+ * 'SharedPreference'. Moreover, 'currentMinesweeperGame' has its own save, load and delete methods,
+ * while all other keys are specified outside this class. This is inconsistent and questionable at
+ * best. Hence, rework of this class to go in either direction is under consideration.
+ * </p>
+ */
 @ApplicationScope
 public class LocalStorage {
 
@@ -54,11 +66,13 @@ public class LocalStorage {
         deleteSaveFile(CURRENT_GAME_SAVE_FILE_NAME);
     }
 
-    private void saveToFile(@SuppressWarnings("SameParameterValue") String saveFileName, String strToSave) {
+    private void saveToFile(@SuppressWarnings("SameParameterValue") String saveFileName,
+                            String strToSave) {
 
         try {
             File file = new File(savePath, saveFileName);
-            Log.d(TAG,  String.format("save: Saving file '%s' to '%s'.", saveFileName, file.getAbsolutePath()));
+            Log.d(TAG, String.format("save: Saving file '%s' to '%s'.", saveFileName,
+                                     file.getAbsolutePath()));
             FileWriter writer = new FileWriter(file);
             writer.write(strToSave);
             writer.close();
@@ -73,7 +87,8 @@ public class LocalStorage {
         FileInputStream fis;
         try {
             fis = new FileInputStream(new File(savePath, saveFileName));
-            InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            InputStreamReader inputStreamReader = new InputStreamReader(fis,
+                                                                        StandardCharsets.UTF_8);
 
             try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
                 String line = reader.readLine();

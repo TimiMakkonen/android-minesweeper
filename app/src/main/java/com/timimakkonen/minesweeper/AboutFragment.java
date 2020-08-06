@@ -21,6 +21,11 @@ import java.util.List;
 import java.util.Locale;
 
 
+/**
+ * <p>
+ * This fragment class is the fragment that is responsible for displaying the 'about-page'.
+ * </p>
+ */
 public class AboutFragment extends Fragment {
 
     private static final String TAG = "AboutFragment";

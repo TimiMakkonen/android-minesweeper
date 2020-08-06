@@ -13,6 +13,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import javax.inject.Inject;
 
+/**
+ * <p>
+ * This fragment is responsible for displaying and handling all the settings/preferences available
+ * for users to modify.
+ * </p>
+ */
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "SettingsFragment";

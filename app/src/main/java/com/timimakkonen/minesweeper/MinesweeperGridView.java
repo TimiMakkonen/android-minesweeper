@@ -18,6 +18,40 @@ import android.view.View;
 import androidx.annotation.ColorInt;
 
 
+/**
+ * <p>
+ * This class displays a minesweeper grid and allows users to interact on it.
+ * </p>
+ * <p>
+ * To display the symbols of the minesweeper game, symbols for the corresponding symbols have to be
+ * set via their setters or attributes.
+ * </p>
+ * <p>
+ * Grid lines color, normal cell background color, and checked cell background color decide on the
+ * main colours used for the lines and surfaces of the grid. These colours can be overridden by
+ * their setters or attributes.
+ * </p>
+ * <p>
+ * Grid line width, which has default size set by 'DEFAULT_GRID_LINE_STROKE_WIDTH' can also be
+ * overridden via setter or attribute.
+ * </p>
+ * <p>
+ * This class has the ability to return what it considers to be the maximum number of cells it can
+ * display in a row or column via methods 'maxGridLength' and 'maxGridWidth', respectively.
+ * </p>
+ * <p>
+ * To set the cell data needed to visualise the minesweeper grid, an instance of
+ * 'VisualMinesweeperCell[][]' must be provided via 'setVisualMinesweeperCellsAndResize'-method.
+ * Alternatively you can also use 'setVisualMinesweeperCells'-method, but in this case you must also
+ * manually modify number of rows and columns displayed via 'setNumberOfRow' and
+ * 'setNumberOfColumns', respectively.
+ * </p>
+ * <p>
+ * This minesweeper view can handle standard short(primary) and long(secondary) press touch events.
+ * To use this, an implementation of 'MinesweeperGridView.OnMinesweeperGridViewEventListener' must
+ * be set via 'setMinesweeperGridViewEventListener'.
+ * </p>
+ */
 @SuppressWarnings("FieldCanBeLocal")
 public class MinesweeperGridView extends View {
 
@@ -75,6 +109,7 @@ public class MinesweeperGridView extends View {
     private int mContentHeight;
     private int mGridWidth;
     private int mGridHeight;
+
     private float mGridLineStrokeWidth = DEFAULT_GRID_LINE_STROKE_WIDTH;
 
     // grid origin point on canvas;
@@ -139,8 +174,10 @@ public class MinesweeperGridView extends View {
                     int clickedColumn = (eventX - mOriginX) / mCellSize;
                     int clickedRow = (eventY - mOriginY) / mCellSize;
 
-                    Log.d(TAG, String.format("Primary cell action on (%d, %d)", clickedColumn, clickedRow));
-                    mMinesweeperGridViewEventListener.onCellPrimaryAction(clickedColumn, clickedRow);
+                    Log.d(TAG, String.format("Primary cell action on (%d, %d)", clickedColumn,
+                                             clickedRow));
+                    mMinesweeperGridViewEventListener.onCellPrimaryAction(clickedColumn,
+                                                                          clickedRow);
                 }
 
                 return true;
@@ -164,8 +201,10 @@ public class MinesweeperGridView extends View {
                     int clickedColumn = (eventX - mOriginX) / mCellSize;
                     int clickedRow = (eventY - mOriginY) / mCellSize;
 
-                    Log.d(TAG, String.format("Secondary cell action on (%d, %d)", clickedColumn, clickedRow));
-                    mMinesweeperGridViewEventListener.onCellSecondaryAction(clickedColumn, clickedRow);
+                    Log.d(TAG, String.format("Secondary cell action on (%d, %d)", clickedColumn,
+                                             clickedRow));
+                    mMinesweeperGridViewEventListener.onCellSecondaryAction(clickedColumn,
+                                                                            clickedRow);
                 }
             }
 
@@ -649,6 +688,10 @@ public class MinesweeperGridView extends View {
         this.mMarkedDrawable = mMarkedDrawable;
     }
 
+    public void setGridLineStrokeWidth(float gridLineStrokeWidth) {
+        this.mGridLineStrokeWidth = gridLineStrokeWidth;
+    }
+
     /**
      * Calls {@link #setVisualMinesweeperCellsAndResize(VisualMinesweeperCell[][])}.
      *
@@ -659,12 +702,13 @@ public class MinesweeperGridView extends View {
     }
 
     /**
-     * Sets the mVisualMinesweeperCells to draw/visualise the minesweeper grid.
-     * Also sets the number of rows (mNumOfRows) and columns (mNumOfColumns) to keep these consistent
-     * with the mVisualMinesweeperCells.
+     * Sets the mVisualMinesweeperCells to draw/visualise the minesweeper grid. Also sets the number
+     * of rows (mNumOfRows) and columns (mNumOfColumns) to keep these consistent with the
+     * mVisualMinesweeperCells.
      *
      * @param visualMinesweeperCells VisualMinesweeperCells to draw/visualise.
-     * @throws IllegalArgumentException if Rows of the VisualMinesweeperCell[][] are not same length.
+     * @throws IllegalArgumentException if Rows of the VisualMinesweeperCell[][] are not same
+     *                                  length.
      */
     public void setVisualMinesweeperCellsAndResize(VisualMinesweeperCell[][] visualMinesweeperCells)
             throws IllegalArgumentException {

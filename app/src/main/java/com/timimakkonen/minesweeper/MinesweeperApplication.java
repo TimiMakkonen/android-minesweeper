@@ -9,6 +9,9 @@ import com.timimakkonen.minesweeper.di.DaggerApplicationComponent;
 
 import javax.inject.Inject;
 
+/**
+ * This class is the base class for this whole application.
+ */
 public class MinesweeperApplication extends Application {
 
     private static final String USE_NIGHT_MODE_KEY = "use_night_mode";
