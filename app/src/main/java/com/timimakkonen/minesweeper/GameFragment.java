@@ -32,15 +32,15 @@ import javax.inject.Inject;
  * </p>
  * <p>
  * This fragment:
- *  <ul>
- *      <li>forwards needed data to 'MinesweeperGridView' and passes its touch events to
- *          'GameViewModel'</li>
- *      <li>starts 'save-game'-feature when paused</li>
- *      <li>deals with minesweeper game related menu items, such as 'New Game' and 'Show solution'
- *      </li>
- *      <li>starts dialogs when game has been won, lost, or when a new custom game is requested</li>
- *  </ul>
  * </p>
+ * <ul>
+ *     <li>forwards needed data to 'MinesweeperGridView' and passes its touch events to
+ *         'GameViewModel'</li>
+ *     <li>starts 'save-game'-feature when paused</li>
+ *     <li>deals with minesweeper game related menu items, such as 'New Game' and 'Show solution'
+ *     </li>
+ *     <li>starts dialogs when game has been won, lost, or when a new custom game is requested</li>
+ * </ul>
  */
 public class GameFragment extends Fragment {
 

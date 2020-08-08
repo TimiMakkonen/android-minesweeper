@@ -28,7 +28,13 @@ void AndroidMinesweeperGame::newGame(int gridHeight, int gridWidth, double propo
 
 void AndroidMinesweeperGame::checkInputCoordinates(int x, int y) { this->_minesweeperGame.checkInputCoordinates(x, y); }
 
-void AndroidMinesweeperGame::markInputCoordinates(int x, int y) { this->_minesweeperGame.markInputCoordinates(x, y); }
+void AndroidMinesweeperGame::markInputCoordinates(int x, int y) {
+    try {
+        this->_minesweeperGame.markInputCoordinates(x, y);
+    } catch (std::invalid_argument& ex) {
+        // ignore mark input if the grid has not been initialised
+    }
+}
 
 void AndroidMinesweeperGame::completeAroundInputCoordinates(int x, int y) {
     this->_minesweeperGame.completeAroundInputCoordinates(x, y);

@@ -55,6 +55,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
     has been erroneously marked.
 * Modified 'maxGridHeight' and 'maxGridWidth' methods in
   'MinesweeperGridView' to make sure that cells are at least 24dp.
+* Handle the exception (by ignoring) when trying to mark a cell in an uninitialised grid.
 * Added preliminary Javadoc comments to classes.
 * In 'MaterialIntSliderAndEditText':
   * Added attributes.
