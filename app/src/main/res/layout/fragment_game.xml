@@ -14,15 +14,14 @@
         android:id="@+id/minesweeperGridView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="10dp"
+        android:padding="8dp"
         app:eightCellDrawable="@drawable/ic_eight_symbol"
         app:fiveCellDrawable="@drawable/ic_five_symbol"
         app:fourCellDrawable="@drawable/ic_four_symbol"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/primSecoSwitchFab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5"
         app:markedCellDrawable="@drawable/ic_marked_symbol"
         app:mineCellDrawable="@drawable/ic_mine_symbol"
         app:oneCellDrawable="@drawable/ic_one_symbol"
@@ -30,5 +29,17 @@
         app:sixCellDrawable="@drawable/ic_six_symbol"
         app:threeCellDrawable="@drawable/ic_three_symbol"
         app:twoCellDrawable="@drawable/ic_two_symbol" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/primSecoSwitchFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/minesweeperGridView"
+        app:srcCompat="@drawable/ic_visibility_black_24dp"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

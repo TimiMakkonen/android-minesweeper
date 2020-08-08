@@ -22,6 +22,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import javax.inject.Inject;
 
@@ -76,6 +77,7 @@ public class GameFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         minesweeperView = view.findViewById(R.id.minesweeperGridView);
+        final FloatingActionButton primSecoSwitchFab = view.findViewById(R.id.primSecoSwitchFab);
 
         gameFragmentView = view.findViewById(R.id.game_fragment_view);
         hasOriginalColorDrawableBackground = initBackgroundColorField();
@@ -116,6 +118,16 @@ public class GameFragment extends Fragment {
                     }
                 });
 
+        primSecoSwitchFab.setOnClickListener(v -> viewModel.switchMinesweeperPrimSecoActions());
+
+        viewModel.isPrimaryActionCheck().observe(getViewLifecycleOwner(), primaryActionIsCheck -> {
+            if (primaryActionIsCheck) {
+                primSecoSwitchFab.setImageResource(R.drawable.ic_visibility_black_24dp);
+            } else {
+                primSecoSwitchFab.setImageResource(R.drawable.ic_marked_symbol);
+            }
+
+        });
     }
 
     private boolean initBackgroundColorField() {

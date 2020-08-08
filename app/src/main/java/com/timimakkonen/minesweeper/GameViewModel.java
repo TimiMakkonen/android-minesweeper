@@ -22,8 +22,9 @@ import io.reactivex.rxjava3.observers.DisposableObserver;
  * the android/ui/view level.
  * </p>
  * <p>
- * This class has 'visualMinesweeperCells' (VisualMinesweeperCell[][]), 'playerHasWon' (Boolean) and
- * 'playerHasLost' (Boolean) 'LiveData's which can be observed.
+ * This class has 'visualMinesweeperCells' (VisualMinesweeperCell[][]), 'playerHasWon' (Boolean),
+ * 'playerHasLost' (Boolean) and 'primaryActionIsCheck' (Boolean) 'LiveData's which can be
+ * observed.
  * </p>
  * <p>
  * This class itself observes 'RxJava MinesweeperDataForView Observable' and reacts to its changes
@@ -52,6 +53,8 @@ public class GameViewModel extends ViewModel {
     private final MutableLiveData<Boolean> playerHasLost;
     private final CompositeDisposable disposables;
 
+    private final MutableLiveData<Boolean> primaryActionIsCheck;
+
 
     @Inject
     public GameViewModel(/*SavedStateHandle savedStateHandle,*/
@@ -60,9 +63,11 @@ public class GameViewModel extends ViewModel {
         this.minesweeperRepository = minesweeperRepository;
 
         this.disposables = new CompositeDisposable();
-        visualMinesweeperCells = new MutableLiveData<>();
-        playerHasWon = new MutableLiveData<>();
-        playerHasLost = new MutableLiveData<>();
+        this.visualMinesweeperCells = new MutableLiveData<>();
+        this.playerHasWon = new MutableLiveData<>();
+        this.playerHasLost = new MutableLiveData<>();
+
+        this.primaryActionIsCheck = new MutableLiveData<>(true);
 
         init();
     }
@@ -134,11 +139,14 @@ public class GameViewModel extends ViewModel {
             throw new IllegalArgumentException(
                     "Trying perform primary action on a cell outside the grid.");
         }
-
         if (isCellVisible(x, y)) {
             completeAroundMinesweeperCoordinates(x, y);
         } else {
-            checkMinesweeperCoordinates(x, y);
+            if (primaryActionIsCheck.getValue() != null && primaryActionIsCheck.getValue()) {
+                checkMinesweeperCoordinates(x, y);
+            } else {
+                markMinesweeperCoordinates(x, y);
+            }
         }
     }
 
@@ -149,7 +157,15 @@ public class GameViewModel extends ViewModel {
             throw new IllegalArgumentException(
                     "Trying perform secondary action on a cell outside the grid.");
         }
-        markMinesweeperCoordinates(x, y);
+        if (isCellVisible(x, y)) {
+            completeAroundMinesweeperCoordinates(x, y);
+        } else {
+            if (primaryActionIsCheck.getValue() != null && primaryActionIsCheck.getValue()) {
+                markMinesweeperCoordinates(x, y);
+            } else {
+                checkMinesweeperCoordinates(x, y);
+            }
+        }
     }
 
     private void checkMinesweeperCoordinates(int x, int y) {
@@ -250,5 +266,17 @@ public class GameViewModel extends ViewModel {
 
     public void save() {
         minesweeperRepository.save();
+    }
+
+    public void switchMinesweeperPrimSecoActions() {
+        if (this.primaryActionIsCheck.getValue() != null && this.primaryActionIsCheck.getValue()) {
+            this.primaryActionIsCheck.setValue(false);
+        } else {
+            this.primaryActionIsCheck.setValue(true);
+        }
+    }
+
+    public LiveData<Boolean> isPrimaryActionCheck() {
+        return this.primaryActionIsCheck;
     }
 }
