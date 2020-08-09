@@ -64,6 +64,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
   * Added 'setValue', 'removeOnChangeListener' and
     'clearOnChangeListeners' methods.
   * Fixed typos in 'setMinValue' and 'setMaxValue' methods.
+* Bumped 'minSdkVersion' from 19 to 21.
 * Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to v8.5.1
 
 ### Version 0.2.0
