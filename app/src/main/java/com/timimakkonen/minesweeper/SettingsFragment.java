@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SeekBarPreference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -26,7 +27,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     private static final String USE_NIGHT_MODE_KEY = "use_night_mode";
     private static final String OVERRIDE_SYSTEM_DARK_THEME_KEY = "override_system_dark_theme";
     private static final String DELETE_SAVED_GAME_KEY = "delete_saved_game";
-
+    private static final String PRIM_SECO_SWITCH_HORIZ_BIAS_KEY =
+            "prim_seco_switch_horizontal_bias";
+    private static final String PRIM_SECO_SWITCH_HORIZ_BIAS_CUSTOM_KEY =
+            "prim_seco_switch_horizontal_bias_custom";
     private static final String HAS_SAVED_GAME_KEY = "has_saved_game";
 
     @Inject
@@ -84,6 +88,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 }
                 break;
+            case PRIM_SECO_SWITCH_HORIZ_BIAS_KEY:
+                SeekBarPreference primSecoSwitchCustomHorizBiasPref
+                        = findPreference(PRIM_SECO_SWITCH_HORIZ_BIAS_CUSTOM_KEY);
+                if (primSecoSwitchCustomHorizBiasPref != null) {
+                    if (sharedPreferences.getString(PRIM_SECO_SWITCH_HORIZ_BIAS_KEY, "start")
+                                         .equals("custom")) {
+                        primSecoSwitchCustomHorizBiasPref.setVisible(true);
+                    } else {
+                        primSecoSwitchCustomHorizBiasPref.setVisible(false);
+                    }
+                }
         }
     }
 

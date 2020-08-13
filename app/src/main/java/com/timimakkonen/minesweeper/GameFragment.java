@@ -20,9 +20,10 @@ import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceManager;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import javax.inject.Inject;
 
@@ -48,16 +49,19 @@ public class GameFragment extends Fragment {
     private static final String TAG = "GameFragment";
 
     private static final String SAVE_AND_RESUME_KEY = "save_and_resume";
-
+    private static final String USE_PRIM_SECO_SWITCH_KEY = "use_prim_seco_switch";
+    private static final String PRIM_SECO_SWITCH_HORIZ_BIAS_KEY =
+            "prim_seco_switch_horizontal_bias";
+    private static final String PRIM_SECO_SWITCH_HORIZ_BIAS_CUSTOM_KEY =
+            "prim_seco_switch_horizontal_bias_custom";
     @Inject
     GameViewModel viewModel;
-
     @Inject
     LocalStorage localStorage;
 
-
     private MinesweeperGridView minesweeperView;
     private ConstraintLayout gameFragmentView;
+    private MaterialButton primSecoSwitchButton;
 
     private boolean hasOriginalColorDrawableBackground = false;
     @ColorInt
@@ -77,7 +81,7 @@ public class GameFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         minesweeperView = view.findViewById(R.id.minesweeperGridView);
-        final FloatingActionButton primSecoSwitchFab = view.findViewById(R.id.primSecoSwitchFab);
+        primSecoSwitchButton = view.findViewById(R.id.primSecoSwitchButton);
 
         gameFragmentView = view.findViewById(R.id.game_fragment_view);
         hasOriginalColorDrawableBackground = initBackgroundColorField();
@@ -118,13 +122,15 @@ public class GameFragment extends Fragment {
                     }
                 });
 
-        primSecoSwitchFab.setOnClickListener(v -> viewModel.switchMinesweeperPrimSecoActions());
+        primSecoSwitchButton.setOnClickListener(v -> viewModel.switchMinesweeperPrimSecoActions());
 
         viewModel.isPrimaryActionCheck().observe(getViewLifecycleOwner(), primaryActionIsCheck -> {
             if (primaryActionIsCheck) {
-                primSecoSwitchFab.setImageResource(R.drawable.ic_visibility_black_24dp);
+                primSecoSwitchButton.setIconResource(
+                        R.drawable.ic_visibility_with_marked_symbol_black_24dp);
             } else {
-                primSecoSwitchFab.setImageResource(R.drawable.ic_marked_symbol);
+                primSecoSwitchButton.setIconResource(
+                        R.drawable.ic_marked_symbol_with_visibility_black_24dp);
             }
 
         });
@@ -154,6 +160,40 @@ public class GameFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // primary-secondary click action switch setup
+        if (PreferenceManager.getDefaultSharedPreferences(requireActivity()).getBoolean(
+                USE_PRIM_SECO_SWITCH_KEY, true)) {
+            primSecoSwitchButton.setVisibility(View.VISIBLE);
+            ConstraintLayout.LayoutParams params =
+                    (ConstraintLayout.LayoutParams) primSecoSwitchButton.getLayoutParams();
+            String chosenButtonBias = localStorage.getString(PRIM_SECO_SWITCH_HORIZ_BIAS_KEY,
+                                                             "start");
+            switch (chosenButtonBias) {
+                case "start":
+                    params.horizontalBias = 0f;
+                    break;
+                case "center":
+                    params.horizontalBias = 0.5f;
+                    break;
+                case "end":
+                    params.horizontalBias = 1f;
+                    break;
+                case "custom":
+                    params.horizontalBias = localStorage.getInt(
+                            PRIM_SECO_SWITCH_HORIZ_BIAS_CUSTOM_KEY, 0) / 100f;
+                    break;
+            }
+            primSecoSwitchButton.setLayoutParams(params);
+        } else {
+            primSecoSwitchButton.setVisibility(View.GONE);
+            viewModel.setPrimaryActionIsCheckToDefault();
+        }
     }
 
     @Override

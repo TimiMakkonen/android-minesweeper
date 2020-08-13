@@ -3,14 +3,7 @@
     android:height="100dp"
     android:viewportWidth="1000"
     android:viewportHeight="1000">
-  <path
-      android:pathData="m200,100v350h100c90,-60 140,-50 199.79,-50H500c110.46,0 200,89.54 200,200 0,110.46 -105.72,200 -200,200 -79.49,0 -167.1,-63.64 -192.64,-149.81 -0.02,-0.06 -0.04,-0.13 -0.05,-0.19H204.15c0.01,0.05 0.01,0.09 0.02,0.14C228.03,791.96 351.4,900 500,900 665.69,900 800,765.69 800,600 800,434.31 665.69,300 500,300c-64.91,0 -139.36,3.43 -200,34.24V200H800V100Z"
-      android:strokeAlpha="1"
-      android:strokeLineJoin="miter"
-      android:strokeWidth="1"
-      android:fillColor="@color/five_symbol"
-      android:strokeColor="#00000000"
-      android:fillType="nonZero"
-      android:fillAlpha="1"
-      android:strokeLineCap="butt"/>
+    <path
+        android:fillColor="@color/five_symbol"
+        android:pathData="m200,100v350h100c90,-60 140,-50 199.79,-50H500c110.46,0 200,89.54 200,200 0,110.46 -105.72,200 -200,200 -79.49,0 -167.1,-63.64 -192.64,-149.81 -0.02,-0.06 -0.04,-0.13 -0.05,-0.19H204.15c0.01,0.05 0.01,0.09 0.02,0.14C228.03,791.96 351.4,900 500,900 665.69,900 800,765.69 800,600 800,434.31 665.69,300 500,300c-64.91,0 -139.36,3.43 -200,34.24V200H800V100Z" />
 </vector>

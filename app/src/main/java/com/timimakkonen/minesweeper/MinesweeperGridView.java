@@ -63,16 +63,16 @@ public class MinesweeperGridView extends View {
     private static final float DEFAULT_GRID_LINE_STROKE_WIDTH = 3;
 
     // grid size fields:
-    private int mNumOfColumns = DEFAULT_NUM_OF_COLUMNS; // TODO: use a default from R.dimen...
-    private int mNumOfRows = DEFAULT_NUM_OF_ROWS; // TODO: use a default from R.dimen...
+    private int mNumOfColumns = DEFAULT_NUM_OF_COLUMNS;
+    private int mNumOfRows = DEFAULT_NUM_OF_ROWS;
 
     // color fields:
     @ColorInt
-    private int mCellBgColor = Color.LTGRAY; // TODO: use a default from R.color...
+    private int mCellBgColor = Color.LTGRAY;
     @ColorInt
-    private int mCheckedCellBgColor = Color.GRAY; // TODO: use a default from R.color...
+    private int mCheckedCellBgColor = Color.GRAY;
     @ColorInt
-    private int mGridLinesColor = Color.BLACK; // TODO: use a default from R.color...
+    private int mGridLinesColor = Color.BLACK;
 
     // drawable symbols:
     private Drawable mUncheckedDrawable;

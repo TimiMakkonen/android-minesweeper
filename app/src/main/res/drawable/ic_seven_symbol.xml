@@ -3,13 +3,7 @@
     android:height="100dp"
     android:viewportWidth="1000"
     android:viewportHeight="1000">
-  <path
-      android:pathData="M200,100V200H680L200,900H320L800,200V100Z"
-      android:strokeAlpha="1"
-      android:strokeLineJoin="miter"
-      android:strokeWidth="1"
-      android:fillColor="@color/seven_symbol"
-      android:fillAlpha="1"
-      android:strokeColor="#00000000"
-      android:strokeLineCap="butt"/>
+    <path
+        android:fillColor="@color/seven_symbol"
+        android:pathData="M200,100V200H680L200,900H320L800,200V100Z" />
 </vector>

@@ -45,6 +45,8 @@ public class GameViewModel extends ViewModel {
     private static final int HARD_GAME_GRID_WIDTH = 16;
     private static final int HARD_GAME_NUM_OF_MINES = 99;
 
+    private static final boolean DEFAULT_PRIMARY_ACTION_IS_CHECK = true;
+
 
     //private final SavedStateHandle savedStateHandle;
     private final MinesweeperRepository minesweeperRepository;
@@ -274,6 +276,10 @@ public class GameViewModel extends ViewModel {
         } else {
             this.primaryActionIsCheck.setValue(true);
         }
+    }
+
+    public void setPrimaryActionIsCheckToDefault() {
+        this.primaryActionIsCheck.setValue(DEFAULT_PRIMARY_ACTION_IS_CHECK);
     }
 
     public LiveData<Boolean> isPrimaryActionCheck() {

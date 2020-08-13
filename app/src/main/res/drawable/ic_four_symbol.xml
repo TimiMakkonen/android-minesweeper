@@ -3,13 +3,7 @@
     android:height="100dp"
     android:viewportWidth="1000"
     android:viewportHeight="1000">
-  <path
-      android:pathData="M600,900H700V600H800V500H700V300H600V500H350L700,100 550,100 200,500v100h400z"
-      android:strokeAlpha="1"
-      android:strokeLineJoin="miter"
-      android:strokeWidth="1"
-      android:fillColor="@color/four_symbol"
-      android:strokeColor="#00000000"
-      android:fillAlpha="1"
-      android:strokeLineCap="butt"/>
+    <path
+        android:fillColor="@color/four_symbol"
+        android:pathData="M600,900H700V600H800V500H700V300H600V500H350L700,100 550,100 200,500v100h400z" />
 </vector>

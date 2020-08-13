@@ -3,22 +3,10 @@
     android:height="100dp"
     android:viewportWidth="1000"
     android:viewportHeight="1000">
-  <path
-      android:pathData="m550,100v650h150v50H800V900H200V800H300V750H450V460h50V100Z"
-      android:strokeAlpha="1"
-      android:strokeLineJoin="miter"
-      android:strokeWidth="1"
-      android:fillColor="@color/marked_symbol_pole"
-      android:strokeColor="#00000000"
-      android:fillAlpha="1"
-      android:strokeLineCap="butt"/>
-  <path
-      android:pathData="M450,100 L150,280 450,460h50V100Z"
-      android:strokeAlpha="1"
-      android:strokeLineJoin="miter"
-      android:strokeWidth="1"
-      android:fillColor="@color/marked_symbol_flag"
-      android:strokeColor="#00000000"
-      android:fillAlpha="1"
-      android:strokeLineCap="butt"/>
+    <path
+        android:fillColor="@color/marked_symbol_pole"
+        android:pathData="m550,100v650h150v50H800V900H200V800H300V750H450V460h50V100Z" />
+    <path
+        android:fillColor="@color/marked_symbol_flag"
+        android:pathData="M450,100 L150,280 450,460h50V100Z" />
 </vector>

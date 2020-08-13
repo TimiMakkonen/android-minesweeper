@@ -47,6 +47,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 * Added 'SolutionFragment' to show the solution of the current grid.
 * Added primary/secondary click-action-switch button.
+  * Can be moved horizontally or hidden in 'Settings'.
 * Added 'complete-around'-feature.
   * If you perform a click action on a visible cell that has: 'number of
     marked neighbouring cells' == 'number of mines around', then all
@@ -64,6 +65,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
   * Added 'setValue', 'removeOnChangeListener' and
     'clearOnChangeListeners' methods.
   * Fixed typos in 'setMinValue' and 'setMaxValue' methods.
+* Added some new icons and slightly modified old ones.
 * Bumped 'minSdkVersion' from 19 to 21.
 * Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to v8.5.1
 

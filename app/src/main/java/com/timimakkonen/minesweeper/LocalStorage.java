@@ -127,4 +127,8 @@ public class LocalStorage {
         editor.putBoolean(key, value);
         editor.apply();
     }
+
+    public int getInt(String key, int defValue) {
+        return sharedPrefs.getInt(key, defValue);
+    }
 }

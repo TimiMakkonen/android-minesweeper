@@ -15,4 +15,18 @@
         <item>@string/play_hard_game</item>
         <item>@string/play_custom_game</item>
     </string-array>
+
+    <string-array name="prim_seco_horizontal_bias_entries">
+        <item>Start</item>
+        <item>Center</item>
+        <item>End</item>
+        <item>Custom</item>
+    </string-array>
+
+    <string-array name="prim_seco_horizontal_bias_values">
+        <item>start</item>
+        <item>center</item>
+        <item>end</item>
+        <item>custom</item>
+    </string-array>
 </resources>
