@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory app:title="Night mode">
 
@@ -37,7 +37,8 @@
             android:defaultValue="true"
             android:key="use_prim_seco_switch"
             android:summary="Use button which allows switching between primary and secondary click actions"
-            android:title="Action switch button" />
+            android:title="Action switch button"
+            tools:icon="@drawable/ic_visibility_with_marked_symbol_black_24dp"/>
 
         <ListPreference
             android:defaultValue="1"
@@ -50,11 +51,10 @@
             app:useSimpleSummaryProvider="true" />
 
         <SeekBarPreference
+            android:defaultValue="0"
             android:key="prim_seco_switch_horizontal_bias_custom"
             android:max="100"
-            android:defaultValue="0"
-            app:isPreferenceVisible="false"
-            />
+            app:isPreferenceVisible="false" />
 
     </PreferenceCategory>
 

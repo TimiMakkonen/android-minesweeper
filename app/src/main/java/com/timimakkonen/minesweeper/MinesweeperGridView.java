@@ -510,14 +510,12 @@ public class MinesweeperGridView extends View {
         return mGestureDetector.onTouchEvent(event);
     }
 
-    @SuppressWarnings("SameReturnValue")
     public int maxGridHeight() {
         return (int) (mContentHeight /
                       ((float) (24 * getContext().getResources().getDisplayMetrics().densityDpi) /
                        DisplayMetrics.DENSITY_DEFAULT));
     }
 
-    @SuppressWarnings("SameReturnValue")
     public int maxGridWidth() {
         return (int) (mContentWidth /
                       ((float) (24 * getContext().getResources().getDisplayMetrics().densityDpi) /

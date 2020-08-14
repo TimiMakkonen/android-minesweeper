@@ -45,11 +45,13 @@ public class GameViewModel extends ViewModel {
     private static final int HARD_GAME_GRID_WIDTH = 16;
     private static final int HARD_GAME_NUM_OF_MINES = 99;
 
+    private static final String PRIM_ACTION_IS_CHECK_KEY = "prim_action_is_check";
     private static final boolean DEFAULT_PRIMARY_ACTION_IS_CHECK = true;
 
 
     //private final SavedStateHandle savedStateHandle;
     private final MinesweeperRepository minesweeperRepository;
+    private final LocalStorage localStorage;
     private final MutableLiveData<VisualMinesweeperCell[][]> visualMinesweeperCells;
     private final MutableLiveData<Boolean> playerHasWon;
     private final MutableLiveData<Boolean> playerHasLost;
@@ -60,16 +62,18 @@ public class GameViewModel extends ViewModel {
 
     @Inject
     public GameViewModel(/*SavedStateHandle savedStateHandle,*/
-            MinesweeperRepository minesweeperRepository) {
+            MinesweeperRepository minesweeperRepository, LocalStorage localStorage) {
         //this.savedStateHandle = savedStateHandle;
         this.minesweeperRepository = minesweeperRepository;
+        this.localStorage = localStorage;
 
         this.disposables = new CompositeDisposable();
         this.visualMinesweeperCells = new MutableLiveData<>();
         this.playerHasWon = new MutableLiveData<>();
         this.playerHasLost = new MutableLiveData<>();
 
-        this.primaryActionIsCheck = new MutableLiveData<>(true);
+        this.primaryActionIsCheck = new MutableLiveData<>(
+                localStorage.getBoolean(PRIM_ACTION_IS_CHECK_KEY, DEFAULT_PRIMARY_ACTION_IS_CHECK));
 
         init();
     }
@@ -273,13 +277,16 @@ public class GameViewModel extends ViewModel {
     public void switchMinesweeperPrimSecoActions() {
         if (this.primaryActionIsCheck.getValue() != null && this.primaryActionIsCheck.getValue()) {
             this.primaryActionIsCheck.setValue(false);
+            this.localStorage.setBoolean(PRIM_ACTION_IS_CHECK_KEY, false);
         } else {
             this.primaryActionIsCheck.setValue(true);
+            this.localStorage.setBoolean(PRIM_ACTION_IS_CHECK_KEY, true);
         }
     }
 
     public void setPrimaryActionIsCheckToDefault() {
         this.primaryActionIsCheck.setValue(DEFAULT_PRIMARY_ACTION_IS_CHECK);
+        this.localStorage.setBoolean(PRIM_ACTION_IS_CHECK_KEY, DEFAULT_PRIMARY_ACTION_IS_CHECK);
     }
 
     public LiveData<Boolean> isPrimaryActionCheck() {

@@ -2,10 +2,15 @@ package com.timimakkonen.minesweeper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SeekBarPreference;
@@ -32,6 +37,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     private static final String PRIM_SECO_SWITCH_HORIZ_BIAS_CUSTOM_KEY =
             "prim_seco_switch_horizontal_bias_custom";
     private static final String HAS_SAVED_GAME_KEY = "has_saved_game";
+    private static final String USE_PRIM_SECO_SWITCH_KEY = "use_prim_seco_switch";
+    private static final String PRIM_ACTION_IS_CHECK_KEY = "prim_action_is_check";
 
     @Inject
     LocalStorage localStorage;
@@ -39,6 +46,26 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
+
+        // set icon for 'use_prim_seco_switch' preference
+        Preference primSecoSwitchPref = findPreference(USE_PRIM_SECO_SWITCH_KEY);
+        if (primSecoSwitchPref != null) {
+            final Drawable primSecoSwitchIcon;
+            if (localStorage.getBoolean(PRIM_ACTION_IS_CHECK_KEY, true)) {
+                primSecoSwitchIcon = ContextCompat.getDrawable(requireActivity(),
+                                                               R.drawable.ic_visibility_with_marked_symbol_black_24dp);
+            } else {
+                primSecoSwitchIcon = ContextCompat.getDrawable(requireActivity(),
+                                                               R.drawable.ic_marked_symbol_with_visibility_black_24dp);
+            }
+            if (primSecoSwitchIcon != null) {
+                TypedArray a = requireContext().obtainStyledAttributes(new TypedValue().data,
+                                                                       new int[]{android.R.attr.textColorSecondary});
+                primSecoSwitchIcon.setColorFilter(a.getColor(0, 0), PorterDuff.Mode.SRC_IN);
+                a.recycle();
+            }
+            primSecoSwitchPref.setIcon(primSecoSwitchIcon);
+        }
 
         setOnPreferenceClickListeners();
     }
