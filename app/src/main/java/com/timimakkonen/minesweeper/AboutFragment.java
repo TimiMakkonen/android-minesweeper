@@ -64,7 +64,7 @@ public class AboutFragment extends Fragment {
                 v -> {
                     Intent emailIntent = new Intent(Intent.ACTION_SEND);
                     emailIntent.setType("text/plain");
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, getString(R.string.email));
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.email)});
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, appInformationString());
                     if (emailIntent.resolveActivity(requireActivity().getPackageManager()) !=
                         null) {
