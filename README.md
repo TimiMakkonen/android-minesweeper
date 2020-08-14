@@ -43,7 +43,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ## Version history
 
-### Version DEVELOP
+### Version 0.3.0
 
 * Added 'SolutionFragment' to show the solution of the current grid.
 * Added primary/secondary click-action-switch button.
@@ -93,9 +93,9 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ## Screenshots
 
-Gameplay example | Gameplay example (larger grid) | Gameplay example (dark theme) | Custom game selection dialog
------------------|--------------------------------|-------------------------------|-----------------------------
-[![Gameplay example](/screenshots/GamePlay1.png "Gameplay example")](/screenshots/GamePlay1.png) | [![Gameplay example (larger grid)](/screenshots/GamePlay2.png "Gameplay example (larger grid)")](/screenshots/GamePlay2.png) | [![Gameplay example (dark theme)](/screenshots/DarkTheme_GamePlay.png "Gameplay example (dark theme)")](/screenshots/DarkTheme_GamePlay.png) | [![Custom game selection dialog](/screenshots/CustomGameSelection.png "Custom game selection dialog")](/screenshots/CustomGameSelection.png)
+Gameplay example | Solution example | Gameplay example (dark theme) | Custom game selection dialog | Settings page
+-----------------|--------------------------------|-------------------------------|-----------------------------|----
+[![Gameplay example](/screenshots/v0.3.0/GamePlay_v0.3.0.png "Gameplay example")](/screenshots/v0.3.0/GamePlay_v0.3.0.png) | [![Solution example](/screenshots/v0.3.0/Solution_v0.3.0.png "Solution example")](/screenshots/v0.3.0/Solution_v0.3.0.png) | [![Gameplay example (dark theme)](/screenshots/v0.3.0/GamePlay_DarkTheme_v0.3.0.png "Gameplay example (dark theme)")](/screenshots/v0.3.0/GamePlay_DarkTheme_v0.3.0.png) | [![Custom game selection dialog](/screenshots/v0.1.0/CustomGameSelection_v0.1.0.png "Custom game selection dialog")](/screenshots/v0.1.0/CustomGameSelection_v0.1.0.png) | [![Settings page](/screenshots/v0.3.0/Settings_v0.3.0.png "Settings page")](/screenshots/v0.3.0/Settings_v0.3.0.png)
 
 ## Fixes and features left to consider/implement
 
@@ -110,3 +110,5 @@ Gameplay example | Gameplay example (larger grid) | Gameplay example (dark theme
 * Add zooming option to grid.
 * Add 'peek solution' option which instead of showing solution in
   another fragment, shows the solution in place of the current game.
+* Consider removing/changing 'LocalStorage' inconsistencies.
+* Consider removing 'primaryActionIsCheck' LiveData in 'GameViewModel'.
