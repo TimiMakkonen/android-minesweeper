@@ -28,11 +28,12 @@ import java.util.List;
  * attributes.
  * </p>
  * <p>
- * Changes in the 'value/currentValue' can be listened with an implementation of
- * 'MaterialIntSliderAndEditText.OnChangeListener', which can be set using 'addOnChangeListener'
- * method.
+ * Changes in the 'value/currentValue' can be listened with an implementation of {@link
+ * MaterialIntSliderAndEditText.OnChangeListener} 'MaterialIntSliderAndEditText.OnChangeListener',
+ * which can be set using {@link #addOnChangeListener(OnChangeListener)}.
  * </p>
  */
+@SuppressWarnings("unused")
 public class MaterialIntSliderAndEditText extends LinearLayout {
 
     private static final String TAG = "MatIntSliderAndEditT";

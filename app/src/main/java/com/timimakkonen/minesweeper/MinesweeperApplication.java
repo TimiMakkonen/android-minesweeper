@@ -14,9 +14,6 @@ import javax.inject.Inject;
  */
 public class MinesweeperApplication extends Application {
 
-    private static final String USE_NIGHT_MODE_KEY = "use_night_mode";
-    private static final String OVERRIDE_SYSTEM_DARK_THEME_KEY = "override_system_dark_theme";
-
     final ApplicationComponent appComponent = DaggerApplicationComponent.factory().create(this);
 
     @Inject
@@ -28,8 +25,8 @@ public class MinesweeperApplication extends Application {
 
         appComponent.inject(this);
 
-        if (localStorage.getBoolean(OVERRIDE_SYSTEM_DARK_THEME_KEY, false)) {
-            if (localStorage.getBoolean(USE_NIGHT_MODE_KEY, false)) {
+        if (localStorage.getOverrideSystemDarkTheme(false)) {
+            if (localStorage.getUseNightMode(false)) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

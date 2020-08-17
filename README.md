@@ -46,6 +46,14 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 ### Version DEVELOP
 
 * Updated 'mine'-symbol.
+* Moved 'SharedPreference'-keys to 'LocalStorage' and created explicit
+  setters and getters to access their data.
+  * 'LocalStorage' and 'SettingsFragment' are now the only classes which
+    access 'SharedPreferences' directly.
+* Updated Javadoc.
+* Re-enabled 'unused'-warning and fixed or suppressed them.
+* Changed 'MinesweeperGridView' to allow multiple
+  'MinesweeperGridViewEventListener's.
 
 ### Version 0.3.0
 
@@ -114,5 +122,4 @@ Gameplay example | Solution example | Gameplay example (dark theme) | Custom gam
 * Add zooming option to grid.
 * Add 'peek solution' option which instead of showing solution in
   another fragment, shows the solution in place of the current game.
-* Consider removing/changing 'LocalStorage' inconsistencies.
 * Consider removing 'primaryActionIsCheck' LiveData in 'GameViewModel'.

@@ -27,8 +27,6 @@ import javax.inject.Inject;
  */
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = "SettingsFragment";
-
     private static final String USE_NIGHT_MODE_KEY = "use_night_mode";
     private static final String OVERRIDE_SYSTEM_DARK_THEME_KEY = "override_system_dark_theme";
     private static final String DELETE_SAVED_GAME_KEY = "delete_saved_game";
@@ -36,9 +34,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             "prim_seco_switch_horizontal_bias";
     private static final String PRIM_SECO_SWITCH_HORIZ_BIAS_CUSTOM_KEY =
             "prim_seco_switch_horizontal_bias_custom";
-    private static final String HAS_SAVED_GAME_KEY = "has_saved_game";
     private static final String USE_PRIM_SECO_SWITCH_KEY = "use_prim_seco_switch";
-    private static final String PRIM_ACTION_IS_CHECK_KEY = "prim_action_is_check";
 
     @Inject
     LocalStorage localStorage;
@@ -51,7 +47,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         Preference primSecoSwitchPref = findPreference(USE_PRIM_SECO_SWITCH_KEY);
         if (primSecoSwitchPref != null) {
             final Drawable primSecoSwitchIcon;
-            if (localStorage.getBoolean(PRIM_ACTION_IS_CHECK_KEY, true)) {
+            if (localStorage.getPrimActionIsCheck(true)) {
                 primSecoSwitchIcon = ContextCompat.getDrawable(requireActivity(),
                                                                R.drawable.ic_visibility_with_marked_symbol_black_24dp);
             } else {
@@ -150,7 +146,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 .setPositiveButton(R.string.accept,
                                    (dialog, which) -> {
                                        localStorage.deleteCurrentMinesweeperGame();
-                                       localStorage.setBoolean(HAS_SAVED_GAME_KEY, false);
+                                       localStorage.setHasSavedGame(false);
                                    }
                 )
                 .show();

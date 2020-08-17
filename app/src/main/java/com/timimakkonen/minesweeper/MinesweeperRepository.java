@@ -13,11 +13,12 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 /**
  * <p>
- * This class is the main holder of the 'AndroidMinesweeperGame'.
+ * This class is the main holder of the {@link AndroidMinesweeperGame}.
  * </p>
  * <p>
- * This class holds an instance of 'AndroidMinesweeperGame' and handles calling its methods, updates
- * visual information when needed (into its observables) and saves the game progress on request.
+ * This class holds an instance of {@link AndroidMinesweeperGame} and handles calling its methods,
+ * updates visual information when needed (into its observables) and saves the game progress on
+ * request.
  * </p>
  * <p>
  * This class has 'minesweeperDataForViewObservable' (MinesweeperDataForView) and
@@ -29,8 +30,6 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 class MinesweeperRepository {
 
     private static final String TAG = "MinesweeperRepository";
-
-    private static final String HAS_SAVED_GAME_KEY = "has_saved_game";
 
     private final LocalStorage localStorage;
     private final BehaviorSubject<MinesweeperDataForView> minesweeperDataForViewObservable;
@@ -150,6 +149,7 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
+    @SuppressWarnings("unused")
     public void startNewGame(int gridHeight, int gridWidth,
                              double proportionOfMines) throws IllegalArgumentException {
         verifyGridDimension(gridHeight);
@@ -177,7 +177,7 @@ class MinesweeperRepository {
 
     private void saveCurrentMinesweeperGame() {
         localStorage.saveCurrentMinesweeperGame(this.currentMinesweeperGame.serialise());
-        localStorage.setBoolean(HAS_SAVED_GAME_KEY, true);
+        localStorage.setHasSavedGame(true);
     }
 
     private void updateCurrentGridInformation() {

@@ -11,16 +11,12 @@ import dagger.Provides;
  * Dagger module responsible for providing an instance of 'AndroidMinesweeperGame'.
  * </p>
  * <p>
- * If saved game can be found from 'LocalStorage', and the user has chosen to resume it, this saved
- * game is returned. Else, a new instance of 'AndroidMinesweeperGame' is returned.
+ * If saved game can be found in {@link com.timimakkonen.minesweeper.LocalStorage}, and the user has chosen to resume it, this saved
+ * game is returned. Else, a new instance of {@link com.timimakkonen.minesweeper.jni.AndroidMinesweeperGame} is returned.
  * </p>
  */
 @Module
 public class MinesweeperModelModule {
-
-    private static final String HAS_SAVED_GAME_KEY = "has_saved_game";
-    private static final String SAVE_AND_RESUME_KEY = "save_and_resume";
-    private static final String SAVE_WAS_CORRUPTED_KEY = "save_was_corrupted";
 
     // Used to load the 'libandroidminesweeper' library when this module is initialised for the first time.
     static {
@@ -31,8 +27,9 @@ public class MinesweeperModelModule {
     @Provides
     public AndroidMinesweeperGame provideAndroidMinesweeperGame(LocalStorage localStorage) {
 
-        final boolean hasSavedGame = localStorage.getBoolean(HAS_SAVED_GAME_KEY, false);
-        final boolean resumePreviousGame = localStorage.getBoolean(SAVE_AND_RESUME_KEY, true);
+        final boolean hasSavedGame = localStorage.getHasSavedGame(false);
+        final boolean resumePreviousGame = localStorage.getSaveAndResume(true);
+
 
         if (resumePreviousGame && hasSavedGame) {
             AndroidMinesweeperGame androidMinesweeperGame = new AndroidMinesweeperGame();
@@ -41,9 +38,9 @@ public class MinesweeperModelModule {
             if (deserialisationWasSuccessful) {
                 return androidMinesweeperGame;
             } else {
-                localStorage.setBoolean(SAVE_WAS_CORRUPTED_KEY, true);
+                localStorage.setSaveWasCorrupted(true);
                 localStorage.deleteCurrentMinesweeperGame();
-                localStorage.setBoolean(HAS_SAVED_GAME_KEY, false);
+                localStorage.setHasSavedGame(false);
             }
         }
         // return this default AndroidMinesweeperGame if no save can be found, or if the save is corrupted

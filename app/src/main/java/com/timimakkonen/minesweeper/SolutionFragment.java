@@ -24,10 +24,6 @@ public class SolutionFragment extends Fragment {
     @Inject
     SolutionViewModel viewModel;
 
-    public static SolutionFragment newInstance() {
-        return new SolutionFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

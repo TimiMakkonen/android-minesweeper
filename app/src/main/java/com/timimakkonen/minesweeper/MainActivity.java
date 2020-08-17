@@ -26,8 +26,6 @@ import javax.inject.Inject;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static final String SAVE_WAS_CORRUPTED_KEY = "save_was_corrupted";
-
     AppBarConfiguration appBarConfiguration;
 
     @Inject
@@ -59,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
         ((MinesweeperApplication) getApplicationContext()).appComponent.inject(this);
 
         // displaying alert dialog if save file was corrupted
-        if (localStorage.getBoolean(SAVE_WAS_CORRUPTED_KEY, false)) {
+        if (localStorage.getSaveWasCorrupted(false)) {
             showCorruptedGameSaveDialog();
-            localStorage.setBoolean(SAVE_WAS_CORRUPTED_KEY, false);
+            localStorage.setSaveWasCorrupted(false);
         }
 
     }

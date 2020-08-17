@@ -20,7 +20,6 @@ import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.appcompat.app.AlertDialog;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -36,8 +35,8 @@ import javax.inject.Inject;
  * This fragment:
  * </p>
  * <ul>
- *     <li>forwards needed data to 'MinesweeperGridView' and passes its touch events to
- *         'GameViewModel'</li>
+ *     <li>forwards needed data to {@link MinesweeperGridView} and passes its touch events to {@link GameViewModel}
+ *         </li>
  *     <li>starts 'save-game'-feature when paused</li>
  *     <li>deals with minesweeper game related menu items, such as 'New Game' and 'Show solution'
  *     </li>
@@ -48,12 +47,6 @@ public class GameFragment extends Fragment {
 
     private static final String TAG = "GameFragment";
 
-    private static final String SAVE_AND_RESUME_KEY = "save_and_resume";
-    private static final String USE_PRIM_SECO_SWITCH_KEY = "use_prim_seco_switch";
-    private static final String PRIM_SECO_SWITCH_HORIZ_BIAS_KEY =
-            "prim_seco_switch_horizontal_bias";
-    private static final String PRIM_SECO_SWITCH_HORIZ_BIAS_CUSTOM_KEY =
-            "prim_seco_switch_horizontal_bias_custom";
     @Inject
     GameViewModel viewModel;
     @Inject
@@ -107,14 +100,16 @@ public class GameFragment extends Fragment {
             }
         });
 
-        minesweeperView.setMinesweeperGridViewEventListener(
+        minesweeperView.addMinesweeperEventListener(
                 new MinesweeperGridView.OnMinesweeperGridViewEventListener() {
+                    @SuppressWarnings("unused")
                     @Override
                     public void onCellPrimaryAction(int x, int y) {
                         Log.d(TAG, String.format("Primary cell action on (%d, %d)", x, y));
                         viewModel.primaryMinesweeperCoordinatesAction(x, y);
                     }
 
+                    @SuppressWarnings("unused")
                     @Override
                     public void onCellSecondaryAction(int x, int y) {
                         Log.d(TAG, String.format("Secondary cell action on (%d, %d)", x, y));
@@ -167,13 +162,11 @@ public class GameFragment extends Fragment {
         super.onResume();
 
         // primary-secondary click action switch setup
-        if (PreferenceManager.getDefaultSharedPreferences(requireActivity()).getBoolean(
-                USE_PRIM_SECO_SWITCH_KEY, true)) {
+        if (localStorage.getUsePrimSecoSwitchKey(true)) {
             primSecoSwitchButton.setVisibility(View.VISIBLE);
             ConstraintLayout.LayoutParams params =
                     (ConstraintLayout.LayoutParams) primSecoSwitchButton.getLayoutParams();
-            String chosenButtonBias = localStorage.getString(PRIM_SECO_SWITCH_HORIZ_BIAS_KEY,
-                                                             "start");
+            String chosenButtonBias = localStorage.getPrimSecoSwitchHorizBias("start");
             switch (chosenButtonBias) {
                 case "start":
                     params.horizontalBias = 0f;
@@ -185,8 +178,7 @@ public class GameFragment extends Fragment {
                     params.horizontalBias = 1f;
                     break;
                 case "custom":
-                    params.horizontalBias = localStorage.getInt(
-                            PRIM_SECO_SWITCH_HORIZ_BIAS_CUSTOM_KEY, 0) / 100f;
+                    params.horizontalBias = localStorage.getPrimSecoSwitchCustomHorizBias(0) / 100f;
                     break;
             }
             primSecoSwitchButton.setLayoutParams(params);
@@ -198,7 +190,7 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onPause() {
-        if (localStorage.getBoolean(SAVE_AND_RESUME_KEY, true)) {
+        if (localStorage.getSaveAndResume(true)) {
             viewModel.save();
         }
         super.onPause();

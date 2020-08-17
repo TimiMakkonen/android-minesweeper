@@ -17,6 +17,9 @@ import android.view.View;
 
 import androidx.annotation.ColorInt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * <p>
@@ -37,22 +40,23 @@ import androidx.annotation.ColorInt;
  * </p>
  * <p>
  * This class has the ability to return what it considers to be the maximum number of cells it can
- * display in a row or column via methods 'maxGridLength' and 'maxGridWidth', respectively.
+ * display in a row or column via methods {@link #maxGridHeight()} and {@link #maxGridWidth()} ()},
+ * respectively.
  * </p>
  * <p>
  * To set the cell data needed to visualise the minesweeper grid, an instance of
- * 'VisualMinesweeperCell[][]' must be provided via 'setVisualMinesweeperCellsAndResize'-method.
- * Alternatively you can also use 'setVisualMinesweeperCells'-method, but in this case you must also
- * manually modify number of rows and columns displayed via 'setNumberOfRow' and
- * 'setNumberOfColumns', respectively.
+ * 'VisualMinesweeperCell[][]' must be provided via {@link #setVisualMinesweeperCellsAndResize(VisualMinesweeperCell[][])}.
+ * Alternatively you can also use {@link #setVisualMinesweeperCells(VisualMinesweeperCell[][])}, but
+ * in this case you must also manually modify number of rows and columns displayed using {@link
+ * #setNumberOfRows(int)} and {@link #setNumberOfColumns(int)}, respectively.
  * </p>
  * <p>
  * This minesweeper view can handle standard short(primary) and long(secondary) press touch events.
- * To use this, an implementation of 'MinesweeperGridView.OnMinesweeperGridViewEventListener' must
- * be set via 'setMinesweeperGridViewEventListener'.
+ * To use this, an implementation of {@link OnMinesweeperGridViewEventListener} must be set via
+ * {@link #addMinesweeperEventListener(OnMinesweeperGridViewEventListener)}.
  * </p>
  */
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class MinesweeperGridView extends View {
 
     private static final String TAG = "MinesweeperGridView";
@@ -61,11 +65,12 @@ public class MinesweeperGridView extends View {
     private static final int DEFAULT_NUM_OF_COLUMNS = 10;
     private static final int DEFAULT_NUM_OF_ROWS = 13;
     private static final float DEFAULT_GRID_LINE_STROKE_WIDTH = 3;
-
+    // minesweeper grid event listeners:
+    private final List<MinesweeperGridView.OnMinesweeperGridViewEventListener>
+            mMinesweeperGridViewEventListeners = new ArrayList<>();
     // grid size fields:
     private int mNumOfColumns = DEFAULT_NUM_OF_COLUMNS;
     private int mNumOfRows = DEFAULT_NUM_OF_ROWS;
-
     // color fields:
     @ColorInt
     private int mCellBgColor = Color.LTGRAY;
@@ -73,7 +78,6 @@ public class MinesweeperGridView extends View {
     private int mCheckedCellBgColor = Color.GRAY;
     @ColorInt
     private int mGridLinesColor = Color.BLACK;
-
     // drawable symbols:
     private Drawable mUncheckedDrawable;
     private Drawable mEmptyDrawable;
@@ -88,15 +92,12 @@ public class MinesweeperGridView extends View {
     private Drawable mMineDrawable;
     private Drawable mFlagDrawable;
     private Drawable mMarkedDrawable;
-
     // Minesweeper cells:
     private VisualMinesweeperCell[][] mVisualMinesweeperCells;
-
     // grid paints:
     private Paint mCellBgPaint;
     private Paint mCheckedCellBgPaint;
     private Paint mGridLinesPaint;
-
     // sizes:
     private int mCellSize;
     private int mViewWidth;
@@ -109,18 +110,12 @@ public class MinesweeperGridView extends View {
     private int mContentHeight;
     private int mGridWidth;
     private int mGridHeight;
-
     private float mGridLineStrokeWidth = DEFAULT_GRID_LINE_STROKE_WIDTH;
-
-    // grid origin point on canvas;
+    // grid origin point on canvas:
     private int mOriginX;
     private int mOriginY;
-
     // gesture detector:
     private GestureDetector mGestureDetector;
-
-    // minesweeper grid event listener
-    private OnMinesweeperGridViewEventListener mMinesweeperGridViewEventListener;
 
     public MinesweeperGridView(Context context) {
         super(context);
@@ -176,8 +171,7 @@ public class MinesweeperGridView extends View {
 
                     Log.d(TAG, String.format("Primary cell action on (%d, %d)", clickedColumn,
                                              clickedRow));
-                    mMinesweeperGridViewEventListener.onCellPrimaryAction(clickedColumn,
-                                                                          clickedRow);
+                    dispatchMinesweeperPrimaryActionEvent(clickedColumn, clickedRow);
                 }
 
                 return true;
@@ -203,8 +197,7 @@ public class MinesweeperGridView extends View {
 
                     Log.d(TAG, String.format("Secondary cell action on (%d, %d)", clickedColumn,
                                              clickedRow));
-                    mMinesweeperGridViewEventListener.onCellSecondaryAction(clickedColumn,
-                                                                            clickedRow);
+                    dispatchMinesweeperSecondaryActionEvent(clickedColumn, clickedRow);
                 }
             }
 
@@ -215,6 +208,18 @@ public class MinesweeperGridView extends View {
             }
         });
 
+    }
+
+    private void dispatchMinesweeperPrimaryActionEvent(int x, int y) {
+        for (OnMinesweeperGridViewEventListener listener : mMinesweeperGridViewEventListeners) {
+            listener.onCellPrimaryAction(x, y);
+        }
+    }
+
+    private void dispatchMinesweeperSecondaryActionEvent(int x, int y) {
+        for (OnMinesweeperGridViewEventListener listener : mMinesweeperGridViewEventListeners) {
+            listener.onCellSecondaryAction(x, y);
+        }
     }
 
     private void loadAttributes(AttributeSet attrs, int defStyle) {
@@ -733,9 +738,18 @@ public class MinesweeperGridView extends View {
         invalidate();
     }
 
-    public void setMinesweeperGridViewEventListener(
-            OnMinesweeperGridViewEventListener minesweeperGridViewEventListener) {
-        this.mMinesweeperGridViewEventListener = minesweeperGridViewEventListener;
+    public void addMinesweeperEventListener(
+            MinesweeperGridView.OnMinesweeperGridViewEventListener listener) {
+        this.mMinesweeperGridViewEventListeners.add(listener);
+    }
+
+    public void removeMinesweeperEventListener(
+            MinesweeperGridView.OnMinesweeperGridViewEventListener listener) {
+        this.mMinesweeperGridViewEventListeners.remove(listener);
+    }
+
+    public void clearMinesweeperEventListeners() {
+        this.mMinesweeperGridViewEventListeners.clear();
     }
 
     public interface OnMinesweeperGridViewEventListener {
@@ -743,4 +757,5 @@ public class MinesweeperGridView extends View {
 
         void onCellSecondaryAction(int x, int y);
     }
+
 }

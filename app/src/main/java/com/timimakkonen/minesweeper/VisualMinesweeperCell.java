@@ -8,8 +8,8 @@ import java.util.Map;
  * This enum class represent the visual state of a cell, allowing views/ui to display a cell.
  * </p>
  * <p>
- * An instance of 'VisualMinesweeperCell' can be obtained using static 'newVisualMinesweeperCell'
- * method, if needed.
+ * An instance of 'VisualMinesweeperCell' can be obtained using static {@link
+ * #newVisualMinesweeperCell(Integer)} method, if needed.
  * </p>
  */
 public enum VisualMinesweeperCell {
