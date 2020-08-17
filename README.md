@@ -43,6 +43,10 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ## Version history
 
+### Version DEVELOP
+
+* Updated 'mine'-symbol.
+
 ### Version 0.3.0
 
 * Added 'SolutionFragment' to show the solution of the current grid.

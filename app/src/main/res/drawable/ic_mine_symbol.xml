@@ -1,26 +1,12 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="100dp"
     android:height="100dp"
-    android:viewportWidth="1000"
-    android:viewportHeight="1000">
+    android:viewportWidth="100"
+    android:viewportHeight="100">
     <path
-        android:fillAlpha="1"
-        android:fillType="evenOdd"
-        android:pathData="M500,500m-400,0a400,400 0,1 1,800 0a400,400 0,1 1,-800 0">
-        <aapt:attr name="android:fillColor">
-            <gradient
-                android:centerX="360"
-                android:centerY="360"
-                android:gradientRadius="160"
-                android:type="radial">
-                <item
-                    android:color="#9A000000"
-                    android:offset="0" />
-                <item
-                    android:color="#FF000000"
-                    android:offset="1" />
-            </gradient>
-        </aapt:attr>
-    </path>
+        android:fillColor="@color/mine_symbol_primary"
+        android:pathData="M45,10L45,20.42A30,30 0,0 0,31.436 26.436L25,20L20,25L26.436,31.436A30,30 0,0 0,20.42 45L10,45L10,55L20.42,55A30,30 0,0 0,26.436 68.564L20,75L25,80L31.436,73.564A30,30 0,0 0,45 79.58L45,90L55,90L55,79.58A30,30 0,0 0,68.564 73.564L75,80L80,75L73.564,68.564A30,30 0,0 0,79.58 55L90,55L90,45L79.58,45A30,30 0,0 0,73.564 31.436L80,25L75,20L68.564,26.436A30,30 0,0 0,55 20.42L55,10L45,10z" />
+    <path
+        android:fillColor="@color/mine_symbol_secondary"
+        android:pathData="M50,50m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
 </vector>
