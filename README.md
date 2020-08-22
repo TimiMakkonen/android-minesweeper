@@ -45,6 +45,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ### Version DEVELOP
 
+* Added zooming feature.
 * Updated 'mine'-symbol.
 * Moved 'SharedPreference'-keys to 'LocalStorage' and created explicit
   setters and getters to access their data.
@@ -119,7 +120,6 @@ Gameplay example | Solution example | Gameplay example (dark theme) | Custom gam
 * Add more customisation options (more colors, minesweeper symbols, etc.).
 * Clean up and comment code.
 * Add help page.
-* Add zooming option to grid.
 * Add 'peek solution' option which instead of showing solution in
   another fragment, shows the solution in place of the current game.
 * Consider removing 'primaryActionIsCheck' LiveData in 'GameViewModel'.
