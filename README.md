@@ -54,7 +54,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
     * 'unreasonable custom game' is just ridiculous.
   * Note that for very large grids saving and loading a game slows down
     considerably and the save file size bloats.
-* Updated 'mine'-symbol.
+* Updated 'mine' and 'one'-symbols.
 * Moved 'SharedPreference'-keys to 'LocalStorage' and created explicit
   setters and getters to access their data.
   * 'LocalStorage' and 'SettingsFragment' are now the only classes which
