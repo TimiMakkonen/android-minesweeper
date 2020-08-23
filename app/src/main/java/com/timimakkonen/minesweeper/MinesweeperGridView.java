@@ -559,15 +559,34 @@ public class MinesweeperGridView extends View {
             canvas.setMatrix(mCurrentViewMatrix);
         }
 
-        // draw grid cells
-        for (int y = 0; y < mNumOfRows; ++y) {
-            for (int x = 0; x < mNumOfColumns; ++x) {
+        // to avoid some unnecessary drawing (overdraw), we will only draw cells close to viewport
+        final int minRow = Math.max(
+                (int) ((mCurrentViewportRect.top - mGridRect.top) / mCellSize) - 1,
+                0);
+        final int minColumn = Math.max(
+                (int) ((mCurrentViewportRect.left - mGridRect.left) / mCellSize) - 1,
+                0);
+        final int maxRow = Math.min(
+                (int) ((mCurrentViewportRect.bottom - mGridRect.top) / mCellSize) + 1,
+                mNumOfRows);
+        final int maxColumn = Math.min(
+                (int) ((mCurrentViewportRect.right - mGridRect.left) / mCellSize) + 1,
+                mNumOfColumns);
+
+        drawGridCells(canvas, minRow, minColumn, maxRow, maxColumn);
+
+        drawGridLines(canvas, minRow, minColumn, maxRow, maxColumn);
+        canvas.restore();
+    }
+
+    private void drawGridCells(Canvas canvas, int minRow, int minColumn, int maxRow,
+                               int maxColumn) {
+
+        for (int y = minRow; y < maxRow; ++y) {
+            for (int x = minColumn; x < maxColumn; ++x) {
                 drawCell(canvas, x, y);
             }
         }
-
-        drawGridLines(canvas);
-        canvas.restore();
     }
 
     private void drawCell(Canvas canvas, int x, int y) {
@@ -638,19 +657,20 @@ public class MinesweeperGridView extends View {
         }
     }
 
-    private void drawGridLines(Canvas canvas) {
+    private void drawGridLines(Canvas canvas, int minRow, int minColumn, int maxRow,
+                               int maxColumn) {
         // draw column/vertical lines:
-        for (int i = 0; i <= mNumOfColumns; ++i) {
-            canvas.drawLine(mGridRect.left + (i * mCellSize), mGridRect.top,
-                            mGridRect.left + (i * mCellSize),
+        for (int x = minColumn; x <= maxColumn; ++x) {
+            canvas.drawLine(mGridRect.left + (x * mCellSize), mGridRect.top,
+                            mGridRect.left + (x * mCellSize),
                             mGridRect.bottom, mGridLinesPaint);
         }
 
         // draw row/horizontal lines:
-        for (int i = 0; i <= mNumOfRows; ++i) {
-            canvas.drawLine(mGridRect.left, mGridRect.top + (i * mCellSize),
+        for (int y = minRow; y <= maxRow; ++y) {
+            canvas.drawLine(mGridRect.left, mGridRect.top + (y * mCellSize),
                             mGridRect.right,
-                            mGridRect.top + (i * mCellSize), mGridLinesPaint);
+                            mGridRect.top + (y * mCellSize), mGridLinesPaint);
         }
     }
 
