@@ -5,6 +5,7 @@
     <!-- Strings used for fragments for navigation -->
     <string name="main_fragment_label">@string/app_name</string>
     <string name="settings_label">Settings</string>
+    <string name="solution_label">Solution</string>
 
     <!-- Win/Lost Alerts -->
     <string name="win_alert_title">Congratulations! You have won!</string>
@@ -15,7 +16,9 @@
     <string name="play_easy_game">Play Easy Game</string>
     <string name="play_medium_game">Play Medium Game</string>
     <string name="play_hard_game">Play Hard Game</string>
-    <string name="play_custom_game">Play Custom Game</string>
+    <string name="play_clickable_custom_game">Play Custom Game</string>
+    <string name="play_reasonable_custom_game">Play Reasonable Custom Game</string>
+    <string name="play_unreasonable_custom_game">Play Unreasonable Custom Game</string>
 
     <!-- Menu buttons -->
     <string name="action_about">About</string>
@@ -24,10 +27,13 @@
     <string name="action_change_size">Change Size</string>
     <string name="action_restart_without_mines">Restart</string>
     <string name="action_restart_with_mines">Restart with mines</string>
+    <string name="action_show_solution">Show solution</string>
     <string name="action_new_game_easy">Easy</string>
     <string name="action_new_game_medium">Medium</string>
     <string name="action_new_game_hard">Hard</string>
-    <string name="action_new_game_custom">Custom</string>
+    <string name="action_new_game_clickable_custom">Custom</string>
+    <string name="action_new_game_reasonable_custom">Reasonable custom</string>
+    <string name="action_new_game_unreasonable_custom">Unreasonable custom</string>
 
     <!-- General navigation buttons -->
     <string name="ok">OK</string>
@@ -59,8 +65,6 @@
     <!-- Feedback -->
     <string name="email">timi.makkonen@gmail.com</string>
     <string name="feedback_email_subject">Android Minesweeper - V:%s OS:%s SDK:%d D:%s M:%s P:%s</string>
-    <string name="action_show_solution">Show solution</string>
-    <string name="solution_label">Solution</string>
 
     <!-- Various strings -->
 

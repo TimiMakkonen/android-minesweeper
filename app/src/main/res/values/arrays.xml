@@ -5,7 +5,9 @@
         <item>@string/play_easy_game</item>
         <item>@string/play_medium_game</item>
         <item>@string/play_hard_game</item>
-        <item>@string/play_custom_game</item>
+        <item>@string/play_clickable_custom_game</item>
+        <item>@string/play_reasonable_custom_game</item>
+        <item>@string/play_unreasonable_custom_game</item>
     </string-array>
 
     <string-array name="lost_game_dialog_options">
@@ -13,7 +15,9 @@
         <item>@string/play_easy_game</item>
         <item>@string/play_medium_game</item>
         <item>@string/play_hard_game</item>
-        <item>@string/play_custom_game</item>
+        <item>@string/play_clickable_custom_game</item>
+        <item>@string/play_reasonable_custom_game</item>
+        <item>@string/play_unreasonable_custom_game</item>
     </string-array>
 
     <string-array name="prim_seco_horizontal_bias_entries">

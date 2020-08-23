@@ -224,15 +224,24 @@ public class GameFragment extends Fragment {
             case R.id.action_new_game_hard:
                 viewModel.startNewHardGame();
                 return true;
-            case R.id.action_new_game_custom:
-                customNewGameDialog();
+            case R.id.action_new_game_clickable_custom:
+                customNewGameDialog(minesweeperView.clickableMaxGridHeight(),
+                                    minesweeperView.clickableMaxGridWidth());
+                return true;
+            case R.id.action_new_game_reasonable_custom:
+                customNewGameDialog(minesweeperView.reasonableMaxGridHeight(),
+                                    minesweeperView.reasonableMaxGridWidth());
+                return true;
+            case R.id.action_new_game_unreasonable_custom:
+                customNewGameDialog(minesweeperView.unreasonableMaxGridHeight(),
+                                    minesweeperView.unreasonableMaxGridWidth());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void customNewGameDialog() {
+    private void customNewGameDialog(int maxGridHeight, int maxGridWidth) {
 
         final MaterialAlertDialogBuilder newGameAlert = new MaterialAlertDialogBuilder(
                 requireActivity());
@@ -247,12 +256,12 @@ public class GameFragment extends Fragment {
         final MaterialIntSliderAndEditText gridHeightSliderWithEditText = dialogView.findViewById(
                 R.id.sliderandedittext_grid_height);
         gridHeightSliderWithEditText.setMinValue(0);
-        gridHeightSliderWithEditText.setMaxValue(minesweeperView.maxGridHeight());
+        gridHeightSliderWithEditText.setMaxValue(maxGridHeight);
 
         final MaterialIntSliderAndEditText gridWidthSliderWithEditText = dialogView.findViewById(
                 R.id.sliderandedittext_grid_width);
         gridWidthSliderWithEditText.setMinValue(0);
-        gridWidthSliderWithEditText.setMaxValue(minesweeperView.maxGridWidth());
+        gridWidthSliderWithEditText.setMaxValue(maxGridWidth);
 
         final MaterialIntSliderAndEditText numOfMinesSliderWithEditText = dialogView.findViewById(
                 R.id.sliderandedittext_grid_num_of_mines);
@@ -353,8 +362,15 @@ public class GameFragment extends Fragment {
                         viewModel.startNewMediumGame();
                     } else if (choice.equals(getString(R.string.play_hard_game))) {
                         viewModel.startNewHardGame();
-                    } else if (choice.equals(getString(R.string.play_custom_game))) {
-                        customNewGameDialog();
+                    } else if (choice.equals(getString(R.string.play_clickable_custom_game))) {
+                        customNewGameDialog(minesweeperView.clickableMaxGridHeight(),
+                                            minesweeperView.clickableMaxGridWidth());
+                    } else if (choice.equals(getString(R.string.play_reasonable_custom_game))) {
+                        customNewGameDialog(minesweeperView.reasonableMaxGridHeight(),
+                                            minesweeperView.reasonableMaxGridWidth());
+                    } else if (choice.equals(getString(R.string.play_unreasonable_custom_game))) {
+                        customNewGameDialog(minesweeperView.unreasonableMaxGridHeight(),
+                                            minesweeperView.unreasonableMaxGridWidth());
                     }
                 })
                 .show();
@@ -381,8 +397,15 @@ public class GameFragment extends Fragment {
                         viewModel.startNewMediumGame();
                     } else if (choice.equals(getString(R.string.play_hard_game))) {
                         viewModel.startNewHardGame();
-                    } else if (choice.equals(getString(R.string.play_custom_game))) {
-                        customNewGameDialog();
+                    } else if (choice.equals(getString(R.string.play_clickable_custom_game))) {
+                        customNewGameDialog(minesweeperView.clickableMaxGridHeight(),
+                                            minesweeperView.clickableMaxGridWidth());
+                    } else if (choice.equals(getString(R.string.play_reasonable_custom_game))) {
+                        customNewGameDialog(minesweeperView.reasonableMaxGridHeight(),
+                                            minesweeperView.reasonableMaxGridWidth());
+                    } else if (choice.equals(getString(R.string.play_unreasonable_custom_game))) {
+                        customNewGameDialog(minesweeperView.unreasonableMaxGridHeight(),
+                                            minesweeperView.unreasonableMaxGridWidth());
                     }
                 })
                 .show();

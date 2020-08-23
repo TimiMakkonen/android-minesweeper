@@ -46,6 +46,14 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 ### Version DEVELOP
 
 * Added zooming feature.
+  * Zooming and panning/scrolling works as expected.
+* Added 'reasonable' and 'unreasonable custom game' options.
+  * Now:
+    * 'custom game' should work well unzoomed,
+    * 'reasonable custom game' should work well zoomed, and
+    * 'unreasonable custom game' is just ridiculous.
+  * Note that for very large grids saving and loading a game slows down
+    considerably and the save file size bloats.
 * Updated 'mine'-symbol.
 * Moved 'SharedPreference'-keys to 'LocalStorage' and created explicit
   setters and getters to access their data.

@@ -23,7 +23,6 @@ import androidx.annotation.ColorInt;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * <p>
  * This class displays a minesweeper grid and allows users to interact on it.
@@ -38,13 +37,20 @@ import java.util.List;
  * their setters or attributes.
  * </p>
  * <p>
- * Grid line width, which has default size set by 'DEFAULT_GRID_LINE_STROKE_WIDTH' can also be
- * overridden via setter or attribute.
+ * Grid line width automatically adjusts to the size of the grid, but it can also be overridden via
+ * setter or attribute. To return back to default/automatic grid line width, the custom grid line
+ * width must be unset using {@link #unsetGridLineStrokeWidth()}.
  * </p>
  * <p>
  * This class has the ability to return what it considers to be the maximum number of cells it can
  * display in a row or column via methods {@link #maxGridHeight()} and {@link #maxGridWidth()} ()},
- * respectively.
+ * respectively. To give even more flexibility about the recommended maximal sizes of the grid,
+ * there are also other maximal methods. Namely: {@link #clickableMaxGridHeight()}, {@link
+ * #reasonableMaxGridHeight()}, {@link #unreasonableMaxGridHeight()}, and their width equivalents.
+ * {@link #clickableMaxGridHeight()} is suitable for unzoomed grids, {@link
+ * #reasonableMaxGridHeight()} is suitable for zoomed grids and {@link #unreasonableMaxGridHeight()}
+ * is just ridiculous. Currently {@link #maxGridHeight()} and {@link #reasonableMaxGridHeight()} are
+ * equivalent, and the same applies to their width relatives.
  * </p>
  * <p>
  * To set the cell data needed to visualise the minesweeper grid, an instance of
@@ -58,6 +64,9 @@ import java.util.List;
  * To use this, an implementation of {@link OnMinesweeperGridViewEventListener} must be set via
  * {@link #addMinesweeperEventListener(OnMinesweeperGridViewEventListener)}.
  * </p>
+ * <p>
+ * This view has zooming and panning/scrolling functionality, which should behave as expected.
+ * </p>
  */
 @SuppressWarnings({"unused"})
 public class MinesweeperGridView extends View {
@@ -68,6 +77,7 @@ public class MinesweeperGridView extends View {
     private static final int DEFAULT_NUM_OF_COLUMNS = 10;
     private static final int DEFAULT_NUM_OF_ROWS = 13;
     private static final float DEFAULT_GRID_LINE_STROKE_WIDTH = 3;
+    private static final float NULL_GRID_LINE_STROKE_WIDTH = -1;
     // minesweeper grid event listeners:
     private final List<MinesweeperGridView.OnMinesweeperGridViewEventListener>
             mMinesweeperGridViewEventListeners = new ArrayList<>();
@@ -104,11 +114,11 @@ public class MinesweeperGridView extends View {
     // sizes:
     private int mCellSize;
     private float mGridLineStrokeWidth = DEFAULT_GRID_LINE_STROKE_WIDTH;
-    // content rectangle:
+    private boolean mUseCustomGridLineStrokeWidth = false;
+    // canvas rectangles and matrices:
     private RectF mContentRect = new RectF();
     private Matrix mContentMatrix = new Matrix();
     private Rect mGridRect = new Rect();
-    // TODO: Add scaling/zooming and scrolling/panning
     private RectF mCurrentViewportRect = new RectF();
     private Matrix mCurrentViewMatrix = new Matrix();
     // gesture detector:
@@ -182,18 +192,22 @@ public class MinesweeperGridView extends View {
                                     float distanceY) {
                 mCurrentViewMatrix.postTranslate(-distanceX, -distanceY);
                 Log.d(TAG, String.format("onScroll: xDist: %f, yDist: %f", distanceX, distanceY));
+
                 calculateCurrentViewPortRectFromMatrix();
+
                 Log.d(TAG, String.format(
                         "onScroll: BEFORE: CurrentViewportRect(%f, %f, %f, %f), ContentRect(%f, %f, %f, %f)",
                         mCurrentViewportRect.left, mCurrentViewportRect.top,
                         mCurrentViewportRect.right, mCurrentViewportRect.bottom, mContentRect.left,
                         mContentRect.top, mContentRect.right, mContentRect.bottom));
+
                 validateAndCorrectViewPort();
                 Log.d(TAG, String.format(
                         "onScroll: AFTER: CurrentViewportRect(%f, %f, %f, %f), ContentRect(%f, %f, %f, %f)",
                         mCurrentViewportRect.left, mCurrentViewportRect.top,
                         mCurrentViewportRect.right, mCurrentViewportRect.bottom, mContentRect.left,
                         mContentRect.top, mContentRect.right, mContentRect.bottom));
+
                 invalidate();
                 return true;
             }
@@ -229,62 +243,18 @@ public class MinesweeperGridView extends View {
                         context,
                         new ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
-                            //private float lastSpanX;
-                            //private float lastSpanY;
-
                             @Override
                             public boolean onScale(ScaleGestureDetector detector) {
-                                //float spanX = detector.getCurrentSpanX();
-                                //float spanY = detector.getCurrentSpanY();
-                                //float span = detector.getCurrentSpan();
-
-                                //float newWidth = lastSpanX / spanX * mCurrentViewportRect.width();
-                                //float newHeight = lastSpanY / spanY * mCurrentViewportRect.height();
+                                final float scaleFactor = detector.getScaleFactor();
                                 float newWidth =
-                                        mCurrentViewportRect.width() / detector.getScaleFactor();
+                                        mCurrentViewportRect.width() / scaleFactor;
                                 float newHeight =
-                                        mCurrentViewportRect.height() / detector.getScaleFactor();
-                                //float newWidth
+                                        mCurrentViewportRect.height() / scaleFactor;
 
-                                //detector.getCurrentSpan()
-
-                                //                                float focusX = detector.getFocusX();
-                                //                                float focusY = detector.getFocusY();
-                                //                                PointF viewportFocus = new PointF(
-                                //                                        mCurrentViewportRect.left + mCurrentViewportRect.width() *
-                                //                                                                    (focusX - mContentRect.left) /
-                                //                                                                    mContentRect.width(),
-                                //                                        mCurrentViewportRect.top + mCurrentViewportRect.height() *
-                                //                                                                   (focusY - mContentRect.bottom) /
-                                //                                                                   -mContentRect.height());
-
-                                mCurrentViewMatrix.postScale(detector.getScaleFactor(),
-                                                             detector.getScaleFactor(),
+                                mCurrentViewMatrix.postScale(scaleFactor,
+                                                             scaleFactor,
                                                              detector.getFocusX(),
                                                              detector.getFocusY());
-
-                                //                                mCurrentViewportRect
-                                //                                        .set(viewportFocus.x -
-                                //                                             newWidth * (focusX - mContentRect.left) /
-                                //                                             mContentRect.width(),
-                                //                                             viewportFocus.y -
-                                //                                             newHeight * (mContentRect.bottom - focusY) /
-                                //                                             mContentRect.height(),
-                                //                                             0,
-                                //                                             0);
-                                //
-                                //                                mCurrentViewportRect.right = mCurrentViewportRect.left + newWidth;
-                                //                                mCurrentViewportRect.bottom = mCurrentViewportRect.top + newHeight;
-
-                                //lastSpanX = spanX;
-                                //lastSpanY = spanY;
-
-                                //calculateCurrentViewMatrixFromViewportRect();
-
-                                //                                Log.d(TAG, String.format(
-                                //                                        "onScale: CurrentViewPort is now: (%f, %f. %f, %f)",
-                                //                                        mCurrentViewportRect.left, mCurrentViewportRect.top,
-                                //                                        mCurrentViewportRect.right, mCurrentViewportRect.bottom));
 
                                 calculateCurrentViewPortRectFromMatrix();
                                 validateAndCorrectViewPort();
@@ -309,16 +279,10 @@ public class MinesweeperGridView extends View {
     }
 
     private void calculateCurrentViewMatrixFromViewportRect() {
-
         float scaleX = mContentRect.width() / mCurrentViewportRect.width();
         float scaleY = mContentRect.height() / mCurrentViewportRect.height();
-        //float scaleX = mContentRect.width() / getWidth();
-        //float scaleY = mContentRect.height() / getHeight();
         mCurrentViewMatrix = new Matrix();
         if (scaleX != 0 && scaleY != 0) {
-            //mCurrentViewMatrix.postTranslate(-mContentRect.left - mCurrentViewportRect.left,
-            //                                 -mContentRect.top - mCurrentViewportRect.top);
-            //mCurrentViewMatrix.postTranslate(-mCurrentViewportRect.left, mCurrentViewportRect.top);
             mCurrentViewMatrix.postScale(scaleX, scaleY);
             mCurrentViewMatrix.postTranslate(mContentRect.left - scaleX * mCurrentViewportRect.left,
                                              mContentRect.top - scaleY * mCurrentViewportRect.top);
@@ -326,14 +290,9 @@ public class MinesweeperGridView extends View {
     }
 
     private void calculateCurrentViewPortRectFromMatrix() {
-        //float[] rectCorners = new float[]{0, 0, getWidth(), getHeight()};
         float[] rectCorners =
                 new float[]{mContentRect.left, mContentRect.top, mContentRect.right, mContentRect.bottom};
-        //Matrix currentViewMatrixInverse = new Matrix();
-        Matrix currentViewMatrixInverse = new Matrix(mCurrentViewMatrix);
-        //mCurrentViewMatrix.invert(currentViewMatrixInverse);
-        currentViewMatrixInverse.invert(currentViewMatrixInverse);
-        currentViewMatrixInverse.mapPoints(rectCorners);
+        inverseOfMatrix(mCurrentViewMatrix).mapPoints(rectCorners);
         mCurrentViewportRect.set(rectCorners[0], rectCorners[1], rectCorners[2], rectCorners[3]);
     }
 
@@ -345,6 +304,7 @@ public class MinesweeperGridView extends View {
 
     private void validateAndCorrectViewPort() {
         if (!mContentRect.contains(mCurrentViewportRect)) {
+            // if viewport rectangle is wider than content rectangle, reset viewport to content
             if (mCurrentViewportRect.width() > mContentRect.width()) {
                 mCurrentViewportRect.set(mContentRect);
             }
@@ -378,9 +338,6 @@ public class MinesweeperGridView extends View {
                     mContentRect.top, mContentRect.right, mContentRect.bottom));
 
             calculateCurrentViewMatrixFromViewportRect();
-            // TODO: delete next line
-            calculateCurrentViewPortRectFromMatrix();
-
             Log.d(TAG, String.format(
                     "validateAndCorrectViewPort: AFTER: CurrentViewportRect(%f, %f, %f, %f), ContentRect(%f, %f, %f, %f)",
                     mCurrentViewportRect.left, mCurrentViewportRect.top,
@@ -395,10 +352,15 @@ public class MinesweeperGridView extends View {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.MinesweeperGridView, defStyle, 0);
 
-
-        mGridLineStrokeWidth = a.getDimension(
+        // if: grid line stroke width attribute is found, set it,
+        // else: use default/'grid size dependant' stroke width
+        float gridLineStrokeWidthAttr = a.getDimension(
                 R.styleable.MinesweeperGridView_gridLineStrokeWidth,
-                mGridLineStrokeWidth);
+                NULL_GRID_LINE_STROKE_WIDTH);
+        if (gridLineStrokeWidthAttr != NULL_GRID_LINE_STROKE_WIDTH) {
+            mGridLineStrokeWidth = gridLineStrokeWidthAttr;
+            mUseCustomGridLineStrokeWidth = true;
+        }
 
         loadColorAttributes(a);
 
@@ -556,41 +518,26 @@ public class MinesweeperGridView extends View {
         mContentRect.set(paddingLeft, paddingTop, viewWidth - paddingRight,
                          viewHeight - paddingTop);
 
-        //mContentMatrix = new Matrix();
-        //mContentMatrix.postTranslate(-mContentRect.left, -mContentRect.top);
-        //mContentMatrix.postScale(mContentRect.width()/viewWidth, mContentRect.height()/viewHeight);
-
-
+        // set initial viewport rectangle and matrix
         mCurrentViewportRect.set(mContentRect);
         calculateCurrentViewMatrixFromViewportRect();
 
+        // if explicit/custom grid line stroke width has not been set,
+        // use the following stroke width
+        if (!mUseCustomGridLineStrokeWidth) {
+            // grid line stroke width is the minimum between 'default' and 'estimated cellSize / 8'
+            mGridLineStrokeWidth = Math.min(DEFAULT_GRID_LINE_STROKE_WIDTH,
+                                            Math.min(mContentRect.width() / mNumOfColumns,
+                                                     mContentRect.height() / mNumOfRows) / 16);
+            mGridLinesPaint.setStrokeWidth(mGridLineStrokeWidth);
+        }
+
+        // Check if width or height is the limiting cell size factor and set cell size and grid
+        // rectangle accordingly. The grid rectangle is centered inside content rectangle.
         final int maximalCellWidth =
                 (int) ((mContentRect.width() - mGridLineStrokeWidth) / mNumOfColumns);
         final int maximalCellHeight =
                 (int) ((mContentRect.height() - mGridLineStrokeWidth) / mNumOfRows);
-
-        // check if width or height is the limiting cell size factor
-        // and set cell size, grid size and the origin of the grid accordingly
-        // origin is the top left corner of the grid and is adjusted to centralize the grid
-//        if (maximalCellWidth < maximalCellHeight) { // TODO(Timi)
-//            mCellSize = maximalCellWidth;
-//            final int gridWidth = mCellSize * mNumOfColumns;
-//            final int gridHeight = mCellSize * mNumOfRows;
-//            final int gridLeft;
-//            final int gridTop = (int) ((mContentRect.top + mContentRect.bottom - gridHeight) / 2);
-//
-//            mGridRect.set(paddingLeft, gridTop, paddingLeft + gridWidth,
-//                          gridTop + gridHeight);
-//        } else {
-//            mCellSize = maximalCellHeight;
-//            final int gridWidth = mCellSize * mNumOfColumns;
-//            final int gridHeight = mCellSize * mNumOfRows;
-//            final int originX = (int) (paddingLeft + (mContentRect.width() - gridWidth) / 2);
-//
-//            mGridRect.set(originX, paddingTop, originX + gridWidth,
-//                          paddingTop + gridHeight);
-//        }
-
         mCellSize = Math.min(maximalCellHeight, maximalCellWidth);
         final int gridWidth = mCellSize * mNumOfColumns;
         final int gridHeight = mCellSize * mNumOfRows;
@@ -716,16 +663,44 @@ public class MinesweeperGridView extends View {
     }
 
     public int maxGridHeight() {
+        return this.reasonableMaxGridHeight();
+    }
+
+    public int maxGridWidth() {
+        return this.reasonableMaxGridWidth();
+    }
+
+    public int clickableMaxGridHeight() {
         return (int) (mContentRect.height() /
                       ((float) (24 * getContext().getResources().getDisplayMetrics().densityDpi) /
                        DisplayMetrics.DENSITY_DEFAULT));
     }
 
-    public int maxGridWidth() {
+    public int clickableMaxGridWidth() {
         return (int) (mContentRect.width() /
                       ((float) (24 * getContext().getResources().getDisplayMetrics().densityDpi) /
                        DisplayMetrics.DENSITY_DEFAULT));
     }
+
+    public int reasonableMaxGridHeight() {
+        return (int) (mContentRect.height() / 16);
+    }
+
+    public int reasonableMaxGridWidth() {
+        return (int) (mContentRect.width() / 16);
+    }
+
+    public int unreasonableMaxGridHeight() {
+        return (int) (mContentRect.height() / 2);
+    }
+
+    public int unreasonableMaxGridWidth() {
+        return (int) (mContentRect.width() / 2);
+    }
+
+    //================================================================================
+    // Getters and Setters:
+    //================================================================================
 
     /**
      * Gets the number of columns on the grid.
@@ -735,10 +710,6 @@ public class MinesweeperGridView extends View {
     public int getNumberOfColumns() {
         return mNumOfColumns;
     }
-
-    //================================================================================
-    // Getters and Setters:
-    //================================================================================
 
     /**
      * Sets the number of columns attribute value.
@@ -891,8 +862,19 @@ public class MinesweeperGridView extends View {
         this.mMarkedDrawable = mMarkedDrawable;
     }
 
+    public float getGridLineStrokeWidth() {
+        return this.mGridLineStrokeWidth;
+    }
+
     public void setGridLineStrokeWidth(float gridLineStrokeWidth) {
         this.mGridLineStrokeWidth = gridLineStrokeWidth;
+        this.mUseCustomGridLineStrokeWidth = true;
+        invalidateDimensions();
+    }
+
+    public void unsetGridLineStrokeWidth() {
+        this.mUseCustomGridLineStrokeWidth = false;
+        invalidateDimensions();
     }
 
     /**
