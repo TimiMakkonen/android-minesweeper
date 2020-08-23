@@ -3,7 +3,7 @@
 [![GitHub License](https://img.shields.io/github/license/TimiMakkonen/android-minesweeper)](/LICENSE)
 ![GitHub Latest Release Tag](https://img.shields.io/github/v/tag/TimiMakkonen/android-minesweeper)
 
-Android minesweeper game utilising [Minesweeper game library](https://github.com/TimiMakkonen/minesweeper) version 8.5.1.
+Android minesweeper game utilising [Minesweeper game library](https://github.com/TimiMakkonen/minesweeper) version 8.5.2.
 
 ## Table of contents
 
@@ -35,7 +35,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ## External libraries
 
-* [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) (v8.5.1) for minesweeper game logic in C++
+* [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) (v8.5.2) for minesweeper game logic in C++
 
 ## Tools used
 
@@ -63,6 +63,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 * Re-enabled 'unused'-warning and fixed or suppressed them.
 * Changed 'MinesweeperGridView' to allow multiple
   'MinesweeperGridViewEventListener's.
+* Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to 'v8.5.2'.
 
 ### Version 0.3.0
 
@@ -88,7 +89,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
   * Fixed typos in 'setMinValue' and 'setMaxValue' methods.
 * Added some new icons and slightly modified old ones.
 * Bumped 'minSdkVersion' from 19 to 21.
-* Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to v8.5.1
+* Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to 'v8.5.1'.
 
 ### Version 0.2.0
 
