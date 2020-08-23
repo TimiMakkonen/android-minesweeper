@@ -43,13 +43,13 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ## Version history
 
-### Version DEVELOP
+### Version 0.4.0
 
 * Added zooming feature.
   * Zooming and panning/scrolling works as expected.
 * Added 'reasonable' and 'unreasonable custom game' options.
   * Now:
-    * 'custom game' should work well unzoomed,
+    * 'custom game' should work well even without zooming,
     * 'reasonable custom game' should work well zoomed, and
     * 'unreasonable custom game' is just ridiculous.
   * Note that for very large grids saving and loading a game slows down
@@ -118,7 +118,6 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 Gameplay example | Solution example | Gameplay example (dark theme) | Custom game selection dialog | Settings page
 -----------------|------------------|-------------------------------|------------------------------|--------------
 [![Gameplay example](/screenshots/v0.3.0/GamePlay_v0.3.0.png "Gameplay example")](/screenshots/v0.3.0/GamePlay_v0.3.0.png) | [![Solution example](/screenshots/v0.3.0/Solution_v0.3.0.png "Solution example")](/screenshots/v0.3.0/Solution_v0.3.0.png) | [![Gameplay example (dark theme)](/screenshots/v0.3.0/GamePlay_DarkTheme_v0.3.0.png "Gameplay example (dark theme)")](/screenshots/v0.3.0/GamePlay_DarkTheme_v0.3.0.png) | [![Custom game selection dialog](/screenshots/v0.1.0/CustomGameSelection_v0.1.0.png "Custom game selection dialog")](/screenshots/v0.1.0/CustomGameSelection_v0.1.0.png) | [![Settings page](/screenshots/v0.3.0/Settings_v0.3.0.png "Settings page")](/screenshots/v0.3.0/Settings_v0.3.0.png)
-
 
 Large gameplay example | Large solution example | Large gameplay example (dark theme) | Zoomed-in gameplay example | Zoomed-in gameplay example (dark theme)
 -----------------------|------------------------|-------------------------------------|----------------------------|----------------------------------------
