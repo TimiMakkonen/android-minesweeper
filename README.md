@@ -45,6 +45,26 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ### Version DEVELOP
 
+* Added loading feature (spinning progress bar).
+  * Some of the long running tasks now run on background, which is
+    managed by new 'BackgroundTaskRunner'-class.
+  * Spinning progress bar now appears when the game is loading after
+    input clicks.
+* Added 'BackgroundTaskRunner'-class which takes care of running tasks
+  on background.
+* Added 'CallBackTask'-class which combines two 'Runnable's (task and
+  callback) together to form a new 'Runnable'.
+* Added 'CounterWithCallbackOnZero'-class which makes a callback when
+  its internal counter reaches zero and another callback when its
+  counter turns non-zero.
+* Modified 'GameViewModel'-class.
+  * Starts long lasting tasks in background using
+    'BackgroundTaskRunner'-class.
+  * Keeps count of non-finished background tasks using
+    'CounterWithCallbackOnZero'-class, which in turn updates
+    'MutableLiveData' to tell UI when background task is in progress.
+* 'MinesweeperRepository' is now thread-safe, as long as its internal
+  'LocalStorage' and 'AndroidMinesweeperGame' are.
 * Updated some Android dependencies.
 * Added missing 'numberOfRows' and 'numberOfColumns' attributes in
   'MinesweeperGridView'.
@@ -143,3 +163,7 @@ Large gameplay example | Large solution example | Large gameplay example (dark t
 * Add 'peek solution' option which instead of showing solution in
   another fragment, shows the solution in place of the current game.
 * Consider removing 'primaryActionIsCheck' LiveData in 'GameViewModel'.
+* Add spinning progress bar when initially launching the app and loading saved game.
+  * Move loading of the saved game from 'ApplicationModule' to 'GameFragment'.
+* Utilise 'BackgroundTaskRunner' in 'SolutionViewModel'.
+* Add 'save game'-button.

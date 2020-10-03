@@ -25,6 +25,10 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
  * 'minesweeperSolutionVisualisationObservable' (VisualMinesweeperCell[][]) 'BehaviorSubject's,
  * which can be observed.
  * </p>
+ * <p>
+ * This class is thread-safe as long as {@link LocalStorage} and {@link AndroidMinesweeperGame}
+ * provided to it are.
+ * </p>
  */
 @ApplicationScope
 class MinesweeperRepository {
@@ -83,17 +87,17 @@ class MinesweeperRepository {
         }
     }
 
-    public Observable<MinesweeperDataForView> getCurrentVisualMinesweeperInformation() {
+    public synchronized Observable<MinesweeperDataForView> getCurrentVisualMinesweeperInformation() {
 
         return this.minesweeperDataForViewObservable;
     }
 
-    public Observable<VisualMinesweeperCell[][]> getCurrentVisualMinesweeperSolutionInformation() {
+    public synchronized Observable<VisualMinesweeperCell[][]> getCurrentVisualMinesweeperSolutionInformation() {
 
         return this.minesweeperSolutionVisualisationObservable;
     }
 
-    public void checkCoordinates(int x, int y) throws IllegalArgumentException {
+    public synchronized void checkCoordinates(int x, int y) throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException("Trying to check cell outside the grid.");
@@ -103,7 +107,7 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
-    public void markCoordinates(int x, int y) throws IllegalArgumentException {
+    public synchronized void markCoordinates(int x, int y) throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException("Trying to mark cell outside the grid.");
@@ -112,7 +116,8 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
-    public void completeAroundCoordinates(int x, int y) throws IllegalArgumentException {
+    public synchronized void completeAroundCoordinates(int x, int y)
+            throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException(
@@ -126,7 +131,7 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
-    public boolean isCellVisible(int x, int y) {
+    public synchronized boolean isCellVisible(int x, int y) {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException(
@@ -135,13 +140,13 @@ class MinesweeperRepository {
         return this.currentMinesweeperGame.isCellVisible(x, y);
     }
 
-    public void resetCurrentGame(boolean keepCreatedMines) {
+    public synchronized void resetCurrentGame(boolean keepCreatedMines) {
         this.currentMinesweeperGame.reset(keepCreatedMines);
         updateCurrentGridInformation();
     }
 
-    public void startNewGame(int gridHeight, int gridWidth,
-                             int numOfMines) throws IllegalArgumentException {
+    public synchronized void startNewGame(int gridHeight, int gridWidth,
+                                          int numOfMines) throws IllegalArgumentException {
         verifyGridDimension(gridHeight);
         verifyGridDimension(gridWidth);
         verifyNumOfMines(gridHeight, gridWidth, numOfMines);
@@ -149,9 +154,9 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
-    @SuppressWarnings("unused")
-    public void startNewGame(int gridHeight, int gridWidth,
-                             double proportionOfMines) throws IllegalArgumentException {
+    public synchronized void startNewGame(int gridHeight, int gridWidth,
+                                          double proportionOfMines)
+            throws IllegalArgumentException {
         verifyGridDimension(gridHeight);
         verifyGridDimension(gridWidth);
         verifyProportionOfMines(gridHeight, gridWidth, proportionOfMines);
@@ -159,11 +164,12 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
-    public int minNumOfMines() {
+    public synchronized int minNumOfMines() {
         return AndroidMinesweeperGame.minNumOfMines();
     }
 
-    public int maxNumOfMines(int gridHeight, int gridWidth) throws IllegalArgumentException {
+    public synchronized int maxNumOfMines(int gridHeight, int gridWidth)
+            throws IllegalArgumentException {
         if (gridHeight < 0 || gridWidth < 0) {
             throw new IllegalArgumentException(
                     "Trying to check the maximum number of mines for a negative grid.");
@@ -171,7 +177,7 @@ class MinesweeperRepository {
         return AndroidMinesweeperGame.maxNumOfMines(gridHeight, gridWidth);
     }
 
-    public void save() {
+    public synchronized void save() {
         saveCurrentMinesweeperGame();
     }
 
@@ -223,7 +229,7 @@ class MinesweeperRepository {
         return this.currentMinesweeperGame.playerHasLost();
     }
 
-    public void updateCurrentGridSolutionVisualisation() {
+    public synchronized void updateCurrentGridSolutionVisualisation() {
         if (solutionVisualisationIsOutdated) {
             this.minesweeperSolutionVisualisationObservable.onNext(
                     getCurrentSolutionVisualisation());

@@ -11,6 +11,7 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.observers.DisposableObserver;
@@ -51,20 +52,25 @@ public class GameViewModel extends ViewModel {
     //private final SavedStateHandle savedStateHandle;
     private final MinesweeperRepository minesweeperRepository;
     private final LocalStorage localStorage;
+    private final BackgroundTaskRunner backgroundTaskRunner;
+    private final CounterWithCallbackOnZero loadingProcessCounter;
+
+    private final CompositeDisposable disposables;
     private final MutableLiveData<VisualMinesweeperCell[][]> visualMinesweeperCells;
     private final MutableLiveData<Boolean> playerHasWon;
     private final MutableLiveData<Boolean> playerHasLost;
-    private final CompositeDisposable disposables;
-
     private final MutableLiveData<Boolean> primaryActionIsCheck;
+    private final MutableLiveData<Boolean> loadingInProgress;
 
 
     @Inject
     public GameViewModel(/*SavedStateHandle savedStateHandle,*/
-            MinesweeperRepository minesweeperRepository, LocalStorage localStorage) {
+            MinesweeperRepository minesweeperRepository, LocalStorage localStorage,
+            BackgroundTaskRunner backgroundTaskRunner) {
         //this.savedStateHandle = savedStateHandle;
         this.minesweeperRepository = minesweeperRepository;
         this.localStorage = localStorage;
+        this.backgroundTaskRunner = backgroundTaskRunner;
 
         this.disposables = new CompositeDisposable();
         this.visualMinesweeperCells = new MutableLiveData<>();
@@ -74,6 +80,12 @@ public class GameViewModel extends ViewModel {
         this.primaryActionIsCheck = new MutableLiveData<>(
                 localStorage.getPrimActionIsCheck(DEFAULT_PRIMARY_ACTION_IS_CHECK));
 
+        this.loadingInProgress = new MutableLiveData<>(true);
+
+        this.loadingProcessCounter = new CounterWithCallbackOnZero(
+                () -> loadingInProgress.postValue(false),
+                () -> loadingInProgress.postValue(true));
+
         init();
     }
 
@@ -81,6 +93,7 @@ public class GameViewModel extends ViewModel {
         disposables
                 .add(minesweeperRepository
                              .getCurrentVisualMinesweeperInformation()
+                             .observeOn(AndroidSchedulers.mainThread())
                              .subscribeWith(new DisposableObserver<MinesweeperDataForView>() {
                                  @Override
                                  public void onNext(
@@ -105,7 +118,6 @@ public class GameViewModel extends ViewModel {
                                          GameViewModel.this.playerHasLost.setValue(
                                                  minesweeperDataForView.hasPlayerLost());
                                      }
-
                                  }
 
                                  @Override
@@ -118,7 +130,6 @@ public class GameViewModel extends ViewModel {
 
                                  }
                              }));
-
     }
 
     @Override
@@ -176,13 +187,13 @@ public class GameViewModel extends ViewModel {
     private void checkMinesweeperCoordinates(int x, int y) {
         Log.d(TAG, "checkMinesweeperCoordinates: "
                    + String.format("Checking cell (%d, %d)", x, y));
-        minesweeperRepository.checkCoordinates(x, y);
+        executeLoadingProcess(() -> minesweeperRepository.checkCoordinates(x, y));
     }
 
     private void markMinesweeperCoordinates(int x, int y) {
         Log.d(TAG, "markMinesweeperCoordinates: "
                    + String.format("Marking cell (%d, %d)", x, y));
-        minesweeperRepository.markCoordinates(x, y);
+        executeLoadingProcess(() -> minesweeperRepository.markCoordinates(x, y));
     }
 
     private void completeAroundMinesweeperCoordinates(int x, int y)
@@ -193,15 +204,15 @@ public class GameViewModel extends ViewModel {
         }
         Log.d(TAG, "completeAroundMinesweeperCoordinates: "
                    + String.format("Completing around cell (%d, %d)", x, y));
-        minesweeperRepository.completeAroundCoordinates(x, y);
+        executeLoadingProcess(() -> minesweeperRepository.completeAroundCoordinates(x, y));
     }
 
     public void restartWithMines() {
-        minesweeperRepository.resetCurrentGame(true);
+        executeLoadingProcess(() -> minesweeperRepository.resetCurrentGame(true));
     }
 
     public void restartWithoutMines() {
-        minesweeperRepository.resetCurrentGame(false);
+        executeLoadingProcess(() -> minesweeperRepository.resetCurrentGame(false));
     }
 
     public void startNewGame(int gridHeight, int gridWidth, int numOfMines)
@@ -218,23 +229,27 @@ public class GameViewModel extends ViewModel {
             throw new IllegalArgumentException(
                     "Trying to initialise a new grid with too many mines");
         }
-        minesweeperRepository.startNewGame(gridHeight, gridWidth, numOfMines);
+        executeLoadingProcess(
+                () -> minesweeperRepository.startNewGame(gridHeight, gridWidth, numOfMines));
     }
 
     public void startNewEasyGame() {
-        minesweeperRepository.startNewGame(EASY_GAME_GRID_HEIGHT, EASY_GAME_GRID_WIDTH,
-                                           EASY_GAME_NUM_OF_MINES);
+        executeLoadingProcess(() -> minesweeperRepository
+                .startNewGame(EASY_GAME_GRID_HEIGHT, EASY_GAME_GRID_WIDTH,
+                              EASY_GAME_NUM_OF_MINES));
     }
 
     public void startNewMediumGame() {
-        minesweeperRepository.startNewGame(MEDIUM_GAME_GRID_HEIGHT, MEDIUM_GAME_GRID_WIDTH,
-                                           MEDIUM_GAME_NUM_OF_MINES);
+        executeLoadingProcess(() -> minesweeperRepository
+                .startNewGame(MEDIUM_GAME_GRID_HEIGHT, MEDIUM_GAME_GRID_WIDTH,
+                              MEDIUM_GAME_NUM_OF_MINES));
     }
 
 
     public void startNewHardGame() {
-        minesweeperRepository.startNewGame(HARD_GAME_GRID_HEIGHT, HARD_GAME_GRID_WIDTH,
-                                           HARD_GAME_NUM_OF_MINES);
+        executeLoadingProcess(() -> minesweeperRepository
+                .startNewGame(HARD_GAME_GRID_HEIGHT, HARD_GAME_GRID_WIDTH,
+                              HARD_GAME_NUM_OF_MINES));
     }
 
     public int maxNumOfMines(int gridHeight, int gridWidth) throws IllegalArgumentException {
@@ -270,7 +285,7 @@ public class GameViewModel extends ViewModel {
     }
 
     public void save() {
-        minesweeperRepository.save();
+        executeLoadingProcess(minesweeperRepository::save);
     }
 
     public void switchMinesweeperPrimSecoActions() {
@@ -290,5 +305,18 @@ public class GameViewModel extends ViewModel {
 
     public LiveData<Boolean> isPrimaryActionCheck() {
         return this.primaryActionIsCheck;
+    }
+
+    public LiveData<Boolean> isLoadingInProgress() {
+        return this.loadingInProgress;
+    }
+
+    private void executeLoadingProcess(Runnable task) {
+        loadingProcessCounter.increment();
+        executeTaskOnBackground(new CallbackTask(task, loadingProcessCounter::decrement));
+    }
+
+    private void executeTaskOnBackground(Runnable task) {
+        backgroundTaskRunner.execute(task);
     }
 }

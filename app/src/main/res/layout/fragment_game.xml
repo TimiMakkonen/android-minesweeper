@@ -61,4 +61,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ProgressBar
+        android:id="@+id/gameFragment_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/minesweeperGridView"
+        app:layout_constraintEnd_toEndOf="@+id/minesweeperGridView"
+        app:layout_constraintStart_toStartOf="@+id/minesweeperGridView"
+        app:layout_constraintTop_toTopOf="@+id/minesweeperGridView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

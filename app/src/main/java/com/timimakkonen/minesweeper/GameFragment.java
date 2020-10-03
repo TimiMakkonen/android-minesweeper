@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -55,6 +56,7 @@ public class GameFragment extends Fragment {
     private MinesweeperGridView minesweeperView;
     private ConstraintLayout gameFragmentView;
     private MaterialButton primSecoSwitchButton;
+    private ProgressBar progressBar;
 
     private boolean hasOriginalColorDrawableBackground = false;
     @ColorInt
@@ -78,6 +80,8 @@ public class GameFragment extends Fragment {
 
         gameFragmentView = view.findViewById(R.id.game_fragment_view);
         hasOriginalColorDrawableBackground = initBackgroundColorField();
+
+        progressBar = view.findViewById(R.id.gameFragment_progressBar);
 
         viewModel.getVisualMinesweeperCells()
                  .observe(getViewLifecycleOwner(), visualMinesweeperCells -> minesweeperView
@@ -129,6 +133,14 @@ public class GameFragment extends Fragment {
             }
 
         });
+
+        viewModel.isLoadingInProgress().observe(getViewLifecycleOwner(), loadingInProgress -> {
+            if (loadingInProgress) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     private boolean initBackgroundColorField() {
@@ -160,6 +172,12 @@ public class GameFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        final Boolean loadingInProgress = viewModel.isLoadingInProgress().getValue();
+        if(loadingInProgress != null && loadingInProgress) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
 
         // primary-secondary click action switch setup
         if (localStorage.getUsePrimSecoSwitchKey(true)) {
