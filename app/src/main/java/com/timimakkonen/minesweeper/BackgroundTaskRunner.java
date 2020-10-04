@@ -8,7 +8,9 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 /**
- * TODO
+ * <p>
+ * This class takes care of running tasks on background.
+ * </p>
  */
 @ApplicationScope
 public class BackgroundTaskRunner {
@@ -25,6 +27,7 @@ public class BackgroundTaskRunner {
         executorService.execute(task);
     }
 
+    @SuppressWarnings("unused")
     public void execute(Runnable task, Runnable callback) {
         executorService.execute(new CallbackTask(task, callback));
     }

@@ -24,8 +24,8 @@ import io.reactivex.rxjava3.observers.DisposableObserver;
  * </p>
  * <p>
  * This class has 'visualMinesweeperCells' (VisualMinesweeperCell[][]), 'playerHasWon' (Boolean),
- * 'playerHasLost' (Boolean) and 'primaryActionIsCheck' (Boolean) 'LiveData's which can be
- * observed.
+ * 'playerHasLost' (Boolean), 'primaryActionIsCheck' (Boolean) and 'loadingInProgress' (Boolean)
+ * 'LiveData's which can be observed.
  * </p>
  * <p>
  * This class itself observes 'RxJava MinesweeperDataForView Observable' and reacts to its changes
@@ -56,6 +56,7 @@ public class GameViewModel extends ViewModel {
     private final CounterWithCallbackOnZero loadingProcessCounter;
 
     private final CompositeDisposable disposables;
+
     private final MutableLiveData<VisualMinesweeperCell[][]> visualMinesweeperCells;
     private final MutableLiveData<Boolean> playerHasWon;
     private final MutableLiveData<Boolean> playerHasLost;
@@ -311,6 +312,8 @@ public class GameViewModel extends ViewModel {
         return this.loadingInProgress;
     }
 
+    // executes task/process which causes UI to be notified that a task is running,
+    // and also notifies UI when the task has finished running
     private void executeLoadingProcess(Runnable task) {
         loadingProcessCounter.increment();
         executeTaskOnBackground(new CallbackTask(task, loadingProcessCounter::decrement));

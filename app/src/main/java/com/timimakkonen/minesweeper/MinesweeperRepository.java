@@ -154,6 +154,8 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
+
+    @SuppressWarnings("unused")
     public synchronized void startNewGame(int gridHeight, int gridWidth,
                                           double proportionOfMines)
             throws IllegalArgumentException {

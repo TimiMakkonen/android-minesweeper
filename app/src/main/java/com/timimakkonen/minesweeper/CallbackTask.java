@@ -2,7 +2,9 @@ package com.timimakkonen.minesweeper;
 
 
 /**
- * TODO
+ * <p>
+ * This class combines two 'Runnable's (task and callback) together to form a new 'Runnable'.
+ * </p>
  */
 public class CallbackTask implements Runnable {
 
