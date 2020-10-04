@@ -43,6 +43,10 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 ## Version history
 
+### Version DEVELOP
+
+* Updated some Android dependencies.
+
 ### Version 0.4.0
 
 * Added zooming feature.
@@ -64,7 +68,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 * Changed 'MinesweeperGridView' to allow multiple
   'MinesweeperGridViewEventListener's.
 * Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to 'v8.5.2'.
-* Updated some android dependencies.
+
 
 ### Version 0.3.0
 
