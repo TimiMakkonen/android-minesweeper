@@ -41,6 +41,16 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 
 * [SWIG](http://www.swig.org) to create JNI wrapper around C++ interface code
 
+## Screenshots
+
+Gameplay example | Solution example | Gameplay example (dark theme) | Custom game selection dialog | Settings page
+-----------------|------------------|-------------------------------|------------------------------|--------------
+[![Gameplay example](/screenshots/v0.3.0/GamePlay_v0.3.0.png "Gameplay example")](/screenshots/v0.3.0/GamePlay_v0.3.0.png) | [![Solution example](/screenshots/v0.3.0/Solution_v0.3.0.png "Solution example")](/screenshots/v0.3.0/Solution_v0.3.0.png) | [![Gameplay example (dark theme)](/screenshots/v0.3.0/GamePlay_DarkTheme_v0.3.0.png "Gameplay example (dark theme)")](/screenshots/v0.3.0/GamePlay_DarkTheme_v0.3.0.png) | [![Custom game selection dialog](/screenshots/v0.1.0/CustomGameSelection_v0.1.0.png "Custom game selection dialog")](/screenshots/v0.1.0/CustomGameSelection_v0.1.0.png) | [![Settings page](/screenshots/v0.3.0/Settings_v0.3.0.png "Settings page")](/screenshots/v0.3.0/Settings_v0.3.0.png)
+
+Large gameplay example | Large solution example | Large gameplay example (dark theme) | Zoomed-in gameplay example | Zoomed-in gameplay example (dark theme)
+-----------------------|------------------------|-------------------------------------|----------------------------|----------------------------------------
+[![Large gameplay example](/screenshots/v0.4.0/GamePlay_LargeGame_v0.4.0.png "Large gameplay example")](/screenshots/v0.4.0/GamePlay_LargeGame_v0.4.0.png) | [![Large solution example](/screenshots/v0.4.0/Solution_LargeGame_v0.4.0.png "Large solution example")](/screenshots/v0.4.0/Solution_LargeGame_v0.4.0.png) | [![Large gameplay example (dark theme)](/screenshots/v0.4.0/GamePlay_DarkTheme_LargeGame_v0.4.0.png "Large gameplay example (dark theme)")](/screenshots/v0.4.0/GamePlay_DarkTheme_LargeGame_v0.4.0.png) | [![Zoomed-in gameplay example](/screenshots/v0.4.0/ZoomedIn_GamePlay_LargeGame_v0.4.0.png "Zoomed-in gameplay example")](/screenshots/v0.4.0/ZoomedIn_GamePlay_LargeGame_v0.4.0.png) | [![Zoomed-in gameplay example (dark theme)](/screenshots/v0.4.0/ZoomedIn_GamePlay_DarkTheme_LargeGame_v0.4.0.png "Zoomed-in gameplay example (dark theme)")](/screenshots/v0.4.0/ZoomedIn_GamePlay_DarkTheme_LargeGame_v0.4.0.png)
+
 ## Version history
 
 ### Version DEVELOP
@@ -119,16 +129,6 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 * Currently you can play: Easy, Medium, Hard or Custom (up to 30x20) games.
 * Preliminary dark theme (night mode) support.
 * Progress is currently not saved on exit.
-
-## Screenshots
-
-Gameplay example | Solution example | Gameplay example (dark theme) | Custom game selection dialog | Settings page
------------------|------------------|-------------------------------|------------------------------|--------------
-[![Gameplay example](/screenshots/v0.3.0/GamePlay_v0.3.0.png "Gameplay example")](/screenshots/v0.3.0/GamePlay_v0.3.0.png) | [![Solution example](/screenshots/v0.3.0/Solution_v0.3.0.png "Solution example")](/screenshots/v0.3.0/Solution_v0.3.0.png) | [![Gameplay example (dark theme)](/screenshots/v0.3.0/GamePlay_DarkTheme_v0.3.0.png "Gameplay example (dark theme)")](/screenshots/v0.3.0/GamePlay_DarkTheme_v0.3.0.png) | [![Custom game selection dialog](/screenshots/v0.1.0/CustomGameSelection_v0.1.0.png "Custom game selection dialog")](/screenshots/v0.1.0/CustomGameSelection_v0.1.0.png) | [![Settings page](/screenshots/v0.3.0/Settings_v0.3.0.png "Settings page")](/screenshots/v0.3.0/Settings_v0.3.0.png)
-
-Large gameplay example | Large solution example | Large gameplay example (dark theme) | Zoomed-in gameplay example | Zoomed-in gameplay example (dark theme)
------------------------|------------------------|-------------------------------------|----------------------------|----------------------------------------
-[![Large gameplay example](/screenshots/v0.4.0/GamePlay_LargeGame_v0.4.0.png "Large gameplay example")](/screenshots/v0.4.0/GamePlay_LargeGame_v0.4.0.png) | [![Large solution example](/screenshots/v0.4.0/Solution_LargeGame_v0.4.0.png "Large solution example")](/screenshots/v0.4.0/Solution_LargeGame_v0.4.0.png) | [![Large gameplay example (dark theme)](/screenshots/v0.4.0/GamePlay_DarkTheme_LargeGame_v0.4.0.png "Large gameplay example (dark theme)")](/screenshots/v0.4.0/GamePlay_DarkTheme_LargeGame_v0.4.0.png) | [![Zoomed-in gameplay example](/screenshots/v0.4.0/ZoomedIn_GamePlay_LargeGame_v0.4.0.png "Zoomed-in gameplay example")](/screenshots/v0.4.0/ZoomedIn_GamePlay_LargeGame_v0.4.0.png) | [![Zoomed-in gameplay example (dark theme)](/screenshots/v0.4.0/ZoomedIn_GamePlay_DarkTheme_LargeGame_v0.4.0.png "Zoomed-in gameplay example (dark theme)")](/screenshots/v0.4.0/ZoomedIn_GamePlay_DarkTheme_LargeGame_v0.4.0.png)
 
 ## Fixes and features left to consider/implement
 
