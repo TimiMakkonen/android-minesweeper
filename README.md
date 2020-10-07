@@ -46,6 +46,8 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 ### Version DEVELOP
 
 * Updated some Android dependencies.
+* Added missing 'numberOfRows' and 'numberOfColumns' attributes in
+  'MinesweeperGridView'.
 
 ### Version 0.4.0
 

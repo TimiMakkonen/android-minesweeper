@@ -352,6 +352,25 @@ public class MinesweeperGridView extends View {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.MinesweeperGridView, defStyle, 0);
 
+        loadSizeAttributes(a);
+
+        loadColorAttributes(a);
+
+        loadDrawableAttributes(a);
+
+        a.recycle();
+    }
+
+    private void loadSizeAttributes(TypedArray a) {
+
+        mNumOfRows = a.getInt(
+                R.styleable.MinesweeperGridView_numberOfRows,
+                DEFAULT_NUM_OF_ROWS);
+
+        mNumOfColumns = a.getInt(
+                R.styleable.MinesweeperGridView_numberOfColumns,
+                DEFAULT_NUM_OF_COLUMNS);
+
         // if: grid line stroke width attribute is found, set it,
         // else: use default/'grid size dependant' stroke width
         float gridLineStrokeWidthAttr = a.getDimension(
@@ -361,12 +380,6 @@ public class MinesweeperGridView extends View {
             mGridLineStrokeWidth = gridLineStrokeWidthAttr;
             mUseCustomGridLineStrokeWidth = true;
         }
-
-        loadColorAttributes(a);
-
-        loadDrawableAttributes(a);
-
-        a.recycle();
     }
 
     private void loadColorAttributes(TypedArray a) {
