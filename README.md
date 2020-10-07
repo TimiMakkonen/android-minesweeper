@@ -63,6 +63,8 @@ Modifying the Java/Android portion of the code should work as expected, but if y
   * Keeps count of non-finished background tasks using
     'CounterWithCallbackOnZero'-class, which in turn updates
     'MutableLiveData' to tell UI when background task is in progress.
+* Modified 'SolutionViewModel'-class to start long lasting tasks in
+  background using 'BackgroundTaskRunner'-class.
 * 'MinesweeperRepository' is now thread-safe, as long as its internal
   'LocalStorage' and 'AndroidMinesweeperGame' are.
 * Updated some Android dependencies.
@@ -165,5 +167,4 @@ Large gameplay example | Large solution example | Large gameplay example (dark t
 * Consider removing 'primaryActionIsCheck' LiveData in 'GameViewModel'.
 * Add spinning progress bar when initially launching the app and loading saved game.
   * Move loading of the saved game from 'ApplicationModule' to 'GameFragment'.
-* Utilise 'BackgroundTaskRunner' in 'SolutionViewModel'.
 * Add 'save game'-button.
