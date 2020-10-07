@@ -11,8 +11,8 @@ Android minesweeper game utilising [Minesweeper game library](https://github.com
 * [How to use](#how-to-use)
 * [External libraries](#external-libraries)
 * [Tools used](#tools-used)
-* [Version history](#version-history)
 * [Screenshots](#screenshots)
+* [Version history](#version-history)
 * [Fixes and features left to consider/implement](#fixes-and-features-left-to-considerimplement)
 
 ## How to clone
