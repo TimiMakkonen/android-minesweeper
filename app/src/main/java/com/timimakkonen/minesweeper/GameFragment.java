@@ -165,7 +165,7 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_main, menu);
+        inflater.inflate(R.menu.menu_fragment_game, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -232,6 +232,9 @@ public class GameFragment extends Fragment {
                 return true;
             case R.id.action_show_solution:
                 showSolution();
+                return true;
+            case R.id.action_save_game:
+                viewModel.save();
                 return true;
             case R.id.action_new_game_easy:
                 viewModel.startNewEasyGame();

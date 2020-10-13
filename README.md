@@ -50,6 +50,7 @@ Modifying the Java/Android portion of the code should work as expected, but if y
     managed by new 'BackgroundTaskRunner'-class.
   * Spinning progress bar now appears when the game is loading after
     input clicks.
+* Added 'save'-button.
 * Added 'BackgroundTaskRunner'-class which takes care of running tasks
   on background.
 * Added 'CallBackTask'-class which combines two 'Runnable's (task and

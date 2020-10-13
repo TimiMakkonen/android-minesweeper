@@ -286,6 +286,7 @@ public class GameViewModel extends ViewModel {
     }
 
     public void save() {
+        Log.d(TAG, "save: Saving current minesweeper game");
         executeLoadingProcess(minesweeperRepository::save);
     }
 
