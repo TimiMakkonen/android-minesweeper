@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -48,7 +50,7 @@ public class SolutionViewModel extends ViewModel {
                              .subscribeWith(new DisposableObserver<VisualMinesweeperCell[][]>() {
                                  @Override
                                  public void onNext(
-                                         @NonNull VisualMinesweeperCell[][] newVisualMinesweeperCells) {
+                                         @NotNull @NonNull VisualMinesweeperCell[][] newVisualMinesweeperCells) {
                                      visualMinesweeperCells.setValue(newVisualMinesweeperCells);
                                  }
 

@@ -115,12 +115,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 SeekBarPreference primSecoSwitchCustomHorizBiasPref
                         = findPreference(PRIM_SECO_SWITCH_HORIZ_BIAS_CUSTOM_KEY);
                 if (primSecoSwitchCustomHorizBiasPref != null) {
-                    if (sharedPreferences.getString(PRIM_SECO_SWITCH_HORIZ_BIAS_KEY, "start")
-                                         .equals("custom")) {
-                        primSecoSwitchCustomHorizBiasPref.setVisible(true);
-                    } else {
-                        primSecoSwitchCustomHorizBiasPref.setVisible(false);
-                    }
+                    primSecoSwitchCustomHorizBiasPref.setVisible(
+                            sharedPreferences.getString(PRIM_SECO_SWITCH_HORIZ_BIAS_KEY, "start")
+                                             .equals("custom"));
                 }
         }
     }

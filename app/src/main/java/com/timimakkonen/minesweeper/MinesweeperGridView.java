@@ -116,10 +116,10 @@ public class MinesweeperGridView extends View {
     private float mGridLineStrokeWidth = DEFAULT_GRID_LINE_STROKE_WIDTH;
     private boolean mUseCustomGridLineStrokeWidth = false;
     // canvas rectangles and matrices:
-    private RectF mContentRect = new RectF();
-    private Matrix mContentMatrix = new Matrix();
-    private Rect mGridRect = new Rect();
-    private RectF mCurrentViewportRect = new RectF();
+    private final RectF mContentRect = new RectF();
+    private final Matrix mContentMatrix = new Matrix();
+    private final Rect mGridRect = new Rect();
+    private final RectF mCurrentViewportRect = new RectF();
     private Matrix mCurrentViewMatrix = new Matrix();
     // gesture detector:
     private GestureDetector mGestureDetector;
