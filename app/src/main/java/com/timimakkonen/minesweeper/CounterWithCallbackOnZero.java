@@ -21,6 +21,7 @@ public class CounterWithCallbackOnZero {
         this.callbackOnZero = callbackOnZero;
         this.callbackOnChangeFromZero = callbackOnChangeFromZero;
 
+        // initially counter is set to 0, so we will call 'callbackOnZero' straight away
         callbackOnZero.run();
     }
 

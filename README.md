@@ -46,10 +46,10 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 ### Version DEVELOP
 
 * Added loading feature (spinning progress bar).
-  * Some of the long running tasks now run on background, which is
+  * Most of the long running tasks now run on background, which is
     managed by new 'BackgroundTaskRunner'-class.
-  * Spinning progress bar now appears when the game is loading after
-    input clicks.
+  * Spinning progress bar now appears when the game is loading initially
+    and after input clicks.
 * Added 'save'-button.
 * Added 'BackgroundTaskRunner'-class which takes care of running tasks
   on background.
@@ -64,10 +64,17 @@ Modifying the Java/Android portion of the code should work as expected, but if y
   * Keeps count of non-finished background tasks using
     'CounterWithCallbackOnZero'-class, which in turn updates
     'MutableLiveData' to tell UI when background task is in progress.
+* Moved loading of minesweeper games from 'MinesweeperModelModule' (di)
+  to 'MinesweeperRepository'.
+  * Now loading is initialised by the constructor of 'GameViewModel'.
+  * This enables app to load faster and show a spinning progress bar
+    when loading the initial game.
 * Modified 'SolutionViewModel'-class to start long lasting tasks in
   background using 'BackgroundTaskRunner'-class.
 * 'MinesweeperRepository' is now thread-safe, as long as its internal
   'LocalStorage' and 'AndroidMinesweeperGame' are.
+* Turned 'saveFileIsCorrupted'-'shared preference' into observable in
+  'MinesweeperRepository' and 'LiveData' in 'GameViewModel'.
 * Updated some Android dependencies.
 * Added missing 'numberOfRows' and 'numberOfColumns' attributes in
   'MinesweeperGridView'.
@@ -93,7 +100,6 @@ Modifying the Java/Android portion of the code should work as expected, but if y
 * Changed 'MinesweeperGridView' to allow multiple
   'MinesweeperGridViewEventListener's.
 * Updated [TimiMakkonen/minesweeper](https://github.com/TimiMakkonen/minesweeper) submodule to 'v8.5.2'.
-
 
 ### Version 0.3.0
 
@@ -160,12 +166,15 @@ Large gameplay example | Large solution example | Large gameplay example (dark t
 * Consider automatising ['SWIG'](http://www.swig.org).
   * Would be nice, but would require anyone who builds this app to have ['SWIG'](http://www.swig.org) installed.
 * Consider handling exceptions in C++ code.
-* Add more customisation options (more colors, minesweeper symbols, etc.).
+* Add more customisation options
+  (more colors, minesweeper symbols, etc.).
 * Clean up and comment code.
 * Add help page.
 * Add 'peek solution' option which instead of showing solution in
   another fragment, shows the solution in place of the current game.
 * Consider removing 'primaryActionIsCheck' LiveData in 'GameViewModel'.
-* Add spinning progress bar when initially launching the app and loading saved game.
-  * Move loading of the saved game from 'ApplicationModule' to 'GameFragment'.
-* Add 'save game'-button.
+* Consider using better event system.
+  * 'saveFileIsCorrupted' is currently passed from
+    'MinesweeperRepository' to 'GameFragment' using RXJava
+    'BehaviourSubject' and Android 'LiveData'. There is probably a
+    better solution to this.

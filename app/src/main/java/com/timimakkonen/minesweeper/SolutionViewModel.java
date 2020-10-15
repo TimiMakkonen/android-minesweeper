@@ -54,12 +54,11 @@ public class SolutionViewModel extends ViewModel {
         disposables
                 .add(minesweeperRepository
                              .getCurrentVisualMinesweeperSolutionInformation()
-                             .observeOn(AndroidSchedulers.mainThread())
                              .subscribeWith(new DisposableObserver<VisualMinesweeperCell[][]>() {
                                  @Override
                                  public void onNext(
                                          @NonNull VisualMinesweeperCell[][] newVisualMinesweeperCells) {
-                                     visualMinesweeperCells.setValue(newVisualMinesweeperCells);
+                                     visualMinesweeperCells.postValue(newVisualMinesweeperCells);
                                  }
 
                                  @Override
@@ -73,6 +72,11 @@ public class SolutionViewModel extends ViewModel {
                                  }
                              }));
 
+    }
+
+    @Override
+    protected void onCleared() {
+        disposables.clear();
     }
 
     public LiveData<VisualMinesweeperCell[][]> getVisualMinesweeperCells() {

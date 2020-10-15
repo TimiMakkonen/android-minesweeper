@@ -13,10 +13,6 @@ import androidx.navigation.ui.NavigationUI;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import javax.inject.Inject;
-
 /**
  * <p>
  * This 'MainActivity' class is the first visual/ui point of contact for this app. It is responsible
@@ -27,9 +23,6 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity {
 
     AppBarConfiguration appBarConfiguration;
-
-    @Inject
-    LocalStorage localStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         // injecting dependencies
         ((MinesweeperApplication) getApplicationContext()).appComponent.inject(this);
-
-        // displaying alert dialog if save file was corrupted
-        if (localStorage.getSaveWasCorrupted(false)) {
-            showCorruptedGameSaveDialog();
-            localStorage.setSaveWasCorrupted(false);
-        }
 
     }
 
@@ -95,13 +82,5 @@ public class MainActivity extends AppCompatActivity {
     private void showAbout() {
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(
                 R.id.action_global_aboutFragment);
-    }
-
-    private void showCorruptedGameSaveDialog() {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.corrupted_game_save_dialog_title)
-                .setMessage(R.string.corrupted_game_save_dialog_message)
-                .setPositiveButton(R.string.ok, null)
-                .show();
     }
 }

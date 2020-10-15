@@ -21,9 +21,9 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
  * request.
  * </p>
  * <p>
- * This class has 'minesweeperDataForViewObservable' (MinesweeperDataForView) and
- * 'minesweeperSolutionVisualisationObservable' (VisualMinesweeperCell[][]) 'BehaviorSubject's,
- * which can be observed.
+ * This class has 'minesweeperDataForViewObservable' (MinesweeperDataForView),
+ * 'minesweeperSolutionVisualisationObservable' (VisualMinesweeperCell[][]) and
+ * 'saveFileIsCorruptedObservable' (Boolean) 'BehaviorSubject's, which can be observed.
  * </p>
  * <p>
  * This class is thread-safe as long as {@link LocalStorage} and {@link AndroidMinesweeperGame}
@@ -36,10 +36,12 @@ class MinesweeperRepository {
     private static final String TAG = "MinesweeperRepository";
 
     private final LocalStorage localStorage;
+    private final AndroidMinesweeperGame currentMinesweeperGame;
+
     private final BehaviorSubject<MinesweeperDataForView> minesweeperDataForViewObservable;
     private final BehaviorSubject<VisualMinesweeperCell[][]>
             minesweeperSolutionVisualisationObservable;
-    private final AndroidMinesweeperGame currentMinesweeperGame;
+    private final BehaviorSubject<Boolean> saveFileIsCorruptedObservable;
 
     private boolean solutionVisualisationIsOutdated;
 
@@ -49,10 +51,12 @@ class MinesweeperRepository {
 
         this.localStorage = localStorage;
         this.currentMinesweeperGame = androidMinesweeperGame;
+
         this.minesweeperDataForViewObservable = BehaviorSubject.create();
         this.minesweeperSolutionVisualisationObservable = BehaviorSubject.create();
-        updateCurrentGridInformation();
+        this.saveFileIsCorruptedObservable = BehaviorSubject.create();
 
+        updateCurrentGridInformation();
         solutionVisualisationIsOutdated = true;
     }
 
@@ -88,13 +92,15 @@ class MinesweeperRepository {
     }
 
     public synchronized Observable<MinesweeperDataForView> getCurrentVisualMinesweeperInformation() {
-
         return this.minesweeperDataForViewObservable;
     }
 
     public synchronized Observable<VisualMinesweeperCell[][]> getCurrentVisualMinesweeperSolutionInformation() {
-
         return this.minesweeperSolutionVisualisationObservable;
+    }
+
+    public synchronized Observable<Boolean> isSaveFileCorrupted() {
+        return this.saveFileIsCorruptedObservable;
     }
 
     public synchronized void checkCoordinates(int x, int y) throws IllegalArgumentException {
@@ -183,12 +189,55 @@ class MinesweeperRepository {
         saveCurrentMinesweeperGame();
     }
 
+    /**
+     * Loads a game from save file, if a save file exists and this option has been turned on. Else
+     * loads new default game.
+     *
+     * @return Loading of the save file was successful.
+     */
+    public synchronized boolean load() {
+        Log.d(TAG, String.format("load: Current thread is: %s", Thread.currentThread()));
+        boolean loadWasSuccessful = loadCurrentMinesweeperGame();
+        updateCurrentGridInformation();
+        return loadWasSuccessful;
+    }
+
     private void saveCurrentMinesweeperGame() {
         localStorage.saveCurrentMinesweeperGame(this.currentMinesweeperGame.serialise());
         localStorage.setHasSavedGame(true);
     }
 
+    private boolean loadCurrentMinesweeperGame() {
+
+        if (localStorage.getHasSavedGame(false)) {
+            final boolean deserialisationWasSuccessful =
+                    currentMinesweeperGame.deserialise(localStorage.loadCurrentMinesweeperGame());
+            if (deserialisationWasSuccessful) {
+                return true;
+            } else {
+                Log.d(TAG, "loadCurrentMinesweeperGame: Save file was corrupted");
+                saveFileIsCorruptedObservable.onNext(true);
+                localStorage.deleteCurrentMinesweeperGame();
+                localStorage.setHasSavedGame(false);
+                saveFileIsCorruptedObservable.onNext(false);
+
+                // With the current version of minesweeper-library (v8.5.2),
+                //  failed deserialisation will probably cause original game to get corrupted.
+                // Hence we must start a new game.
+                startDefaultNewGame();
+            }
+        }
+        return false;
+    }
+
+    private void startDefaultNewGame() {
+        this.currentMinesweeperGame.newGame(10, 10, 20);
+        updateCurrentGridInformation();
+    }
+
     private void updateCurrentGridInformation() {
+        Log.d(TAG, String.format("updateCurrentGridInformation: Current thread is: %s",
+                                 Thread.currentThread()));
         final VisualMinesweeperCell[][] currentVisualMinesweeperCells =
                 getCurrentVisualMinesweeperCells();
         final boolean playerHasWon = updatePlayerHasWonInformation();
