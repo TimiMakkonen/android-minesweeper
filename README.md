@@ -53,7 +53,7 @@ Large gameplay example | Large solution example | Large gameplay example (dark t
 
 ## Version history
 
-### Version DEVELOP
+### Version 0.5.0
 
 * Added loading feature (spinning progress bar).
   * Most of the long running tasks now run on background, which is
