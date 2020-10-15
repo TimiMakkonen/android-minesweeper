@@ -49,7 +49,6 @@ public class LocalStorage {
     private static final String OVERRIDE_SYSTEM_DARK_THEME_KEY = "override_system_dark_theme";
     private static final String HAS_SAVED_GAME_KEY = "has_saved_game";
     private static final String PRIM_ACTION_IS_CHECK_KEY = "prim_action_is_check";
-    private static final String SAVE_WAS_CORRUPTED_KEY = "save_was_corrupted";
 
     private final File savePath;
     private final SharedPreferences sharedPrefs;
@@ -189,15 +188,6 @@ public class LocalStorage {
 
     public boolean getSaveAndResume(boolean defValue) {
         return getBoolean(SAVE_AND_RESUME_KEY, defValue);
-    }
-
-
-    public boolean getSaveWasCorrupted(boolean defValue) {
-        return getBoolean(SAVE_WAS_CORRUPTED_KEY, defValue);
-    }
-
-    public void setSaveWasCorrupted(boolean value) {
-        setBoolean(SAVE_WAS_CORRUPTED_KEY, value);
     }
 
     public boolean getOverrideSystemDarkTheme(boolean defValue) {

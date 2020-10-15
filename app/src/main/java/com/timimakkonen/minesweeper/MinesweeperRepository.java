@@ -195,6 +195,7 @@ class MinesweeperRepository {
      *
      * @return Loading of the save file was successful.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public synchronized boolean load() {
         Log.d(TAG, String.format("load: Current thread is: %s", Thread.currentThread()));
         boolean loadWasSuccessful = loadCurrentMinesweeperGame();
