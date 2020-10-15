@@ -3,7 +3,6 @@ package com.timimakkonen.minesweeper;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -11,6 +10,8 @@ import android.util.TypedValue;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.BlendModeColorFilterCompat;
+import androidx.core.graphics.BlendModeCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SeekBarPreference;
@@ -57,7 +58,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             if (primSecoSwitchIcon != null) {
                 TypedArray a = requireContext().obtainStyledAttributes(new TypedValue().data,
                                                                        new int[]{android.R.attr.textColorSecondary});
-                primSecoSwitchIcon.setColorFilter(a.getColor(0, 0), PorterDuff.Mode.SRC_IN);
+                primSecoSwitchIcon.setColorFilter(BlendModeColorFilterCompat
+                                                          .createBlendModeColorFilterCompat(
+                                                                  a.getColor(0, 0),
+                                                                  BlendModeCompat.SRC_IN));
                 a.recycle();
             }
             primSecoSwitchPref.setIcon(primSecoSwitchIcon);
