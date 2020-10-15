@@ -97,6 +97,8 @@ public class LocalStorage {
             FileWriter writer = new FileWriter(file);
             writer.write(strToSave);
             writer.close();
+            Log.d(TAG, String.format("save: File '%s' has been saved to '%s'.", saveFileName,
+                                     file.getAbsolutePath()));
         } catch (IOException e) {
             e.printStackTrace();
         }

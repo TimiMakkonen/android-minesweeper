@@ -28,6 +28,7 @@
     <string name="action_restart_without_mines">Restart</string>
     <string name="action_restart_with_mines">Restart with mines</string>
     <string name="action_show_solution">Show solution</string>
+    <string name="action_save_game">Save</string>
     <string name="action_new_game_easy">Easy</string>
     <string name="action_new_game_medium">Medium</string>
     <string name="action_new_game_hard">Hard</string>

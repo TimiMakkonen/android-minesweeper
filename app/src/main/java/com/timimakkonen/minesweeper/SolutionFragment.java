@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import javax.inject.Inject;
 
@@ -23,6 +24,8 @@ public class SolutionFragment extends Fragment {
 
     @Inject
     SolutionViewModel viewModel;
+
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -38,10 +41,20 @@ public class SolutionFragment extends Fragment {
         final MinesweeperGridView minesweeperSolutionView = view.findViewById(
                 R.id.solutionMinesweeperGridView);
 
+        progressBar = view.findViewById(R.id.solutionFragment_progressBar);
+
         viewModel.getVisualMinesweeperCells()
                  .observe(getViewLifecycleOwner(),
                           minesweeperSolutionView::setVisualMinesweeperCellsAndResize
                  );
+
+        viewModel.isLoadingInProgress().observe(getViewLifecycleOwner(), loadingInProgress -> {
+            if (loadingInProgress) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -56,6 +69,13 @@ public class SolutionFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        final Boolean loadingInProgress = viewModel.isLoadingInProgress().getValue();
+        if(loadingInProgress != null && loadingInProgress) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
 
         viewModel.updateSolutionVisualisation();
     }

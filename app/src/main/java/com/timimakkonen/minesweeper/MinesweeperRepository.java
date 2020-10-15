@@ -21,9 +21,13 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
  * request.
  * </p>
  * <p>
- * This class has 'minesweeperDataForViewObservable' (MinesweeperDataForView) and
- * 'minesweeperSolutionVisualisationObservable' (VisualMinesweeperCell[][]) 'BehaviorSubject's,
- * which can be observed.
+ * This class has 'minesweeperDataForViewObservable' (MinesweeperDataForView),
+ * 'minesweeperSolutionVisualisationObservable' (VisualMinesweeperCell[][]) and
+ * 'saveFileIsCorruptedObservable' (Boolean) 'BehaviorSubject's, which can be observed.
+ * </p>
+ * <p>
+ * This class is thread-safe as long as {@link LocalStorage} and {@link AndroidMinesweeperGame}
+ * provided to it are.
  * </p>
  */
 @ApplicationScope
@@ -32,10 +36,12 @@ class MinesweeperRepository {
     private static final String TAG = "MinesweeperRepository";
 
     private final LocalStorage localStorage;
+    private final AndroidMinesweeperGame currentMinesweeperGame;
+
     private final BehaviorSubject<MinesweeperDataForView> minesweeperDataForViewObservable;
     private final BehaviorSubject<VisualMinesweeperCell[][]>
             minesweeperSolutionVisualisationObservable;
-    private final AndroidMinesweeperGame currentMinesweeperGame;
+    private final BehaviorSubject<Boolean> saveFileIsCorruptedObservable;
 
     private boolean solutionVisualisationIsOutdated;
 
@@ -45,10 +51,12 @@ class MinesweeperRepository {
 
         this.localStorage = localStorage;
         this.currentMinesweeperGame = androidMinesweeperGame;
+
         this.minesweeperDataForViewObservable = BehaviorSubject.create();
         this.minesweeperSolutionVisualisationObservable = BehaviorSubject.create();
-        updateCurrentGridInformation();
+        this.saveFileIsCorruptedObservable = BehaviorSubject.create();
 
+        updateCurrentGridInformation();
         solutionVisualisationIsOutdated = true;
     }
 
@@ -83,17 +91,19 @@ class MinesweeperRepository {
         }
     }
 
-    public Observable<MinesweeperDataForView> getCurrentVisualMinesweeperInformation() {
-
+    public synchronized Observable<MinesweeperDataForView> getCurrentVisualMinesweeperInformation() {
         return this.minesweeperDataForViewObservable;
     }
 
-    public Observable<VisualMinesweeperCell[][]> getCurrentVisualMinesweeperSolutionInformation() {
-
+    public synchronized Observable<VisualMinesweeperCell[][]> getCurrentVisualMinesweeperSolutionInformation() {
         return this.minesweeperSolutionVisualisationObservable;
     }
 
-    public void checkCoordinates(int x, int y) throws IllegalArgumentException {
+    public synchronized Observable<Boolean> isSaveFileCorrupted() {
+        return this.saveFileIsCorruptedObservable;
+    }
+
+    public synchronized void checkCoordinates(int x, int y) throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException("Trying to check cell outside the grid.");
@@ -103,7 +113,7 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
-    public void markCoordinates(int x, int y) throws IllegalArgumentException {
+    public synchronized void markCoordinates(int x, int y) throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException("Trying to mark cell outside the grid.");
@@ -112,7 +122,8 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
-    public void completeAroundCoordinates(int x, int y) throws IllegalArgumentException {
+    public synchronized void completeAroundCoordinates(int x, int y)
+            throws IllegalArgumentException {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException(
@@ -126,7 +137,7 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
-    public boolean isCellVisible(int x, int y) {
+    public synchronized boolean isCellVisible(int x, int y) {
         if (x < 0 || y < 0 || x >= currentMinesweeperGame.getGridWidth() ||
             y >= currentMinesweeperGame.getGridHeight()) {
             throw new IllegalArgumentException(
@@ -135,13 +146,13 @@ class MinesweeperRepository {
         return this.currentMinesweeperGame.isCellVisible(x, y);
     }
 
-    public void resetCurrentGame(boolean keepCreatedMines) {
+    public synchronized void resetCurrentGame(boolean keepCreatedMines) {
         this.currentMinesweeperGame.reset(keepCreatedMines);
         updateCurrentGridInformation();
     }
 
-    public void startNewGame(int gridHeight, int gridWidth,
-                             int numOfMines) throws IllegalArgumentException {
+    public synchronized void startNewGame(int gridHeight, int gridWidth,
+                                          int numOfMines) throws IllegalArgumentException {
         verifyGridDimension(gridHeight);
         verifyGridDimension(gridWidth);
         verifyNumOfMines(gridHeight, gridWidth, numOfMines);
@@ -149,9 +160,11 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
+
     @SuppressWarnings("unused")
-    public void startNewGame(int gridHeight, int gridWidth,
-                             double proportionOfMines) throws IllegalArgumentException {
+    public synchronized void startNewGame(int gridHeight, int gridWidth,
+                                          double proportionOfMines)
+            throws IllegalArgumentException {
         verifyGridDimension(gridHeight);
         verifyGridDimension(gridWidth);
         verifyProportionOfMines(gridHeight, gridWidth, proportionOfMines);
@@ -159,11 +172,12 @@ class MinesweeperRepository {
         updateCurrentGridInformation();
     }
 
-    public int minNumOfMines() {
+    public synchronized int minNumOfMines() {
         return AndroidMinesweeperGame.minNumOfMines();
     }
 
-    public int maxNumOfMines(int gridHeight, int gridWidth) throws IllegalArgumentException {
+    public synchronized int maxNumOfMines(int gridHeight, int gridWidth)
+            throws IllegalArgumentException {
         if (gridHeight < 0 || gridWidth < 0) {
             throw new IllegalArgumentException(
                     "Trying to check the maximum number of mines for a negative grid.");
@@ -171,8 +185,21 @@ class MinesweeperRepository {
         return AndroidMinesweeperGame.maxNumOfMines(gridHeight, gridWidth);
     }
 
-    public void save() {
+    public synchronized void save() {
         saveCurrentMinesweeperGame();
+    }
+
+    /**
+     * Loads a game from save file, if a save file exists and this option has been turned on. Else
+     * loads new default game.
+     *
+     * @return Loading of the save file was successful.
+     */
+    public synchronized boolean load() {
+        Log.d(TAG, String.format("load: Current thread is: %s", Thread.currentThread()));
+        boolean loadWasSuccessful = loadCurrentMinesweeperGame();
+        updateCurrentGridInformation();
+        return loadWasSuccessful;
     }
 
     private void saveCurrentMinesweeperGame() {
@@ -180,7 +207,37 @@ class MinesweeperRepository {
         localStorage.setHasSavedGame(true);
     }
 
+    private boolean loadCurrentMinesweeperGame() {
+
+        if (localStorage.getHasSavedGame(false)) {
+            final boolean deserialisationWasSuccessful =
+                    currentMinesweeperGame.deserialise(localStorage.loadCurrentMinesweeperGame());
+            if (deserialisationWasSuccessful) {
+                return true;
+            } else {
+                Log.d(TAG, "loadCurrentMinesweeperGame: Save file was corrupted");
+                saveFileIsCorruptedObservable.onNext(true);
+                localStorage.deleteCurrentMinesweeperGame();
+                localStorage.setHasSavedGame(false);
+                saveFileIsCorruptedObservable.onNext(false);
+
+                // With the current version of minesweeper-library (v8.5.2),
+                //  failed deserialisation will probably cause original game to get corrupted.
+                // Hence we must start a new game.
+                startDefaultNewGame();
+            }
+        }
+        return false;
+    }
+
+    private void startDefaultNewGame() {
+        this.currentMinesweeperGame.newGame(10, 10, 20);
+        updateCurrentGridInformation();
+    }
+
     private void updateCurrentGridInformation() {
+        Log.d(TAG, String.format("updateCurrentGridInformation: Current thread is: %s",
+                                 Thread.currentThread()));
         final VisualMinesweeperCell[][] currentVisualMinesweeperCells =
                 getCurrentVisualMinesweeperCells();
         final boolean playerHasWon = updatePlayerHasWonInformation();
@@ -223,7 +280,7 @@ class MinesweeperRepository {
         return this.currentMinesweeperGame.playerHasLost();
     }
 
-    public void updateCurrentGridSolutionVisualisation() {
+    public synchronized void updateCurrentGridSolutionVisualisation() {
         if (solutionVisualisationIsOutdated) {
             this.minesweeperSolutionVisualisationObservable.onNext(
                     getCurrentSolutionVisualisation());

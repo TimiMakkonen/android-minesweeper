@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -55,6 +56,7 @@ public class GameFragment extends Fragment {
     private MinesweeperGridView minesweeperView;
     private ConstraintLayout gameFragmentView;
     private MaterialButton primSecoSwitchButton;
+    private ProgressBar progressBar;
 
     private boolean hasOriginalColorDrawableBackground = false;
     @ColorInt
@@ -78,6 +80,8 @@ public class GameFragment extends Fragment {
 
         gameFragmentView = view.findViewById(R.id.game_fragment_view);
         hasOriginalColorDrawableBackground = initBackgroundColorField();
+
+        progressBar = view.findViewById(R.id.gameFragment_progressBar);
 
         viewModel.getVisualMinesweeperCells()
                  .observe(getViewLifecycleOwner(), visualMinesweeperCells -> minesweeperView
@@ -129,6 +133,20 @@ public class GameFragment extends Fragment {
             }
 
         });
+
+        viewModel.isLoadingInProgress().observe(getViewLifecycleOwner(), loadingInProgress -> {
+            if (loadingInProgress) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        viewModel.isSaveFileCorrupted().observe(getViewLifecycleOwner(), saveFileIsCorrupted -> {
+            if (saveFileIsCorrupted) {
+                showCorruptedGameSaveDialog();
+            }
+        });
     }
 
     private boolean initBackgroundColorField() {
@@ -153,13 +171,19 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_main, menu);
+        inflater.inflate(R.menu.menu_fragment_game, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        final Boolean loadingInProgress = viewModel.isLoadingInProgress().getValue();
+        if (loadingInProgress != null && loadingInProgress) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
 
         // primary-secondary click action switch setup
         if (localStorage.getUsePrimSecoSwitchKey(true)) {
@@ -202,43 +226,45 @@ public class GameFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_settings:
-                showSettings();
-                return true;
-            case R.id.action_restart_without_mines:
-                viewModel.restartWithoutMines();
-                return true;
-            case R.id.action_restart_with_mines:
-                viewModel.restartWithMines();
-                return true;
-            case R.id.action_show_solution:
-                showSolution();
-                return true;
-            case R.id.action_new_game_easy:
-                viewModel.startNewEasyGame();
-                return true;
-            case R.id.action_new_game_medium:
-                viewModel.startNewMediumGame();
-                return true;
-            case R.id.action_new_game_hard:
-                viewModel.startNewHardGame();
-                return true;
-            case R.id.action_new_game_clickable_custom:
-                customNewGameDialog(minesweeperView.clickableMaxGridHeight(),
-                                    minesweeperView.clickableMaxGridWidth());
-                return true;
-            case R.id.action_new_game_reasonable_custom:
-                customNewGameDialog(minesweeperView.reasonableMaxGridHeight(),
-                                    minesweeperView.reasonableMaxGridWidth());
-                return true;
-            case R.id.action_new_game_unreasonable_custom:
-                customNewGameDialog(minesweeperView.unreasonableMaxGridHeight(),
-                                    minesweeperView.unreasonableMaxGridWidth());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        boolean itemFound = false;
+        if (id == R.id.action_settings) {
+            showSettings();
+            itemFound = true;
+        } else if (id == R.id.action_restart_without_mines) {
+            viewModel.restartWithoutMines();
+            itemFound = true;
+        } else if (id == R.id.action_restart_with_mines) {
+            viewModel.restartWithMines();
+            itemFound = true;
+        } else if (id == R.id.action_show_solution) {
+            showSolution();
+            itemFound = true;
+        } else if (id == R.id.action_save_game) {
+            viewModel.save();
+            itemFound = true;
+        } else if (id == R.id.action_new_game_easy) {
+            viewModel.startNewEasyGame();
+            itemFound = true;
+        } else if (id == R.id.action_new_game_medium) {
+            viewModel.startNewMediumGame();
+            itemFound = true;
+        } else if (id == R.id.action_new_game_hard) {
+            viewModel.startNewHardGame();
+            itemFound = true;
+        } else if (id == R.id.action_new_game_clickable_custom) {
+            customNewGameDialog(minesweeperView.clickableMaxGridHeight(),
+                                minesweeperView.clickableMaxGridWidth());
+            itemFound = true;
+        } else if (id == R.id.action_new_game_reasonable_custom) {
+            customNewGameDialog(minesweeperView.reasonableMaxGridHeight(),
+                                minesweeperView.reasonableMaxGridWidth());
+            itemFound = true;
+        } else if (id == R.id.action_new_game_unreasonable_custom) {
+            customNewGameDialog(minesweeperView.unreasonableMaxGridHeight(),
+                                minesweeperView.unreasonableMaxGridWidth());
+            itemFound = true;
         }
+        return itemFound || super.onOptionsItemSelected(item);
     }
 
     private void customNewGameDialog(int maxGridHeight, int maxGridWidth) {
@@ -408,6 +434,14 @@ public class GameFragment extends Fragment {
                                             minesweeperView.unreasonableMaxGridWidth());
                     }
                 })
+                .show();
+    }
+
+    private void showCorruptedGameSaveDialog() {
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.corrupted_game_save_dialog_title)
+                .setMessage(R.string.corrupted_game_save_dialog_message)
+                .setPositiveButton(R.string.ok, null)
                 .show();
     }
 }

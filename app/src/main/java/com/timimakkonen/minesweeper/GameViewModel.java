@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModel;
 
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.observers.DisposableObserver;
@@ -23,18 +25,22 @@ import io.reactivex.rxjava3.observers.DisposableObserver;
  * </p>
  * <p>
  * This class has 'visualMinesweeperCells' (VisualMinesweeperCell[][]), 'playerHasWon' (Boolean),
- * 'playerHasLost' (Boolean) and 'primaryActionIsCheck' (Boolean) 'LiveData's which can be
- * observed.
+ * 'playerHasLost' (Boolean), 'primaryActionIsCheck' (Boolean), 'loadingInProgress' (Boolean) and
+ * 'saveFileIsCorrupted' (Boolean) 'LiveData's which can be observed.
  * </p>
  * <p>
- * This class itself observes 'RxJava MinesweeperDataForView Observable' and reacts to its changes
- * by updating corresponding 'LiveData's.
+ * This class itself observes 'getCurrentVisualMinesweeperInformation' (MinesweeperDataForView) and
+ * 'isSaveFileCorrupted' (Boolean) RxJava 'Observable's  of {@link com.timimakkonen.minesweeper.MinesweeperRepository}
+ * and reacts to their changes by updating corresponding 'LiveData's.
  * </p>
  */
 public class GameViewModel extends ViewModel {
 
     private static final String TAG = "GameViewModel";
 
+    private static final int DEFAULT_GAME_GRID_HEIGHT = 10;
+    private static final int DEFAULT_GAME_GRID_WIDTH = 10;
+    private static final int DEFAULT_GAME_NUM_OF_MINES = 20;
     private static final int EASY_GAME_GRID_HEIGHT = 9;
     private static final int EASY_GAME_GRID_WIDTH = 9;
     private static final int EASY_GAME_NUM_OF_MINES = 10;
@@ -51,33 +57,58 @@ public class GameViewModel extends ViewModel {
     //private final SavedStateHandle savedStateHandle;
     private final MinesweeperRepository minesweeperRepository;
     private final LocalStorage localStorage;
+    private final BackgroundTaskRunner backgroundTaskRunner;
+    private final CounterWithCallbackOnZero loadingProcessCounter;
+
+    private final CompositeDisposable disposables;
+
     private final MutableLiveData<VisualMinesweeperCell[][]> visualMinesweeperCells;
     private final MutableLiveData<Boolean> playerHasWon;
     private final MutableLiveData<Boolean> playerHasLost;
-    private final CompositeDisposable disposables;
-
     private final MutableLiveData<Boolean> primaryActionIsCheck;
+    private final MutableLiveData<Boolean> loadingInProgress;
+    private final MutableLiveData<Boolean> saveFileIsCorrupted;
+
+    private final AtomicBoolean initialGameHasLoaded;
 
 
     @Inject
     public GameViewModel(/*SavedStateHandle savedStateHandle,*/
-            MinesweeperRepository minesweeperRepository, LocalStorage localStorage) {
+            MinesweeperRepository minesweeperRepository, LocalStorage localStorage,
+            BackgroundTaskRunner backgroundTaskRunner) {
         //this.savedStateHandle = savedStateHandle;
         this.minesweeperRepository = minesweeperRepository;
         this.localStorage = localStorage;
+        this.backgroundTaskRunner = backgroundTaskRunner;
 
         this.disposables = new CompositeDisposable();
         this.visualMinesweeperCells = new MutableLiveData<>();
-        this.playerHasWon = new MutableLiveData<>();
-        this.playerHasLost = new MutableLiveData<>();
+        this.playerHasWon = new MutableLiveData<>(false);
+        this.playerHasLost = new MutableLiveData<>(false);
 
         this.primaryActionIsCheck = new MutableLiveData<>(
                 localStorage.getPrimActionIsCheck(DEFAULT_PRIMARY_ACTION_IS_CHECK));
 
+        this.loadingInProgress = new MutableLiveData<>(true);
+
+        this.saveFileIsCorrupted = new MutableLiveData<>(false);
+
+        this.loadingProcessCounter = new CounterWithCallbackOnZero(
+                () -> loadingInProgress.postValue(false),
+                () -> loadingInProgress.postValue(true));
+
+        this.initialGameHasLoaded = new AtomicBoolean(false);
+
         init();
+
+        startInitialGame();
     }
 
     private void init() {
+        // To avoid race condition, do not observe 'getCurrentVisualMinesweeperInformation' on a
+        // different thread.
+        // Otherwise 'initialGameHasLoaded'-field might be set to true before older change has been
+        // observed.
         disposables
                 .add(minesweeperRepository
                              .getCurrentVisualMinesweeperInformation()
@@ -85,40 +116,78 @@ public class GameViewModel extends ViewModel {
                                  @Override
                                  public void onNext(
                                          @NonNull MinesweeperDataForView minesweeperDataForView) {
-                                     visualMinesweeperCells.setValue(minesweeperDataForView
-                                                                             .getCurrentVisualMinesweeperCells());
+                                     Log.d(TAG, String.format("onNext: Current thread is: %s",
+                                                              Thread.currentThread()));
+                                     visualMinesweeperCells.postValue(minesweeperDataForView
+                                                                              .getCurrentVisualMinesweeperCells());
 
                                      Boolean playerHasWonBool =
                                              GameViewModel.this.playerHasWon.getValue();
-                                     if (playerHasWonBool == null || (playerHasWonBool !=
-                                                                      minesweeperDataForView
-                                                                              .hasPlayerWon())) {
-                                         GameViewModel.this.playerHasWon.setValue(
-                                                 minesweeperDataForView.hasPlayerWon());
+                                     if (playerHasWonBool == null
+                                         || (playerHasWonBool !=
+                                             minesweeperDataForView.hasPlayerWon())) {
+                                         if (initialGameHasLoaded.get()) {
+                                             GameViewModel.this.playerHasWon.postValue(
+                                                     minesweeperDataForView.hasPlayerWon());
+                                         }
                                      }
 
                                      Boolean playerHasLostBool =
                                              GameViewModel.this.playerHasLost.getValue();
-                                     if (playerHasLostBool == null || (playerHasLostBool !=
-                                                                       minesweeperDataForView
-                                                                               .hasPlayerLost())) {
-                                         GameViewModel.this.playerHasLost.setValue(
-                                                 minesweeperDataForView.hasPlayerLost());
+                                     if (playerHasLostBool == null
+                                         || (playerHasLostBool !=
+                                             minesweeperDataForView.hasPlayerLost())) {
+                                         if (initialGameHasLoaded.get()) {
+                                             GameViewModel.this.playerHasLost.postValue(
+                                                     minesweeperDataForView.hasPlayerLost());
+                                         }
                                      }
-
                                  }
 
                                  @Override
                                  public void onError(@NonNull Throwable e) {
-
                                  }
 
                                  @Override
                                  public void onComplete() {
-
                                  }
                              }));
 
+        disposables
+                .add(minesweeperRepository
+                             .isSaveFileCorrupted()
+                             .observeOn(AndroidSchedulers.mainThread())
+                             .subscribeWith(new DisposableObserver<Boolean>() {
+
+                                 @Override
+                                 public void onNext(@NonNull Boolean saveFileIsCorrupted) {
+                                     GameViewModel.this.saveFileIsCorrupted.setValue(
+                                             saveFileIsCorrupted);
+                                 }
+
+                                 @Override
+                                 public void onError(@NonNull Throwable e) {
+                                 }
+
+                                 @Override
+                                 public void onComplete() {
+                                 }
+                             }));
+    }
+
+    private void startInitialGame() {
+        Log.d(TAG, "startInitialGame: Starting initial minesweeper game.");
+        if (localStorage.getHasSavedGame(false) && localStorage.getSaveAndResume(true)) {
+            executeLoadingProcess(() -> {
+                load();
+                initialGameHasLoaded.set(true);
+            });
+        } else {
+            executeLoadingProcess(() -> {
+                startNewDefaultGame();
+                initialGameHasLoaded.set(true);
+            });
+        }
     }
 
     @Override
@@ -176,13 +245,13 @@ public class GameViewModel extends ViewModel {
     private void checkMinesweeperCoordinates(int x, int y) {
         Log.d(TAG, "checkMinesweeperCoordinates: "
                    + String.format("Checking cell (%d, %d)", x, y));
-        minesweeperRepository.checkCoordinates(x, y);
+        executeLoadingProcess(() -> minesweeperRepository.checkCoordinates(x, y));
     }
 
     private void markMinesweeperCoordinates(int x, int y) {
         Log.d(TAG, "markMinesweeperCoordinates: "
                    + String.format("Marking cell (%d, %d)", x, y));
-        minesweeperRepository.markCoordinates(x, y);
+        executeLoadingProcess(() -> minesweeperRepository.markCoordinates(x, y));
     }
 
     private void completeAroundMinesweeperCoordinates(int x, int y)
@@ -193,15 +262,15 @@ public class GameViewModel extends ViewModel {
         }
         Log.d(TAG, "completeAroundMinesweeperCoordinates: "
                    + String.format("Completing around cell (%d, %d)", x, y));
-        minesweeperRepository.completeAroundCoordinates(x, y);
+        executeLoadingProcess(() -> minesweeperRepository.completeAroundCoordinates(x, y));
     }
 
     public void restartWithMines() {
-        minesweeperRepository.resetCurrentGame(true);
+        executeLoadingProcess(() -> minesweeperRepository.resetCurrentGame(true));
     }
 
     public void restartWithoutMines() {
-        minesweeperRepository.resetCurrentGame(false);
+        executeLoadingProcess(() -> minesweeperRepository.resetCurrentGame(false));
     }
 
     public void startNewGame(int gridHeight, int gridWidth, int numOfMines)
@@ -218,23 +287,33 @@ public class GameViewModel extends ViewModel {
             throw new IllegalArgumentException(
                     "Trying to initialise a new grid with too many mines");
         }
-        minesweeperRepository.startNewGame(gridHeight, gridWidth, numOfMines);
+        executeLoadingProcess(
+                () -> minesweeperRepository.startNewGame(gridHeight, gridWidth, numOfMines));
     }
 
     public void startNewEasyGame() {
-        minesweeperRepository.startNewGame(EASY_GAME_GRID_HEIGHT, EASY_GAME_GRID_WIDTH,
-                                           EASY_GAME_NUM_OF_MINES);
+        executeLoadingProcess(() -> minesweeperRepository
+                .startNewGame(EASY_GAME_GRID_HEIGHT, EASY_GAME_GRID_WIDTH,
+                              EASY_GAME_NUM_OF_MINES));
     }
 
     public void startNewMediumGame() {
-        minesweeperRepository.startNewGame(MEDIUM_GAME_GRID_HEIGHT, MEDIUM_GAME_GRID_WIDTH,
-                                           MEDIUM_GAME_NUM_OF_MINES);
+        executeLoadingProcess(() -> minesweeperRepository
+                .startNewGame(MEDIUM_GAME_GRID_HEIGHT, MEDIUM_GAME_GRID_WIDTH,
+                              MEDIUM_GAME_NUM_OF_MINES));
     }
 
 
     public void startNewHardGame() {
-        minesweeperRepository.startNewGame(HARD_GAME_GRID_HEIGHT, HARD_GAME_GRID_WIDTH,
-                                           HARD_GAME_NUM_OF_MINES);
+        executeLoadingProcess(() -> minesweeperRepository
+                .startNewGame(HARD_GAME_GRID_HEIGHT, HARD_GAME_GRID_WIDTH,
+                              HARD_GAME_NUM_OF_MINES));
+    }
+
+    public void startNewDefaultGame() {
+        executeLoadingProcess(() -> minesweeperRepository
+                .startNewGame(DEFAULT_GAME_GRID_HEIGHT, DEFAULT_GAME_GRID_WIDTH,
+                              DEFAULT_GAME_NUM_OF_MINES));
     }
 
     public int maxNumOfMines(int gridHeight, int gridWidth) throws IllegalArgumentException {
@@ -270,7 +349,13 @@ public class GameViewModel extends ViewModel {
     }
 
     public void save() {
-        minesweeperRepository.save();
+        Log.d(TAG, "save: Saving current minesweeper game");
+        executeLoadingProcess(minesweeperRepository::save);
+    }
+
+    public void load() {
+        Log.d(TAG, "load: Loading minesweeper game");
+        executeLoadingProcess(minesweeperRepository::load);
     }
 
     public void switchMinesweeperPrimSecoActions() {
@@ -290,5 +375,24 @@ public class GameViewModel extends ViewModel {
 
     public LiveData<Boolean> isPrimaryActionCheck() {
         return this.primaryActionIsCheck;
+    }
+
+    public LiveData<Boolean> isLoadingInProgress() {
+        return this.loadingInProgress;
+    }
+
+    public LiveData<Boolean> isSaveFileCorrupted() {
+        return this.saveFileIsCorrupted;
+    }
+
+    // executes task/process which causes UI to be notified that a task is running,
+    // and also notifies UI when the task has finished running
+    private void executeLoadingProcess(Runnable task) {
+        loadingProcessCounter.increment();
+        executeTaskOnBackground(new CallbackTask(task, loadingProcessCounter::decrement));
+    }
+
+    private void executeTaskOnBackground(Runnable task) {
+        backgroundTaskRunner.execute(task);
     }
 }
